@@ -1,17 +1,18 @@
 package dev.board.boardprojectproto.service
 
-import org.springframework.stereotype.Service
+interface PostService {
+    // TODO: 게시물 생성
+    // 1. 유저의 id를 받는다.
+    // 2. 내용을 받는다.
+    // 3. 파일이 있다면 받는다. -> 아직 구현안함
 
-interface PostService{
-    // create 맴버 id, dto
-    fun writePost()
+    // TODO: 게시물 하나 읽기
 
-    // read dto
-    fun readPost()
+    // TODO: 게시물 전체 읽기 -> 게시판 들어가면
 
-    // update 맴버 id, dto
-    fun updatePost()
+    // TODO: 게시물 검색해서 찾는 기능
 
-    // delete 맴버 id, dto
-    fun deletePost()
+    // TODO: 게시물 삭제하는 기능
+
+    // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 }

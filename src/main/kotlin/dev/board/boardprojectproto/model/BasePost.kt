@@ -1,6 +1,7 @@
 package dev.board.boardprojectproto.model
 
-import jakarta.persistence.*
+import javax.persistence.*
+
 
 // 게시판 상관없이 모두 적용되는 속성을 넣는다.
 // 테이블 전략은 상속관계 매핑 중에서 조인 전략을 사용
@@ -21,5 +22,5 @@ open class BasePost(
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    private val id: Long? = null,
 ) : BaseEntity()

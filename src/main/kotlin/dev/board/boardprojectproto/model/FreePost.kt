@@ -1,6 +1,7 @@
 package dev.board.boardprojectproto.model
 
-import jakarta.persistence.Entity
+import javax.persistence.Entity
+
 
 @Entity
 class FreePost(

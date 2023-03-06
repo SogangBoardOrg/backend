@@ -1,10 +1,11 @@
 package dev.board.boardprojectproto.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
+
 import org.hibernate.annotations.GenericGenerator
 import java.util.*
+import javax.persistence.Column
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 
 class StudentCard(
     @Id

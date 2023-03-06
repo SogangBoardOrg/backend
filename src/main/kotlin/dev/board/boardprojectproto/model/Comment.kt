@@ -1,6 +1,9 @@
 package dev.board.boardprojectproto.model
 
-import jakarta.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 
 @Entity
 class Comment(
@@ -8,8 +11,8 @@ class Comment(
     // val author : Long,
     val isAnon: Boolean,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val postId: Long,
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // val postId: Long?,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

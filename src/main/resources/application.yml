@@ -1,6 +1,10 @@
 spring:
+  mvc:
+    view:
+      suffix: .html
   profiles:
-    active: dev
+    active: def
+    include: oauth2
   datasource:
     url: jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: root
@@ -8,13 +12,21 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 399313694963-ssl5np4ejbnctin79f5ti4rgp2agf5i9.apps.googleusercontent.com
+            client-secret: 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
+            scope : profile, email
 logging.level:
   # for native query
   #org.hibernate.orm.jdbc.bind: trace #??? ?? 3.x, hibernate6

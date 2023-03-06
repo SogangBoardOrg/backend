@@ -1,12 +1,11 @@
 package dev.board.boardprojectproto.model
 
-import dev.board.boardprojectproto.auth.ProviderType
 import dev.board.boardprojectproto.common.enums.CurrentStatus
 import dev.board.boardprojectproto.common.enums.Role
-import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
+import javax.persistence.*
 
 @Entity
 class User(
@@ -17,13 +16,13 @@ class User(
     @Column(name = "role")
     var role: Role = Role.ROLE_NEWBIE,
 
+    // var providerType: ProviderType,
+    // 현재 상태 -> 정지인지 뭐인지 등등
     @Enumerated(EnumType.STRING)
     @Column(name = "provider_type")
-    var providerType: ProviderType,
-    // 현재 상태 -> 정지인지 뭐인지 등등
-    var currentStatus: CurrentStatus,
+    var currentStatus: CurrentStatus = CurrentStatus.NORMAL,
     // 정지된 날짜
-    var susPendedTime: LocalDateTime?,
+    var susPendedTime: LocalDateTime? = null,
 
     @Id
     @Column(name = "user_id")
