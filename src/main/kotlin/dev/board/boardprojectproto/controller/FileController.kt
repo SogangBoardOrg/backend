@@ -1,17 +1,16 @@
-package board.dev.boardproject.controller
+package dev.board.boardprojectproto.controller
 
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
-@RequestMapping("/api")
+@RestController
+@RequestMapping("/api/v1")
 class FileController {
 
     @GetMapping("/test")
-    @ResponseBody
     fun test(): String {
+        println("안녕하세요")
         return "hello"
     }
 }

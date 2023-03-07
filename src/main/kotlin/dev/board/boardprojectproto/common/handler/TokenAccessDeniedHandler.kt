@@ -22,6 +22,7 @@ class TokenAccessDeniedHandler : AccessDeniedHandler {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         val responseJson = JSONObject()
         responseJson["status"] = "fail"
+        // TODO: 여기 수정
         // responseJson["data"] = ErrorCode.UNAUTHORIZED.message
         response.writer.print(responseJson)
     }

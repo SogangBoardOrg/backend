@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 10초마다 파일 변화를 체크하여 갱신시킨다. -->
-<configuration scan="true" scanPeriod="10 seconds">
+<configuration scan="true" scanPeriod="60 seconds">
 
     <!-- spring.profile에 따른 설정파일 분기 -->
     <springProfile name = "prod">

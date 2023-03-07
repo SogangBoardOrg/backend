@@ -10,8 +10,8 @@ class UserServiceImpl(
 ) : UserService {
 
     override fun join(username: String, pw: String) {
-        var user: User = User(username = username, password = pw)
-        userRepository.save(user)
+        // var user: User = User(username = username, password = pw)
+        // userRepository.save(user)
         return
     }
 }

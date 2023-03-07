@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass
 abstract class BaseEntity(
     @CreatedDate
     @Column(name = "created_at")
-    val createdAt: LocalDateTime? = null,
+    var createdAt: LocalDateTime? = null,
 
     @LastModifiedDate
     @Column(name = "updated_at")

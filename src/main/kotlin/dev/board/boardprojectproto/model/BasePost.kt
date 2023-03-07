@@ -22,5 +22,5 @@ open class BasePost(
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null,
+    private var id: Long? = null,
 ) : BaseEntity()
