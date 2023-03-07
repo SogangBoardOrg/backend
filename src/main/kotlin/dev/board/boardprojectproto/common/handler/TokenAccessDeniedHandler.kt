@@ -1,6 +1,7 @@
 package dev.board.boardprojectproto.common.handler
 
 import com.nimbusds.jose.shaded.json.JSONObject
+import dev.board.boardprojectproto.common.enums.ErrorCode
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.stereotype.Component
@@ -22,8 +23,7 @@ class TokenAccessDeniedHandler : AccessDeniedHandler {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         val responseJson = JSONObject()
         responseJson["status"] = "fail"
-        // TODO: 여기 수정
-        // responseJson["data"] = ErrorCode.UNAUTHORIZED.message
+        responseJson["data"] = ErrorCode.UNAUTHORIZED.message
         response.writer.print(responseJson)
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class JwtConfig(
+    // TODO: 값 변경하기
     @Value("\${jwt.secret}")
     private val secret: String,
 ) {

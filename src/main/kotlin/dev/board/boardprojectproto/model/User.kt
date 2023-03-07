@@ -41,5 +41,8 @@ class User(
     @Column(name = "current_status")
     var currentStatus: CurrentStatus = CurrentStatus.NORMAL,
     // 정지된 날짜
-    var susPendedTime: LocalDateTime? = null,
+    var suspendedTime: LocalDateTime? = null,
+
+    // 프로필 이미지
+    var profileImageUrl: String? = null,
 ) : BaseEntity()

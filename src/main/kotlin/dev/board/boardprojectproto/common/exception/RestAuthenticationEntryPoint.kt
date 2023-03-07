@@ -1,6 +1,7 @@
 package dev.board.boardprojectproto.common.exception
 
 import com.nimbusds.jose.shaded.json.JSONObject
+import dev.board.boardprojectproto.common.enums.ErrorCode
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import javax.servlet.http.HttpServletRequest
@@ -21,7 +22,7 @@ class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         val responseJson = JSONObject()
         responseJson["status"] = "fail"
-        //responseJson["data"] = ErrorCode.UNAUTHORIZED.message
+        responseJson["data"] = ErrorCode.UNAUTHORIZED.message
         response.writer.print(responseJson)
     }
 }

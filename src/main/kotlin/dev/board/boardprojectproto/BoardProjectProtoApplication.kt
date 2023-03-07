@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 @ConfigurationPropertiesScan
 class BoardProjectProtoApplication
 
+// TODO: application yml 값 변경하기
+
 fun main(args: Array<String>) {
     runApplication<BoardProjectProtoApplication>(*args)
 }

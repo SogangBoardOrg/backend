@@ -4,6 +4,8 @@ import dev.board.boardprojectproto.auth.OAuth2UserInfo
 import dev.board.boardprojectproto.auth.OAuth2UserInfoFactory
 import dev.board.boardprojectproto.auth.ProviderType
 import dev.board.boardprojectproto.auth.UserPrincipal
+import dev.board.boardprojectproto.common.enums.ErrorCode
+import dev.board.boardprojectproto.common.exception.InternalServiceException
 import dev.board.boardprojectproto.common.exception.OAuthProviderMissMatchException
 import dev.board.boardprojectproto.model.User
 import dev.board.boardprojectproto.repository.UserRepository
@@ -17,7 +19,6 @@ import java.util.*
 @Service
 class CustomOAuth2UserService(
     private val userRepository: UserRepository,
-    // private val githubClient: GithubClient,
 ) : DefaultOAuth2UserService() {
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
         val user = super.loadUser(userRequest)
@@ -29,9 +30,7 @@ class CustomOAuth2UserService(
             if (it is OAuthProviderMissMatchException) {
                 throw it
             }
-            // TODO: 에러 다시 고치기
-            throw IllegalArgumentException("auth 실패")
-            // throw InternalServiceException(ErrorCode.SERVER_ERROR, it.message.toString())
+            throw InternalServiceException(ErrorCode.SERVER_ERROR, it.message.toString())
         }.getOrThrow()
     }
 
@@ -63,7 +62,7 @@ class CustomOAuth2UserService(
             email = userInfo.getEmail(),
             username = userInfo.getName(),
             providerType = providerType,
-            // profileImageUrl = userInfo.getImageUrl(),
+            profileImageUrl = userInfo.getImageUrl(),
             providerId = userInfo.getId(),
         )
         println("user : $user")

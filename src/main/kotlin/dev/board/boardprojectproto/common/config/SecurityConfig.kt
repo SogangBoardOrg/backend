@@ -7,19 +7,19 @@ import dev.board.boardprojectproto.common.exception.RestAuthenticationEntryPoint
 import dev.board.boardprojectproto.common.filter.TokenAuthenticationFilter
 import dev.board.boardprojectproto.common.handler.OAuth2AuthenticationFailureHandler
 import dev.board.boardprojectproto.common.handler.OAuth2AuthenticationSuccessHandler
-// import dev.board.boardprojectproto.common.handler.OAuth2AuthenticationSuccessHandler
 import dev.board.boardprojectproto.common.handler.TokenAccessDeniedHandler
 import dev.board.boardprojectproto.repository.UserRepository
 import dev.board.boardprojectproto.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
 import dev.board.boardprojectproto.service.CustomOAuth2UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -38,10 +38,6 @@ class SpringSecurityConfig(
     private val tokenAccessDeniedHandler: TokenAccessDeniedHandler,
     private val userRepository: UserRepository,
 ) {
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -98,6 +94,17 @@ class SpringSecurityConfig(
 
         return http.build()
     }
+
+    @Bean
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+        return authenticationConfiguration.authenticationManager
+    }
+
+    @Bean
+    fun passwordEncoder(): BCryptPasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
+
 
     @Bean
     fun oAuth2AuthorizationRequestBasedOnCookieRepository(): OAuth2AuthorizationRequestBasedOnCookieRepository {

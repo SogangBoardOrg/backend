@@ -4,6 +4,7 @@ import dev.board.boardprojectproto.auth.AuthToken
 import dev.board.boardprojectproto.auth.OAuth2UserInfoFactory
 import dev.board.boardprojectproto.auth.ProviderType
 import dev.board.boardprojectproto.common.config.properties.AppProperties
+import dev.board.boardprojectproto.common.enums.ErrorCode
 import dev.board.boardprojectproto.common.exception.UnAuthorizedException
 import dev.board.boardprojectproto.common.util.addCookie
 import dev.board.boardprojectproto.common.util.deleteCookie
@@ -68,10 +69,9 @@ class OAuth2AuthenticationSuccessHandler(
 
     private fun validateRedirectTargetUrl(targetUrl: String) {
         targetUrl.let {
-            // TODO: 에러 수정
             if (!isAuthorizedRedirectUri(it)) {
                 throw UnAuthorizedException(
-                    409,
+                    ErrorCode.UNAUTHORIZED,
                     "올바르지 않은 redirect uri ( $it ) 입니다.",
                 )
             }
