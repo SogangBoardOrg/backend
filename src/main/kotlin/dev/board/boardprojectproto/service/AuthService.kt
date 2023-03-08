@@ -1,10 +1,16 @@
 package dev.board.boardprojectproto.service
 
+import dev.board.boardprojectproto.dto.UserInfoDto
+import dev.board.boardprojectproto.dto.UserLoginRequestDto
+import dev.board.boardprojectproto.dto.UserSignUpDto
+import java.util.UUID
+
 interface AuthService {
     // TODO: 회원가입
-    fun saveUser()
+    fun saveUser(userSingUpDto: UserSignUpDto): UUID
 
     // TODO: 로그인
+    fun loginUser(userLoginRequestDto: UserLoginRequestDto): UserInfoDto
 
     // TODO: 유저토큰 재생산
 

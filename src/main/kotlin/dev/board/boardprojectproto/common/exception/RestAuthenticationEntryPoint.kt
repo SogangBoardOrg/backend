@@ -2,6 +2,7 @@ package dev.board.boardprojectproto.common.exception
 
 import com.nimbusds.jose.shaded.json.JSONObject
 import dev.board.boardprojectproto.common.enums.ErrorCode
+import dev.board.boardprojectproto.common.util.log
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import javax.servlet.http.HttpServletRequest
@@ -13,8 +14,7 @@ class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
         response: HttpServletResponse,
         authException: AuthenticationException,
     ) {
-        // log.info("Responding with unauthorized error. Message ${authException.message}")
-        setResponse(response)
+        log.info("Responding with unauthorized error. Message ${authException.message}")
     }
 
     private fun setResponse(response: HttpServletResponse) {

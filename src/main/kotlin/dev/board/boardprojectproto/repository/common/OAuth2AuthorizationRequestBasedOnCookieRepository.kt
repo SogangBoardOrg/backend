@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse
 const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME: String = "oauth2_auth_request"
 const val REDIRECT_URI_PARAM_COOKIE_NAME: String = "redirect_uri"
 const val REFRESH_TOKEN: String = "refresh_token"
-private const val COOKIE_EXPIRE_SECONDS = 180L
+
+// TODO: 이거 테스트 편하게 만드려고 한거임
+private const val COOKIE_EXPIRE_SECONDS = 1800000000L
 
 class OAuth2AuthorizationRequestBasedOnCookieRepository : AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
     override fun loadAuthorizationRequest(request: HttpServletRequest): OAuth2AuthorizationRequest? {

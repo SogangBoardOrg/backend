@@ -1,11 +1,12 @@
 package dev.board.boardprojectproto.auth
 
+import dev.board.boardprojectproto.common.enums.ErrorCode
+import dev.board.boardprojectproto.common.exception.UnAuthorizedException
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
-import java.lang.Exception
 import java.security.Key
 import java.util.*
 
@@ -33,8 +34,7 @@ class AuthTokenProvider(
 
             return UsernamePasswordAuthenticationToken(principal, authToken, authorities)
         } else {
-            throw Exception("올바르지 않은 토큰")
-        //throw UnAuthorizedException(ErrorCode.TOKEN_INVALID, "올바르지 않은 Token입니다.")
+            throw UnAuthorizedException(ErrorCode.TOKEN_INVALID, "올바르지 않은 Token입니다.")
         }
     }
 }

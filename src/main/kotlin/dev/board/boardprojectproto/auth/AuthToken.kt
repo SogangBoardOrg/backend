@@ -1,5 +1,6 @@
 package dev.board.boardprojectproto.auth
 
+import dev.board.boardprojectproto.common.util.log
 import io.jsonwebtoken.*
 import java.security.Key
 import java.util.*
@@ -27,17 +28,17 @@ class AuthToken(
                     .parseClaimsJws(token)
                     .body
             } catch (e: SecurityException) {
-                // log.error("Invalid JWT signature.")
+                log.error("Invalid JWT signature.")
             } catch (e: MalformedJwtException) {
-                // log.error("Invalid Jwt token.")
+                log.error("Invalid Jwt token.")
             } catch (e: ExpiredJwtException) {
-                // log.error("Expired JWT token.")
+                log.error("Expired JWT token.")
             } catch (e: UnsupportedJwtException) {
-                // log.error("Unsupported JWT token.")
+                log.error("Unsupported JWT token.")
             } catch (e: java.lang.IllegalArgumentException) {
-                // log.error("Jwt token compact of handler are invalid.")
+                log.error("Jwt token compact of handler are invalid.")
             } catch (e: SignatureException) {
-                // log.error("Jwt signature does not match.")
+                log.error("Jwt signature does not match.")
             }
             return null
         }
@@ -51,18 +52,18 @@ class AuthToken(
                     .parseClaimsJws(token)
                     .body
             } catch (e: ExpiredJwtException) {
-                // log.info("Expired JWT token.")
+                log.info("Expired JWT token.")
                 return e.claims
             } catch (e: SecurityException) {
-                // log.error("Invalid JWT signature.")
+                log.error("Invalid JWT signature.")
             } catch (e: MalformedJwtException) {
-                // log.error("Invalid Jwt token.")
+                log.error("Invalid Jwt token.")
             } catch (e: UnsupportedJwtException) {
-                // log.error("Unsupported JWT token.")
+                log.error("Unsupported JWT token.")
             } catch (e: java.lang.IllegalArgumentException) {
-                // log.error("Jwt token compact of handler are invalid.")
+                log.error("Jwt token compact of handler are invalid.")
             } catch (e: SignatureException) {
-                // log.error("Jwt signature does not match.")
+                log.error("Jwt signature does not match.")
             }
             return null
         }

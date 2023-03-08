@@ -45,4 +45,8 @@ class User(
 
     // 프로필 이미지
     var profileImageUrl: String? = null,
-) : BaseEntity()
+) : BaseEntity() {
+    fun encodePassword(encodedPassword: String) {
+        password = encodedPassword
+    }
+}

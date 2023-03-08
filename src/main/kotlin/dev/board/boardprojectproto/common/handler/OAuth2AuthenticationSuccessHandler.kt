@@ -8,6 +8,7 @@ import dev.board.boardprojectproto.common.enums.ErrorCode
 import dev.board.boardprojectproto.common.exception.UnAuthorizedException
 import dev.board.boardprojectproto.common.util.addCookie
 import dev.board.boardprojectproto.common.util.deleteCookie
+import dev.board.boardprojectproto.common.util.log
 import dev.board.boardprojectproto.model.User
 import dev.board.boardprojectproto.repository.UserRepository
 import dev.board.boardprojectproto.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
@@ -61,7 +62,7 @@ class OAuth2AuthenticationSuccessHandler(
         val findUser = findUserByAuthToken(authentication)
         val (accessToken, refreshToken) = createTokens(findUser)
         setRefreshTokenCookie(request, response, refreshToken)
-
+        log.info(refreshToken.toString())
         return UriComponentsBuilder.fromUriString(targetUrl)
             .queryParam("token", accessToken.token)
             .build().toUriString()

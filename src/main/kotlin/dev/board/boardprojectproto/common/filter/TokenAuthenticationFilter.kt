@@ -1,6 +1,7 @@
 package dev.board.boardprojectproto.common.filter
 
 import dev.board.boardprojectproto.common.util.getAccessToken
+import dev.board.boardprojectproto.common.util.log
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -17,6 +18,7 @@ class TokenAuthenticationFilter(
         filterChain: FilterChain,
     ) {
         val tokenStr = getAccessToken(request)
+        log.info("access token : $tokenStr")
 
         tokenStr ?: run {
             filterChain.doFilter(request, response)
