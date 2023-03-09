@@ -1,4 +1,0 @@
-[submodule "securityTest"]
-	path = securityTest
-	url = https://github.com/SogangBoard/securityTest.git
-	branch = main
