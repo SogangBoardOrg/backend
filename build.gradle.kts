@@ -53,3 +53,23 @@ allOpen {
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
 }
+
+tasks.register("copyYml", Copy::class) {
+    copy {
+        from("./Config")
+        include("*.yml", "*.xml")
+        into("src/main/resources")
+    }
+}
+
+tasks.bootRun {
+    dependsOn(tasks.getByName("copyYml"))
+}
+
+tasks.build {
+    dependsOn(tasks.getByName("copyYml"))
+}
+
+val jar: Jar by tasks
+
+jar.enabled = false
