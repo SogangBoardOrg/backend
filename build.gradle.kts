@@ -56,7 +56,7 @@ allOpen {
 
 tasks.register("copyYml", Copy::class) {
     copy {
-        from("./securityTest")
+        from("./backend-config")
         include("*.yml", "*.xml")
         into("src/main/resources")
     }

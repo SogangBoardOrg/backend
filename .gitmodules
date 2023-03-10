@@ -1,3 +1,4 @@
-[submodule "securityTest"]
-	path = securityTest
-	url = https://github.com/SogangBoard/securityTest.git
+[submodule "backend-config"]
+	path = backend-config
+	url = https://github.com/SogangBoardOrg/backend-config.git
+	branch = main
