@@ -15,7 +15,9 @@ jobs:
 
       - name: Build and deploy
         run: |
+          sudo apt-get update
           sudo apt-get install sshpass
+          echo "hi"
           sshpass -p$SSH_PRIVATE_KEY ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_KNOWN_HOSTS '~/build.sh'
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
