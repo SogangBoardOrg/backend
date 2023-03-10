@@ -1,4 +1,3 @@
 [submodule "backend-config"]
 	path = backend-config
-	url = https://github.com/SogangBoardOrg/backend-config.git
-	branch = main
+	url = git@github.com:SogangBoardOrg/backend-config.git
