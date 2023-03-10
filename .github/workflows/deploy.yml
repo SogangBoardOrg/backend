@@ -3,7 +3,7 @@ name: Deploy to dev env
 on:
     push:
         branches:
-            - dev
+            - main
 jobs:
     build-docker:
         runs-on: ubuntu-latest
@@ -50,3 +50,9 @@ jobs:
                 echo "docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
                 echo "docker run -p 8080:8080 -e PROFILE=dev -d --restart always --name csbroker-api $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
                 
+
+            
+            
+
+
+
