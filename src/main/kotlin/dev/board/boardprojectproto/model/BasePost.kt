@@ -15,7 +15,7 @@ import javax.persistence.*
 open class BasePost(
     var title: String,
     var content: String,
-    //val authorId : Long,
+    //val authorId : UUID,
     var isAnon: Boolean,
     var commentOn: Boolean,
     // var showStatus: 이거는 enum 만들기
