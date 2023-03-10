@@ -58,5 +58,5 @@ jobs:
             - name: Pull image from Amazon ECR and restart container
               run: |
                 docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-                docker stop test_con && docker rm test_con
+                docker stop test && docker rm test
                 docker run -d --name test -p 8080:8090 --restart unless-stopped ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
