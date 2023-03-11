@@ -15,11 +15,8 @@ jobs:
 
       - name: Build and deploy
         run: |
-          touch $PWD/temp.pem
-          echo "$SSH_PEM_KEY" > $PWD/temp.pem
-          chmod 400 $PWD/temp.pem
-          echo "$SSH_PEM_KEY"
-          ssh -i "temp.pem" $SSH_USER@$SSH_KNOWN_HOSTS '~/script.sh'
+          echo "SSH_PEM_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
         env:
           SSH_USER: ${{secrets.SSH_USER}}
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
