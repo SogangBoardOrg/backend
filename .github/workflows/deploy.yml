@@ -16,7 +16,7 @@ jobs:
       - name: Build and deploy
         run: |
           echo "SSH_PEM_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER}@${SSH_KNOWN_HOSTS}
         env:
           SSH_USER: ${{secrets.SSH_USER}}
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
