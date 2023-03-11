@@ -15,7 +15,7 @@ jobs:
 
       - name: Build and deploy
         run: |
-          echo "SSH_PEM_KEY" >> $HOME/key.pem
+          echo "$SSH_PEM_KEY" >> $HOME/key.pem
           chmod 400 $HOME/key.pem
           ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS}
         env:
