@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "$SSH_PEM_KEY" >> $HOME/key.pem
           chmod 400 $HOME/key.pem
-          ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS}
+          ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS} '~/script.sh'
         env:
           SSH_USER: ${{secrets.SSH_USER}}
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
