@@ -14,7 +14,6 @@ class BoardProjectApplication
 // TODO: username 처리 방법 알아보기 -> 랜덤 닉네임 생성?
 // TODO: redis refresh token 생성
 
-
 fun main(args: Array<String>) {
     runApplication<BoardProjectApplication>(*args)
 }
