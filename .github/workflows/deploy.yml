@@ -15,9 +15,9 @@ jobs:
 
       - name: Build and deploy
         run: |
-          touch temp.pem
-          $SSH_PEM_KEY > temp.pem
-          chmod 400 temp.pem
+          touch $PWD/temp.pem
+          echo $SSH_PEM_KEY > $PWD/temp.pem
+          chmod 400 $PWD/temp.pem
           ssh -i "temp.pem" $SSH_USER@$SSH_KNOWN_HOSTS '~/script.sh'
         env:
           SSH_USER: ${{secrets.SSH_USER}}
