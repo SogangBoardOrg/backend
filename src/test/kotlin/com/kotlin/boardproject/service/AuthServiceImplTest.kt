@@ -1,11 +1,10 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.auth.AuthTokenProvider
-import dev.board.boardproject.auth.ProviderType
-import dev.board.boardproject.common.config.properties.AppProperties
-import dev.board.boardproject.dto.UserSignUpDto
-import dev.board.boardproject.model.User
-import dev.board.boardproject.repository.UserRepository
+import com.kotlin.boardproject.auth.ProviderType
+import com.kotlin.boardproject.common.config.properties.AppProperties
+import com.kotlin.boardproject.dto.UserSignUpDto
+import com.kotlin.boardproject.model.User
+import com.kotlin.boardproject.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

@@ -2,7 +2,6 @@ package com.kotlin.boardproject.model
 
 import javax.persistence.*
 
-
 // 게시판 상관없이 모두 적용되는 속성을 넣는다.
 // 테이블 전략은 상속관계 매핑 중에서 조인 전략을 사용
 
@@ -11,16 +10,28 @@ import javax.persistence.*
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn
+@DiscriminatorColumn(name = "boardType")
 open class BasePost(
-    var title: String,
-    var content: String,
-    //val authorId : UUID,
-    var isAnon: Boolean,
-    var commentOn: Boolean,
-    // var showStatus: 이거는 enum 만들기
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Long? = null,
-) : BaseEntity()
+
+    var title: String,
+
+    var content: String,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val writer: User,
+
+    var isAnon: Boolean,
+
+    var commentOn: Boolean,
+
+    // var showStatus: 이거는 enum 만들기
+) : BaseEntity() {
+    fun addPost(user: User) {
+        user.postList.add(this)
+    }
+}

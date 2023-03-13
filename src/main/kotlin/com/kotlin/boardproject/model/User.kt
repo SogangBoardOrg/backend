@@ -45,6 +45,15 @@ class User(
 
     // 프로필 이미지
     var profileImageUrl: String? = null,
+
+    // 쓴 글 목록
+    @OneToMany(mappedBy = "writer")
+    val postList: MutableList<BasePost> = mutableListOf(),
+
+    // 쓴 댓글 목록
+    @OneToMany(mappedBy = "writer")
+    val commentList: MutableList<BasePost> = mutableListOf(),
+
 ) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword
