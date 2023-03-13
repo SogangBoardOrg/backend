@@ -30,4 +30,8 @@ open class BasePost(
     var commentOn: Boolean,
 
     // var showStatus: 이거는 enum 만들기
-) : BaseEntity()
+) : BaseEntity() {
+    fun addPost(user: User) {
+        user.postList.add(this)
+    }
+}

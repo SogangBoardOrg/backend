@@ -2,7 +2,6 @@ package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.dto.CreatePostRequestDto
-import com.kotlin.boardproject.model.BasePost
 import com.kotlin.boardproject.repository.PostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -22,6 +21,11 @@ class PostServiceImpl(
         // 포스트 생성 지금은 그냥 진행 -> 태그 null 값이면 다른 post로 취급?
         val post = createPostRequestDto.toPost(user)
 
+        // user post list에 추가
+        post.addPost(user)
+
         postRepository.save(post)
     }
+
+
 }
