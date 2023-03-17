@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.CreatePostRequestDto
-import com.kotlin.boardproject.dto.CreatePostResponseDto
+import com.kotlin.boardproject.dto.ReadOnePostResponseDto
 
 interface PostService {
     // TODO: 게시물 생성
@@ -10,8 +10,8 @@ interface PostService {
     // 3. 파일이 있다면 받는다. -> 아직 구현안함
     fun createPost(username: String, createPostRequestDto: CreatePostRequestDto)
 
-
     // TODO: 게시물 하나 읽기
+    fun readOnePost(postId: Long): ReadOnePostResponseDto
 
     // TODO: 게시물 전체 읽기 -> 게시판 들어가면
 

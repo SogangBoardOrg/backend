@@ -15,7 +15,7 @@ open class BasePost(
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null,
+    var id: Long? = null,
 
     var title: String,
 
