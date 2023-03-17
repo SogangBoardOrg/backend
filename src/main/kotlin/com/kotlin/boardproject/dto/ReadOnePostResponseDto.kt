@@ -7,6 +7,7 @@ data class ReadOnePostResponseDto(
     val title: String,
     val content: String,
     val writerName: String,
+    val isAnon: Boolean,
     val commentOn: Boolean,
     val createTime: LocalDateTime,
     val lastModifiedTime: LocalDateTime?,

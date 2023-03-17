@@ -34,14 +34,16 @@ class PostServiceImpl(
 
     @Transactional(readOnly = true)
     override fun readOnePost(postId: Long): ReadOnePostResponseDto {
-        val post = postRepository.findByIdOrNull(postId) ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+        val post =
+            postRepository.findByIdOrNull(postId) ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         return ReadOnePostResponseDto(
             id = post.id!!,
             commentOn = post.commentOn,
             title = post.title,
+            isAnon = post.isAnon,
             content = post.title,
-            writerName = post.writer.username,
+            writerName = if (post.isAnon) "Anon" else post.writer.username,
             createTime = post.createdAt!!,
             lastModifiedTime = post.updatedAt,
         )
