@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.PostStautus
 import javax.persistence.Entity
 
 @Entity
@@ -15,4 +16,5 @@ class FreePost(
     isAnon = isAnon,
     commentOn = commentOn,
     writer = writer,
+    status = PostStautus.NORMAL
 )

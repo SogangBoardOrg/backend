@@ -1,8 +1,11 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.enums.ErrorCode
+import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
+import com.kotlin.boardproject.common.exception.UnAuthorizedException
 import com.kotlin.boardproject.dto.CreatePostRequestDto
+import com.kotlin.boardproject.dto.EditPostRequestDto
 import com.kotlin.boardproject.dto.ReadOnePostResponseDto
 import com.kotlin.boardproject.repository.PostRepository
 import com.kotlin.boardproject.repository.UserRepository
@@ -37,6 +40,8 @@ class PostServiceImpl(
         val post =
             postRepository.findByIdOrNull(postId) ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
+        // TODO: comment 막혀 있으면 정보 제공 x 또한 삭제된 comment는 전달 x
+
         return ReadOnePostResponseDto(
             id = post.id!!,
             commentOn = post.commentOn,
@@ -47,5 +52,23 @@ class PostServiceImpl(
             createTime = post.createdAt!!,
             lastModifiedTime = post.updatedAt,
         )
+    }
+
+    @Transactional
+    override fun editPost(username: String, postId: Long, editPostRequestDto: EditPostRequestDto): Long {
+        val user = userRepository.findByEmail(username) ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+        val post = postRepository.findByIdAndStatus(postId, PostStautus.NORMAL) ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
+
+        if (user != post.writer) {
+            throw UnAuthorizedException(ErrorCode.FORBIDDEN, "해당 글의 주인이 아닙니다.")
+        }
+
+        // TODO: mapper같은 함수 활용
+        post.title = editPostRequestDto.title
+        post.isAnon = editPostRequestDto.isAnon
+        post.commentOn = editPostRequestDto.commentOn
+        post.content = editPostRequestDto.content
+
+        return post.id!!
     }
 }

@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.CreatePostRequestDto
+import com.kotlin.boardproject.dto.EditPostRequestDto
 import com.kotlin.boardproject.dto.ReadOnePostResponseDto
-import com.kotlin.boardproject.dto.ReadPagePostResponseDto
 
 interface PostService {
     // TODO: 게시물 생성
@@ -20,6 +20,8 @@ interface PostService {
     // TODO: 게시물 검색해서 찾는 기능 -> query dsl 사용
     // fun findPost()
 
+    // TODO: 게시물 수정
+    fun editPost(username: String, postId: Long, editPostRequestDto: EditPostRequestDto): Long
 
     // TODO: 게시물 삭제하는 기능
     // fun deletePost()
