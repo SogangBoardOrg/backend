@@ -28,7 +28,7 @@ class PostController(
         return ApiResponse.success(CreateNormalPostResponseDto(1L))
     }
 
-    @GetMapping("/postId}")
+    @GetMapping("/{postId}")
     fun readOneNormalPost(
         @PathVariable("postId") postId: Long,
     ): ApiResponse<ReadOneNormalPostResponseDto> {
