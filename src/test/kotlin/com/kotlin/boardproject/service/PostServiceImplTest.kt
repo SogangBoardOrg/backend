@@ -3,7 +3,7 @@ package com.kotlin.boardproject.service
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.PostRepository
+import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
@@ -24,7 +24,7 @@ class PostServiceImplTest {
     private lateinit var userRepository: UserRepository
 
     @Autowired
-    private lateinit var postRepository: PostRepository
+    private lateinit var normalPostRepository: NormalPostRepository
 
     private lateinit var writer: User
 
@@ -58,10 +58,10 @@ class PostServiceImplTest {
             isAnon = false,
             commentOn = true,
         )
-        postRepository.save(post)
+        normalPostRepository.save(post)
 
         // then
-        var basePosts = postRepository.findAll()
+        var basePosts = normalPostRepository.findAll()
         basePosts.size shouldBe 1
         basePosts[0].title shouldBe "title_test"
         basePosts[0].content shouldBe "content_test"

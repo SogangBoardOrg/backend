@@ -31,9 +31,9 @@ class PostController(
     @GetMapping("/{postId}")
     fun readOneNormalPost(
         @PathVariable("postId") postId: Long,
-    ): ApiResponse<ReadOneNormalPostResponseDto> {
-        val postDto = postService.readOneNormalPost(postId) // post 객체 반환
-        return ApiResponse.success(postDto)
+    ): ApiResponse<OneNormalPostResponseDto> {
+        val ret = postService.readOneNormalPostById(postId) // post 객체 반환
+        return ApiResponse.success(ret)
     }
 
     @PutMapping("/{postId}")
