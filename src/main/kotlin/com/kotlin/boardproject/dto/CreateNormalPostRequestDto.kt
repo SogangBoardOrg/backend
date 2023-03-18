@@ -3,7 +3,7 @@ package com.kotlin.boardproject.dto
 import com.kotlin.boardproject.model.BasePost
 import com.kotlin.boardproject.model.User
 
-data class CreatePostRequestDto(
+data class CreateNormalPostRequestDto(
     val title: String,
     val content: String,
     val isAnon: Boolean,

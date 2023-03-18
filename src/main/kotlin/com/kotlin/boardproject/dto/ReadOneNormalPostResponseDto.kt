@@ -2,7 +2,7 @@ package com.kotlin.boardproject.dto
 
 import java.time.LocalDateTime
 
-data class ReadOnePostResponseDto(
+data class ReadOneNormalPostResponseDto(
     val id: Long,
     val title: String,
     val content: String,

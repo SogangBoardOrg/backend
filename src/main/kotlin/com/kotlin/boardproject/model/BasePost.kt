@@ -30,6 +30,7 @@ open class BasePost(
 
     var commentOn: Boolean,
 
+    @Enumerated(EnumType.STRING)
     var status: PostStautus,
 ) : BaseEntity() {
     fun addPost(user: User) {

@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.dto
 
-class EditPostRequestDto(
+class EditNormalPostRequestDto(
     val title: String,
     val content: String,
     val isAnon: Boolean,

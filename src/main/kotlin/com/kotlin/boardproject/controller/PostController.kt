@@ -20,29 +20,29 @@ class PostController(
 ) {
 
     @PostMapping("/create")
-    fun createPost(
+    fun createNormalPost(
         @LoginUser loginUser: User,
-        @RequestBody createPostRequestDto: CreatePostRequestDto,
-    ): ApiResponse<CreatePostResponseDto> {
-        postService.createPost(loginUser.username, createPostRequestDto)
-        return ApiResponse.success(CreatePostResponseDto(1L))
+        @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
+    ): ApiResponse<CreateNormalPostResponseDto> {
+        postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
+        return ApiResponse.success(CreateNormalPostResponseDto(1L))
     }
 
     @GetMapping("/postId}")
-    fun readOnePost(
+    fun readOneNormalPost(
         @PathVariable("postId") postId: Long,
-    ): ApiResponse<ReadOnePostResponseDto> {
-        val postDto = postService.readOnePost(postId) // post 객체 반환
+    ): ApiResponse<ReadOneNormalPostResponseDto> {
+        val postDto = postService.readOneNormalPost(postId) // post 객체 반환
         return ApiResponse.success(postDto)
     }
 
     @PutMapping("/{postId}")
-    fun editPost(
+    fun editNormalPost(
         @LoginUser loginUser: User,
         @PathVariable("postId") postId: Long,
-        @RequestBody editPostRequestDto: EditPostRequestDto,
+        @RequestBody editNormalPostRequestDto: EditNormalPostRequestDto,
     ): ApiResponse<Long> {
-        val id = postService.editPost(loginUser.username, postId, editPostRequestDto) // post 객체 반환
+        val id = postService.editNormalPost(loginUser.username, postId, editNormalPostRequestDto) // post 객체 반환
         return ApiResponse.success(id)
     }
 

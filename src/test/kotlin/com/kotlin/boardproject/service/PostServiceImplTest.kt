@@ -1,8 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.auth.ProviderType
-import com.kotlin.boardproject.model.BasePost
-import com.kotlin.boardproject.model.FreePost
+import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.PostRepository
 import com.kotlin.boardproject.repository.UserRepository
@@ -52,7 +51,7 @@ class PostServiceImplTest {
         var content = "content_test"
 
         // when
-        var post = FreePost(
+        var post = NormalPost(
             title = title,
             content = content,
             writer = writer,
