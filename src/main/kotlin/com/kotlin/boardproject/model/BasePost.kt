@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.PostStautus
 import javax.persistence.*
 
 // 게시판 상관없이 모두 적용되는 속성을 넣는다.
@@ -29,7 +30,8 @@ open class BasePost(
 
     var commentOn: Boolean,
 
-    // var showStatus: 이거는 enum 만들기
+    @Enumerated(EnumType.STRING)
+    var status: PostStautus,
 ) : BaseEntity() {
     fun addPost(user: User) {
         user.postList.add(this)

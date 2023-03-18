@@ -1,16 +1,14 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
-import com.kotlin.boardproject.dto.CreatePostRequestDto
-import com.kotlin.boardproject.dto.CreatePostResponseDto
-import com.kotlin.boardproject.dto.ReadAllPostResponseDto
-import com.kotlin.boardproject.dto.ReadOnePostResponseDto
+import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -22,20 +20,30 @@ class PostController(
 ) {
 
     @PostMapping("/create")
-    fun createPost(
+    fun createNormalPost(
         @LoginUser loginUser: User,
-        @RequestBody createPostRequestDto: CreatePostRequestDto,
-    ): ApiResponse<CreatePostResponseDto> {
-        postService.createPost(loginUser.username, createPostRequestDto)
-        return ApiResponse.success(CreatePostResponseDto(1L))
+        @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
+    ): ApiResponse<CreateNormalPostResponseDto> {
+        postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
+        return ApiResponse.success(CreateNormalPostResponseDto(1L))
     }
 
-    @GetMapping("free/v/{postId}")
-    fun readOnePost(
+    @GetMapping("/{postId}")
+    fun findOneNormalPostById(
         @PathVariable("postId") postId: Long,
-    ): ApiResponse<ReadOnePostResponseDto> {
-        val postDto = postService.readOnePost(postId) // post 객체 반환
-        return ApiResponse.success(postDto)
+    ): ApiResponse<OneNormalPostResponseDto> {
+        val ret = postService.findOneNormalPostById(postId) // post 객체 반환
+        return ApiResponse.success(ret)
+    }
+
+    @PutMapping("/{postId}")
+    fun editNormalPost(
+        @LoginUser loginUser: User,
+        @PathVariable("postId") postId: Long,
+        @RequestBody editNormalPostRequestDto: EditNormalPostRequestDto,
+    ): ApiResponse<Long> {
+        val id = postService.editNormalPost(loginUser.username, postId, editNormalPostRequestDto) // post 객체 반환
+        return ApiResponse.success(id)
     }
 
 //    @GetMapping("free/v/")
@@ -44,5 +52,4 @@ class PostController(
 //        val postDto = postService.readOnePost(postId) // post 객체 반환
 //        return ApiResponse.success(postDto)
 //    }
-
 }
