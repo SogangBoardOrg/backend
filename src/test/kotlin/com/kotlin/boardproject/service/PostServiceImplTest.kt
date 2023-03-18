@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.auth.ProviderType
+import com.kotlin.boardproject.common.enums.FreeType
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.NormalPostRepository
@@ -29,7 +30,7 @@ class PostServiceImplTest {
     private lateinit var writer: User
 
     @BeforeEach
-    fun start(){
+    fun start() {
         val user: User = User(
             id = UUID.randomUUID(),
             email = "test@test.com",
@@ -55,8 +56,9 @@ class PostServiceImplTest {
             title = title,
             content = content,
             writer = writer,
-            isAnon = false,
+            isAnon = true,
             commentOn = true,
+            freeType = FreeType.FREE,
         )
         normalPostRepository.save(post)
 
