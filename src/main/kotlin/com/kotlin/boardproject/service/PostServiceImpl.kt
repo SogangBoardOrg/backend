@@ -35,7 +35,7 @@ class PostServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun readOneNormalPostById(postId: Long): OneNormalPostResponseDto {
+    override fun findOneNormalPostById(postId: Long): OneNormalPostResponseDto {
         val post =
             normalPostRepository.findByIdOrNull(postId) ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 

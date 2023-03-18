@@ -12,7 +12,7 @@ interface PostService {
     fun createNormalPost(username: String, createNormalPostRequestDto: CreateNormalPostRequestDto)
 
     // TODO: 게시물 하나 읽기
-    fun readOneNormalPostById(postId: Long): OneNormalPostResponseDto
+    fun findOneNormalPostById(postId: Long): OneNormalPostResponseDto
 
     // TODO: 게시물 페이지 읽기 -> 게시판 들어가면
     // fun readPagePost(): ReadPagePostResponseDto
