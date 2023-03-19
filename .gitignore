@@ -41,7 +41,8 @@ out/
 /nbdist/
 /.nb-gradle/
 
-
+### static ###
+src/main/resources/static/
 
 ### VS Code ###
 .vscode/

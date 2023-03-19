@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.model
 
 import com.kotlin.boardproject.common.enums.ErrorCode
-import com.kotlin.boardproject.common.enums.FreeType
+import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.UnAuthorizedException
 import com.kotlin.boardproject.dto.EditNormalPostRequestDto
@@ -19,7 +19,7 @@ class NormalPost(
     writer: User,
 
     @Enumerated(EnumType.STRING)
-    val freeType: FreeType,
+    val normalType: NormalType,
 ) : BasePost(
     title = title,
     content = content,

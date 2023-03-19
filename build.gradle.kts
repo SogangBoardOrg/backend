@@ -1,18 +1,22 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("org.springframework.boot") version "2.7.1"
     id("io.spring.dependency-management") version "1.1.0"
+    id("org.asciidoctor.jvm.convert") version "3.3.2"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
     kotlin("plugin.jpa") version "1.7.22"
+    kotlin("plugin.allopen") version "1.3.71"
+    kotlin("plugin.noarg") version "1.3.71"
     kotlin("kapt") version "1.6.0" // QueryDsl
 }
 
 group = "dev.board"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
+
+val snippetsDir by extra { file("build/generated-snippets") }
 
 repositories {
     mavenCentral()
@@ -27,13 +31,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("io.sentry:sentry-spring-boot-starter:6.4.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("io.jsonwebtoken:jjwt-api:0.11.2")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("mysql:mysql-connector-java")
-    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("io.mockk:mockk:1.13.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation ("io.kotest:kotest-runner-junit5:5.0.3")
+    testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
@@ -55,7 +61,18 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
+noArg {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
+tasks.test {
+    outputs.dir(snippetsDir)
+}
+
 tasks.register("copyYml", Copy::class) {
+    // println("this is copyYml")
     copy {
         from("./backend-config")
         include("*.yml", "*.xml")
@@ -63,12 +80,40 @@ tasks.register("copyYml", Copy::class) {
     }
 }
 
+tasks.asciidoctor {
+    dependsOn(tasks.getByName("copyYml"))
+    inputs.dir(snippetsDir)
+    dependsOn(tasks.test)
+    doFirst { // 2
+        delete("src/main/resources/static/docs")
+    }
+}
+
+tasks.register("copyHTML", Copy::class) { // 3
+    dependsOn(tasks.asciidoctor)
+    // print("copy html : ")
+    // println(tasks.asciidoctor.get().outputDir)
+    destinationDir = file(".")
+    from(tasks.asciidoctor.get().outputDir) {
+        into("src/main/resources/static/docs")
+    }
+}
+
 tasks.bootRun {
     dependsOn(tasks.getByName("copyYml"))
+    dependsOn(tasks.getByName("copyHTML"))
 }
 
 tasks.build {
     dependsOn(tasks.getByName("copyYml"))
+    dependsOn(tasks.getByName("copyHTML"))
+}
+
+tasks.bootJar { // 5
+    dependsOn(tasks.asciidoctor)
+    from(tasks.asciidoctor.get().outputDir) {
+        into("BOOT-INF/classes/static/docs")
+    }
 }
 
 val jar: Jar by tasks
