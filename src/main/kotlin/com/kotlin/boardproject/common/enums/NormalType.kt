@@ -1,5 +1,5 @@
 package com.kotlin.boardproject.common.enums
 
-enum class FreeType {
+enum class NormalType {
     FREE, QUESTION
 }

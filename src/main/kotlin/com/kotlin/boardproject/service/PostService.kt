@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.CreateNormalPostResponseDto
 import com.kotlin.boardproject.dto.EditNormalPostRequestDto
 import com.kotlin.boardproject.dto.OneNormalPostResponseDto
 
@@ -9,7 +10,7 @@ interface PostService {
     // 1. 유저의 id를 받는다.
     // 2. 내용을 받는다.
     // 3. 파일이 있다면 받는다. -> 아직 구현안함
-    fun createNormalPost(username: String, createNormalPostRequestDto: CreateNormalPostRequestDto)
+    fun createNormalPost(username: String, createNormalPostRequestDto: CreateNormalPostRequestDto): CreateNormalPostResponseDto
 
     // TODO: 게시물 하나 읽기
     fun findOneNormalPostById(postId: Long): OneNormalPostResponseDto
