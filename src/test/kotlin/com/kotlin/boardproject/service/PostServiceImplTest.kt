@@ -15,7 +15,6 @@ import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -31,14 +30,17 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@Transactional
 @ActiveProfiles("local")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PostServiceImplTest {
@@ -64,8 +66,8 @@ class PostServiceImplTest {
 
     val statsEndPoint = "/api/v1/post"
 
-    @BeforeAll
-    fun start() {
+    @BeforeEach
+    fun default_setting() {
         val user: User = User(
             id = UUID.randomUUID(),
             email = "test@test.com",
@@ -75,10 +77,7 @@ class PostServiceImplTest {
             role = Role.ROLE_VERIFIED_USER,
         )
         writer = userRepository.saveAndFlush(user)
-    }
 
-    @BeforeEach
-    fun default_setting() {
         accessToken = tokenProvider.createAuthToken(
             email = "test@test.com",
             expiry = Date(Date().time + 6000000),
@@ -88,10 +87,11 @@ class PostServiceImplTest {
 
     @AfterEach
     fun cleardb() {
-        // normalPostRepository.deleteAll()
+        normalPostRepository.deleteAll()
     }
 
     @Test
+    @Rollback(true)
     fun 일반게시판_글_정상_등록() {
         // given
         val urlPoint = "/create"
@@ -154,6 +154,7 @@ class PostServiceImplTest {
     }
 
     @Test
+    @Rollback(true)
     fun 일반게시판_글_수정() {
         // given
         val urlPoint = "/{postId}"
@@ -165,7 +166,7 @@ class PostServiceImplTest {
         val new_title = "new_title_test"
         val new_content = "new_content_test"
 
-        normalPostRepository.saveAndFlush(
+        val post = normalPostRepository.saveAndFlush(
             NormalPost(
                 title = title,
                 content = content,
@@ -186,7 +187,7 @@ class PostServiceImplTest {
         val editNormalPostRequestString = objectMapper.writeValueAsString(editNormalPostRequestDto)
 
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.put(finalUrl, 1)
+            RestDocumentationRequestBuilders.put(finalUrl, post.id!!)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(editNormalPostRequestString)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
