@@ -6,8 +6,8 @@ import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.dto.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.NormalPostRepository

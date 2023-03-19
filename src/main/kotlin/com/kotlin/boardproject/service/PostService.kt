@@ -1,6 +1,10 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.*
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostResponseDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostResponseDto
 
 interface PostService {
     // TODO: 게시물 생성

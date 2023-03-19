@@ -4,6 +4,10 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.dto.*
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostResponseDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostResponseDto
 import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
