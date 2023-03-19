@@ -128,7 +128,7 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
                         fieldWithPath("title").description("제목"),
@@ -203,7 +203,7 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
                         fieldWithPath("title").description("제목"),
@@ -224,5 +224,57 @@ class PostServiceImplTest {
         basePosts.size shouldBe 1
         basePosts[0].title shouldBe "new_title_test"
         basePosts[0].content shouldBe "new_content_test"
+    }
+
+    @Test
+    @Rollback(true)
+    fun 일반게시판_글_삭제() {
+        val urlPoint = "/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
+            .andDo(
+                document(
+                    "normal-post-delete",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+        // then
+
+        val basePosts = normalPostRepository.findAll()
+
+        basePosts.size shouldBe 1
+        writer.postList.size shouldBe 0
     }
 }

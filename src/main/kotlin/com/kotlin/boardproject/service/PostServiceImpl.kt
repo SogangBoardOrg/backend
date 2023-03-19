@@ -4,10 +4,7 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.dto.*
-import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.normalpost.CreateNormalPostResponseDto
-import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.dto.normalpost.EditNormalPostResponseDto
+import com.kotlin.boardproject.dto.normalpost.*
 import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -64,5 +61,20 @@ class PostServiceImpl(
         post.editPost(editNormalPostRequestDto)
 
         return EditNormalPostResponseDto(post.id!!)
+    }
+
+    @Transactional
+    override fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+        val post = normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
+
+        // TODO: 질문 게시글이면 삭제가 불가능하게 설정한다.
+
+        post.checkWriter(user)
+        post.deletePost(user)
+
+        return DeleteNormalPostResponseDto(post.id!!)
     }
 }

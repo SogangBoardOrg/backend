@@ -1,10 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.*
-import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.normalpost.CreateNormalPostResponseDto
-import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.dto.normalpost.EditNormalPostResponseDto
+import com.kotlin.boardproject.dto.normalpost.*
 
 interface PostService {
     // TODO: 게시물 생성
@@ -26,7 +23,7 @@ interface PostService {
     fun editNormalPost(username: String, postId: Long, editNormalPostRequestDto: EditNormalPostRequestDto): EditNormalPostResponseDto
 
     // TODO: 게시물 삭제하는 기능
-    // fun deletePost()
+    fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto
 
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 }
