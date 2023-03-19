@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.dto
+package com.kotlin.boardproject.dto.normalpost
 
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.model.NormalPost

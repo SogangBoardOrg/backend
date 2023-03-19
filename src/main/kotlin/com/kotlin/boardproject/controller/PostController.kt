@@ -3,6 +3,10 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.dto.common.ApiResponse
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.CreateNormalPostResponseDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.normalpost.EditNormalPostResponseDto
 import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.GetMapping

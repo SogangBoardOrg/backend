@@ -29,7 +29,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("io.sentry:sentry-spring-boot-starter:6.4.0")
+    implementation("io.sentry:sentry-spring-boot-starter:6.16.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
@@ -72,7 +72,6 @@ tasks.test {
 }
 
 tasks.register("copyYml", Copy::class) {
-    // println("this is copyYml")
     copy {
         from("./backend-config")
         include("*.yml", "*.xml")
@@ -86,13 +85,12 @@ tasks.asciidoctor {
     dependsOn(tasks.test)
     doFirst { // 2
         delete("src/main/resources/static/docs")
+        delete("BOOT-INF/classes/static/docs")
     }
 }
 
 tasks.register("copyHTML", Copy::class) { // 3
     dependsOn(tasks.asciidoctor)
-    // print("copy html : ")
-    // println(tasks.asciidoctor.get().outputDir)
     destinationDir = file(".")
     from(tasks.asciidoctor.get().outputDir) {
         into("src/main/resources/static/docs")
@@ -110,6 +108,7 @@ tasks.build {
 
 tasks.bootJar { // 5
     dependsOn(tasks.asciidoctor)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(tasks.asciidoctor.get().outputDir) {
         into("BOOT-INF/classes/static/docs")
     }
