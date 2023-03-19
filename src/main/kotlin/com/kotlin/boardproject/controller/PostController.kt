@@ -32,8 +32,8 @@ class PostController(
     fun findOneNormalPostById(
         @PathVariable("postId") postId: Long,
     ): ApiResponse<OneNormalPostResponseDto> {
-        val ret = postService.findOneNormalPostById(postId) // post 객체 반환
-        return ApiResponse.success(ret)
+        val data = postService.findOneNormalPostById(postId) // post 객체 반환
+        return ApiResponse.success(data)
     }
 
     @PutMapping("/{postId}")
@@ -41,9 +41,9 @@ class PostController(
         @LoginUser loginUser: User,
         @PathVariable("postId") postId: Long,
         @RequestBody editNormalPostRequestDto: EditNormalPostRequestDto,
-    ): ApiResponse<Long> {
-        val id = postService.editNormalPost(loginUser.username, postId, editNormalPostRequestDto) // post 객체 반환
-        return ApiResponse.success(id)
+    ): ApiResponse<EditNormalPostResponseDto> {
+        val data = postService.editNormalPost(loginUser.username, postId, editNormalPostRequestDto) // post 객체 반환
+        return ApiResponse.success(data)
     }
 
 //    @GetMapping("free/v/")
