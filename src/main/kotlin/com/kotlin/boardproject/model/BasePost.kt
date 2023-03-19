@@ -1,6 +1,8 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.exception.UnAuthorizedException
 import javax.persistence.*
 
 // 게시판 상관없이 모두 적용되는 속성을 넣는다.
@@ -35,5 +37,13 @@ open class BasePost(
 ) : BaseEntity() {
     fun addPost(user: User) {
         user.postList.add(this)
+    }
+
+    fun checkWriter(user: User) {
+        if (this.writer != user) {
+            println(this.writer)
+            println(user)
+            throw UnAuthorizedException(ErrorCode.FORBIDDEN, "해당 글의 주인이 아닙니다.")
+        }
     }
 }

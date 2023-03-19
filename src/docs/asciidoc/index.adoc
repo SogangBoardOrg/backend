@@ -72,6 +72,15 @@ endif::[]
 
 ==== 글 등록
 
+.description
+[source]
+----
+글을 등록하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/post/create
+----
+
 .Sample Request
 include::{snippets}/normal-post-create/http-request.adoc[]
 
@@ -80,12 +89,9 @@ include::{snippets}/normal-post-create/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-
-이 Access Token은 만료된 Access Token이며, 토큰 재발급시 쿠키에 포함되어 함께 전송되는 Refresh token과 함께 토큰 재발급시 사용됩니다.
+include::{snippets}/normal-post-create/request
+include::{snippets}/normal-post-create/request-headers.adoc[]
 
 .Response Body
 include::{snippets}/normal-post-create/response-body.adoc[]
 include::{snippets}/normal-post-create/response-fields.adoc[]
-
-.Response Header
-request header를 살펴보면 Bearer token을 Authorization에 넣어준다.

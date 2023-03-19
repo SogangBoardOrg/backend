@@ -3,10 +3,7 @@ package com.kotlin.boardproject.service
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
-import com.kotlin.boardproject.dto.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.CreateNormalPostResponseDto
-import com.kotlin.boardproject.dto.EditNormalPostRequestDto
-import com.kotlin.boardproject.dto.OneNormalPostResponseDto
+import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -53,14 +50,15 @@ class PostServiceImpl(
         username: String,
         postId: Long,
         editNormalPostRequestDto: EditNormalPostRequestDto,
-    ): Long {
-        val user = userRepository.findByEmail(username) ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+    ): EditNormalPostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
-        post.findWriter(user)
+        post.checkWriter(user)
         post.editPost(editNormalPostRequestDto)
 
-        return post.id!!
+        return EditNormalPostResponseDto(post.id!!)
     }
 }

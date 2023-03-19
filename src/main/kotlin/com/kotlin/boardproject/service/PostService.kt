@@ -1,9 +1,6 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.CreateNormalPostResponseDto
-import com.kotlin.boardproject.dto.EditNormalPostRequestDto
-import com.kotlin.boardproject.dto.OneNormalPostResponseDto
+import com.kotlin.boardproject.dto.*
 
 interface PostService {
     // TODO: 게시물 생성
@@ -22,7 +19,7 @@ interface PostService {
     // fun findNormalPost()
 
     // TODO: 게시물 수정
-    fun editNormalPost(username: String, postId: Long, editNormalPostRequestDto: EditNormalPostRequestDto): Long
+    fun editNormalPost(username: String, postId: Long, editNormalPostRequestDto: EditNormalPostRequestDto): EditNormalPostResponseDto
 
     // TODO: 게시물 삭제하는 기능
     // fun deletePost()

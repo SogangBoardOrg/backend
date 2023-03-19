@@ -37,12 +37,6 @@ class NormalPost(
         this.content = editNormalPostRequestDto.content
     }
 
-    fun findWriter(user: User) {
-        if (user != this.writer) {
-            throw UnAuthorizedException(ErrorCode.FORBIDDEN, "해당 글의 주인이 아닙니다.")
-        }
-    }
-
     fun toOneNormalPostReponseDto(): OneNormalPostResponseDto {
         return OneNormalPostResponseDto(
             id = this.id!!,
