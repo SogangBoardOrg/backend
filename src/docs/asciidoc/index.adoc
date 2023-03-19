@@ -89,9 +89,34 @@ include::{snippets}/normal-post-create/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-include::{snippets}/normal-post-create/request
 include::{snippets}/normal-post-create/request-headers.adoc[]
 
 .Response Body
 include::{snippets}/normal-post-create/response-body.adoc[]
 include::{snippets}/normal-post-create/response-fields.adoc[]
+
+==== 글 수정
+
+.description
+[source]
+----
+글을 수정하기 위한 API입니다.
+
+HTTP Method : PUT
+End-Point : /api/v1/post/{postId: Long}
+----
+
+.Sample Request
+include::{snippets}/normal-post-edit/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/normal-post-edit/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/normal-post-edit/request
+include::{snippets}/normal-post-edit/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/normal-post-edit/response-body.adoc[]
+include::{snippets}/normal-post-edit/response-fields.adoc[]
