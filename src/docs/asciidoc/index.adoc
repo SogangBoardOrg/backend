@@ -114,7 +114,6 @@ include::{snippets}/normal-post-edit/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-include::{snippets}/normal-post-edit/request
 include::{snippets}/normal-post-edit/request-headers.adoc[]
 
 .Response Body
@@ -140,7 +139,6 @@ include::{snippets}/normal-post-delete/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-include::{snippets}/normal-post-delete/request
 include::{snippets}/normal-post-delete/request-headers.adoc[]
 
 .Response Body
