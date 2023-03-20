@@ -7,7 +7,6 @@ import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.dto.normalpost.*
 import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -39,7 +38,7 @@ class PostServiceImpl(
     @Transactional(readOnly = true)
     override fun findOneNormalPostById(postId: Long): OneNormalPostResponseDto {
         val post =
-            normalPostRepository.findByIdOrNull(postId)
+            normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         // TODO: comment 막혀 있으면 정보 제공 x 또한 삭제된 comment는 전달 x
@@ -53,9 +52,10 @@ class PostServiceImpl(
         editNormalPostRequestDto: EditNormalPostRequestDto,
     ): EditNormalPostResponseDto {
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
         val post = normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
-            ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
+            ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+        // TODO: 메시지 어떻게 할지 고민
 
         post.checkWriter(user)
         post.editPost(editNormalPostRequestDto)
