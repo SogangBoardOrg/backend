@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.auth.AuthToken
 import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
+import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.Role
+import com.kotlin.boardproject.dto.BlackPostRequestDto
 import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
+import com.kotlin.boardproject.repository.BlackPostRepository
 import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
@@ -55,6 +58,9 @@ class PostServiceImplTest {
     private lateinit var normalPostRepository: NormalPostRepository
 
     @Autowired
+    private lateinit var blackPostRepository: BlackPostRepository
+
+    @Autowired
     private lateinit var objectMapper: ObjectMapper
 
     @Autowired
@@ -62,7 +68,11 @@ class PostServiceImplTest {
 
     private lateinit var writer: User
 
+    private lateinit var user2: User
+
     private lateinit var accessToken: AuthToken
+
+    private lateinit var accessToken2: AuthToken
 
     val statsEndPoint = "/api/v1/post"
 
@@ -80,6 +90,22 @@ class PostServiceImplTest {
 
         accessToken = tokenProvider.createAuthToken(
             email = "test@test.com",
+            expiry = Date(Date().time + 6000000),
+            role = Role.ROLE_VERIFIED_USER.code,
+        )
+
+        val userTwo: User = User(
+            id = UUID.randomUUID(),
+            email = "test2@test.com",
+            password = "test1234!",
+            username = "test2",
+            providerType = ProviderType.LOCAL,
+            role = Role.ROLE_VERIFIED_USER,
+        )
+        user2 = userRepository.saveAndFlush(userTwo)
+
+        accessToken2 = tokenProvider.createAuthToken(
+            email = "test2@test.com",
             expiry = Date(Date().time + 6000000),
             role = Role.ROLE_VERIFIED_USER.code,
         )
@@ -276,5 +302,68 @@ class PostServiceImplTest {
 
         basePosts.size shouldBe 1
         writer.postList.size shouldBe 0
+    }
+
+    @Test
+    @Rollback(true)
+    fun 게시물_신고() {
+        val urlPoint = "/black/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val blackPostRequestDto = BlackPostRequestDto(
+            blackReason = BlackReason.HATE,
+        )
+        val blackPostRequestDtoString = objectMapper.writeValueAsString(blackPostRequestDto)
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(blackPostRequestDtoString)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
+            .andDo(
+                document(
+                    "normal-post-black",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    requestFields(
+                        fieldWithPath("blackReason").description("신고 사유"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+        // then
+
+        val blackPosts = blackPostRepository.findAll()
+
+        blackPosts.size shouldBe 1
+        blackPosts[0].post shouldBe post
+        blackPosts[0].user shouldBe user2
+        blackPosts[0].blackReason shouldBe BlackReason.HATE
     }
 }

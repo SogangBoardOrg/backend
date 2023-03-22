@@ -27,6 +27,7 @@ class PostController(
     fun findOneNormalPostById(
         @PathVariable("postId") postId: Long,
     ): ApiResponse<OneNormalPostResponseDto> {
+        // TODO: 여기는 principal 생성해서 로그인 한 경우는 like 정보를 보내줘야 한다.
         val data = postService.findOneNormalPostById(postId) // post 객체 반환
         return ApiResponse.success(data)
     }
@@ -47,6 +48,16 @@ class PostController(
         @PathVariable("postId") postId: Long,
     ): ApiResponse<DeleteNormalPostResponseDto> {
         val data = postService.deleteNormalPost(loginUser.username, postId) // post 객체 반환
+        return ApiResponse.success(data)
+    }
+
+    @PostMapping("/black/{postId}")
+    fun blackPost(
+        @LoginUser loginUser: User,
+        @PathVariable("postId") postId: Long,
+        @RequestBody blackPostRequestDto: BlackPostRequestDto,
+    ): ApiResponse<BlackPostResponseDto> {
+        val data = postService.blackPost(loginUser.username, postId, blackPostRequestDto)
         return ApiResponse.success(data)
     }
 
