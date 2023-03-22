@@ -410,7 +410,7 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                            .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -472,7 +472,7 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                            .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),

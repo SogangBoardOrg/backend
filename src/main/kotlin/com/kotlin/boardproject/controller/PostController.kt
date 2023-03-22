@@ -1,9 +1,7 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
-import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.dto.common.ApiResponse
-import com.kotlin.boardproject.dto.normalpost.*
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.BlackPostResponseDto
 import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
