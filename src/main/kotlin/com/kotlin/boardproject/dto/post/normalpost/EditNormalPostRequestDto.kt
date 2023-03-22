@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.dto.normalpost
+package com.kotlin.boardproject.dto.post.normalpost
 
 class EditNormalPostRequestDto(
     val title: String,

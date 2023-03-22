@@ -7,12 +7,14 @@ import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.dto.BlackPostRequestDto
-import com.kotlin.boardproject.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.post.BlackPostRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.model.LikePost
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.BlackPostRepository
+import com.kotlin.boardproject.repository.LikePostRepository
 import com.kotlin.boardproject.repository.NormalPostRepository
 import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
@@ -59,6 +61,9 @@ class PostServiceImplTest {
 
     @Autowired
     private lateinit var blackPostRepository: BlackPostRepository
+
+    @Autowired
+    private lateinit var likePostRepository: LikePostRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -113,7 +118,7 @@ class PostServiceImplTest {
 
     @AfterEach
     fun cleardb() {
-        normalPostRepository.deleteAll()
+        // normalPostRepository.deleteAll()
     }
 
     @Test
@@ -366,4 +371,120 @@ class PostServiceImplTest {
         blackPosts[0].user shouldBe user2
         blackPosts[0].blackReason shouldBe BlackReason.HATE
     }
+
+    @Test
+    @Rollback(true)
+    fun 글_추천_등록() {
+        // given
+        val urlPoint = "/like/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
+            .andDo(
+                document(
+                    "like-post-add",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+
+        // then
+        val likes = likePostRepository.findAll()
+
+        likes.size shouldBe 1
+        likes[0].user shouldBe user2
+        likes[0].post shouldBe post
+    }
+
+    @Test
+    @Rollback(true)
+    fun 글_추천_취소() {
+        // given
+        val urlPoint = "/like/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        likePostRepository.save(
+            LikePost(
+                user = user2,
+                post = post,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
+            .andDo(
+                document(
+                    "like-post-cancel",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+
+        // then
+        val likes = likePostRepository.findAll()
+
+        likes.size shouldBe 0
+    }
+
 }
