@@ -5,8 +5,6 @@ import com.kotlin.boardproject.dto.normalpost.*
 
 interface PostService {
     // TODO: 게시물 생성
-    // 1. 유저의 id를 받는다.
-    // 2. 내용을 받는다.
     // 3. 파일이 있다면 받는다. -> 아직 구현안함
     fun createNormalPost(username: String, createNormalPostRequestDto: CreateNormalPostRequestDto): CreateNormalPostResponseDto
 
@@ -19,11 +17,16 @@ interface PostService {
     // TODO: 게시물 검색해서 찾는 기능 -> query dsl 사용
     // fun findNormalPost()
 
-    // TODO: 게시물 수정
     fun editNormalPost(username: String, postId: Long, editNormalPostRequestDto: EditNormalPostRequestDto): EditNormalPostResponseDto
 
-    // TODO: 게시물 삭제하는 기능
     fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto
 
+    // TODO: 게시물 신고하기
+    fun blackPost(username: String, postId: Long, blackPostRequestDto: BlackPostRequestDto): BlackPostResponseDto
+
+    // TODO: 게시물 추천하기
+
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
+
+    // TODO: 어드민 전용 메뉴로 해당 게시물 정지하면 blackpost 상태 변경
 }
