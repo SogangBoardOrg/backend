@@ -1,16 +1,17 @@
 package com.kotlin.boardproject.service
 
-
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
-import com.kotlin.boardproject.dto.*
-import com.kotlin.boardproject.dto.normalpost.*
+import com.kotlin.boardproject.dto.post.BlackPostRequestDto
+import com.kotlin.boardproject.dto.post.BlackPostResponseDto
+import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
+import com.kotlin.boardproject.dto.post.LikePostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.model.BlackPost
-import com.kotlin.boardproject.repository.BasePostRepository
-import com.kotlin.boardproject.repository.BlackPostRepository
-import com.kotlin.boardproject.repository.NormalPostRepository
-import com.kotlin.boardproject.repository.UserRepository
+import com.kotlin.boardproject.model.LikePost
+import com.kotlin.boardproject.repository.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,6 +21,7 @@ class PostServiceImpl(
     private val userRepository: UserRepository,
     private val basePostRepository: BasePostRepository,
     private val blackPostRepository: BlackPostRepository,
+    private val likePostRepository: LikePostRepository,
 ) : PostService {
 
     @Transactional
@@ -102,5 +104,47 @@ class PostServiceImpl(
         blackPostRepository.save(blackPost)
 
         return BlackPostResponseDto(post.id!!)
+    }
+
+    @Transactional
+    override fun likePost(
+        username: String,
+        postId: Long,
+    ): LikePostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val post =
+            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        if (likePostRepository.existsByUserAndPost(user, post)) {
+            throw ConditionConflictException("추천을 하지 않았습니다.")
+        }
+
+        val likePost = LikePost(
+            user = user,
+            post = post,
+        )
+        likePostRepository.save(likePost)
+
+        return LikePostResponseDto(post.id!!)
+    }
+
+    @Transactional
+    override fun cancelLikePost(
+        username: String,
+        postId: Long,
+    ): CancelLikePostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val post =
+            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        likePostRepository.deleteByUserAndPost(user, post)
+
+        return CancelLikePostResponseDto(post.id!!)
     }
 }

@@ -1,7 +1,10 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.*
-import com.kotlin.boardproject.dto.normalpost.*
+import com.kotlin.boardproject.dto.post.BlackPostRequestDto
+import com.kotlin.boardproject.dto.post.BlackPostResponseDto
+import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
+import com.kotlin.boardproject.dto.post.LikePostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.*
 
 interface PostService {
     // TODO: 게시물 생성
@@ -21,10 +24,13 @@ interface PostService {
 
     fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto
 
-    // TODO: 게시물 신고하기
     fun blackPost(username: String, postId: Long, blackPostRequestDto: BlackPostRequestDto): BlackPostResponseDto
 
     // TODO: 게시물 추천하기
+    fun likePost(username: String, postId: Long): LikePostResponseDto
+
+    // TODO: 게시물 추천 취소
+    fun cancelLikePost(username: String, postId: Long): CancelLikePostResponseDto
 
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 

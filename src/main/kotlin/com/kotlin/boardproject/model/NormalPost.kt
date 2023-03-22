@@ -2,8 +2,8 @@ package com.kotlin.boardproject.model
 
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStautus
-import com.kotlin.boardproject.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.dto.OneNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.OneNormalPostResponseDto
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated

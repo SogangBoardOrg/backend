@@ -4,6 +4,11 @@ import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.normalpost.*
+import com.kotlin.boardproject.dto.post.BlackPostRequestDto
+import com.kotlin.boardproject.dto.post.BlackPostResponseDto
+import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
+import com.kotlin.boardproject.dto.post.LikePostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
@@ -58,6 +63,24 @@ class PostController(
         @RequestBody blackPostRequestDto: BlackPostRequestDto,
     ): ApiResponse<BlackPostResponseDto> {
         val data = postService.blackPost(loginUser.username, postId, blackPostRequestDto)
+        return ApiResponse.success(data)
+    }
+
+    @PostMapping("/like/{postId}")
+    fun likePost(
+        @LoginUser loginUser: User,
+        @PathVariable("postId") postId: Long,
+    ): ApiResponse<LikePostResponseDto> {
+        val data = postService.likePost(loginUser.username, postId)
+        return ApiResponse.success(data)
+    }
+
+    @DeleteMapping("/like/{postId}")
+    fun cancelLikePost(
+        @LoginUser loginUser: User,
+        @PathVariable("postId") postId: Long,
+    ): ApiResponse<CancelLikePostResponseDto> {
+        val data = postService.cancelLikePost(loginUser.username, postId)
         return ApiResponse.success(data)
     }
 
