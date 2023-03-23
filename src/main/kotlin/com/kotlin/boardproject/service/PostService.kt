@@ -34,10 +34,8 @@ interface PostService {
 
     fun cancelLikePost(username: String, postId: Long): CancelLikePostResponseDto
 
-    // TODO: 스크랩
     fun scrapPost(username: String, postId: Long): ScrapPostResponseDto
 
-    // TODO: 스크랩 취소
     fun cancelScrapPost(username: String, postId: Long): CancelScrapPostResponseDto
 
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
