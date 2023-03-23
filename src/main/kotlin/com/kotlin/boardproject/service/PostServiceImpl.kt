@@ -4,13 +4,11 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
-import com.kotlin.boardproject.dto.post.BlackPostRequestDto
-import com.kotlin.boardproject.dto.post.BlackPostResponseDto
-import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
-import com.kotlin.boardproject.dto.post.LikePostResponseDto
+import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.model.BlackPost
 import com.kotlin.boardproject.model.LikePost
+import com.kotlin.boardproject.model.ScrapPost
 import com.kotlin.boardproject.repository.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,6 +20,7 @@ class PostServiceImpl(
     private val basePostRepository: BasePostRepository,
     private val blackPostRepository: BlackPostRepository,
     private val likePostRepository: LikePostRepository,
+    private val scrapPostRepository: ScrapPostRepository,
 ) : PostService {
 
     @Transactional
@@ -118,8 +117,8 @@ class PostServiceImpl(
             basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
-        if (likePostRepository.existsByUserAndPost(user, post)) {
-            throw ConditionConflictException("추천을 하지 않았습니다.")
+        likePostRepository.findByUserAndPost(user, post)?.let {
+            throw ConditionConflictException("이미 추천을 했습니다.")
         }
 
         val likePost = LikePost(
@@ -146,5 +145,49 @@ class PostServiceImpl(
         likePostRepository.deleteByUserAndPost(user, post)
 
         return CancelLikePostResponseDto(post.id!!)
+    }
+
+    @Transactional
+    override fun scrapPost(
+        username: String,
+        postId: Long,
+    ): ScrapPostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val post =
+            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        scrapPostRepository.findByUserAndPost(user, post)?.let {
+            throw ConditionConflictException("이미 스크랩을 하였습니다.")
+        }
+
+        val scrapPost = ScrapPost(
+            user = user,
+            post = post,
+        )
+
+        scrapPost.scrapPost(user)
+        scrapPostRepository.save(scrapPost)
+
+        return ScrapPostResponseDto(post.id!!)
+    }
+
+    @Transactional
+    override fun cancelScrapPost(username: String, postId: Long): CancelScrapPostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val post =
+            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        scrapPostRepository.findByUserAndPost(user, post)?.let {
+            it.cancelScrapPost(user)
+            scrapPostRepository.delete(it)
+        }
+
+        return CancelScrapPostResponseDto(post.id!!)
     }
 }

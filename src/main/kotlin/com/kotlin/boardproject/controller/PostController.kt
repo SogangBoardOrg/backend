@@ -2,10 +2,7 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.common.ApiResponse
-import com.kotlin.boardproject.dto.post.BlackPostRequestDto
-import com.kotlin.boardproject.dto.post.BlackPostResponseDto
-import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
-import com.kotlin.boardproject.dto.post.LikePostResponseDto
+import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
@@ -81,6 +78,25 @@ class PostController(
         val data = postService.cancelLikePost(loginUser.username, postId)
         return ApiResponse.success(data)
     }
+
+    @PostMapping("/scrap/{postId}")
+    fun scrapePost(
+        @LoginUser loginUser: User,
+        @PathVariable("postId") postId: Long,
+    ): ApiResponse<ScrapPostResponseDto> {
+        val data = postService.scrapPost(loginUser.username, postId)
+        return ApiResponse.success(data)
+    }
+
+    @DeleteMapping("/scrap/{postId}")
+    fun cancelScrapePost(
+        @LoginUser loginUser: User,
+        @PathVariable("postId") postId: Long,
+    ): ApiResponse<CancelScrapPostResponseDto> {
+        val data = postService.cancelScrapPost(loginUser.username, postId)
+        return ApiResponse.success(data)
+    }
+
 
 //    @GetMapping("free/v/")
 //    fun readAllPost(
