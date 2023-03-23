@@ -6,6 +6,6 @@ import com.kotlin.boardproject.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface LikePostRepository : JpaRepository<LikePost, Long> {
-    fun existsByUserAndPost(user: User, post: BasePost): Boolean
+    fun findByUserAndPost(user: User, post: BasePost): LikePost?
     fun deleteByUserAndPost(user: User, post: BasePost)
 }

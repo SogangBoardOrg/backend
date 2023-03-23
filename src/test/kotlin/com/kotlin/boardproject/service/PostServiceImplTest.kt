@@ -13,10 +13,7 @@ import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.model.LikePost
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.BlackPostRepository
-import com.kotlin.boardproject.repository.LikePostRepository
-import com.kotlin.boardproject.repository.NormalPostRepository
-import com.kotlin.boardproject.repository.UserRepository
+import com.kotlin.boardproject.repository.*
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.AfterEach
@@ -64,6 +61,9 @@ class PostServiceImplTest {
 
     @Autowired
     private lateinit var likePostRepository: LikePostRepository
+
+    @Autowired
+    private lateinit var scrapPostRepository: ScrapPostRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -487,4 +487,158 @@ class PostServiceImplTest {
         likes.size shouldBe 0
     }
 
+    @Test
+    @Rollback(true)
+    fun 글_스크랩() {
+        // given
+        val urlPoint = "/scrap/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val post2 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_2",
+                content = "content_2",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
+            .andDo(
+                document(
+                    "scrap-post-add",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+
+        // 2번 글도 스크래핑
+        mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, post2.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // then
+        val scrapeList = scrapPostRepository.findAll()
+
+        scrapeList.size shouldBe 2
+        user2.scrapPostList.size shouldBe 2
+    }
+
+    @Test
+    @Rollback(true)
+    fun 글_스크랩_취소() {
+        // given
+        val urlPoint = "/scrap/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val post2 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_2",
+                content = "content_2",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        // when
+        mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // 2번 글도 스크래핑
+        mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, post2.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
+            .andDo(
+                document(
+                    "scrap-post-cancel",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+
+        // then
+        val scrapeList = scrapPostRepository.findAll()
+
+        scrapeList.size shouldBe 1
+        user2.scrapPostList.size shouldBe 1
+        user2.scrapPostList[0].post shouldBe post2
+    }
 }
