@@ -122,7 +122,7 @@ include::{snippets}/view-single-normal-post-login/response-fields.adoc[]
 ----
 글을 등록하기 위한 API입니다.
 
-HTTP Method : POST
+HTTP Method : GET
 End-Point : /api/v1/post/create
 ----
 
