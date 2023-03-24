@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ScrapPostRepository : JpaRepository<ScrapPost, Long> {
     fun findByUserAndPost(user: User, post: BasePost): ScrapPost?
+    fun existsByUserAndPost(user: User, post: BasePost): Boolean
 }

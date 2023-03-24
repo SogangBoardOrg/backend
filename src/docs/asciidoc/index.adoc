@@ -70,6 +70,51 @@ endif::[]
 
 === POST API ( /api/v1/post )
 
+==== 글 단건 조회
+
+.description
+[source]
+----
+글을 단건 조회하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/post/{postId : Long}
+----
+
+.Sample Request
+
+로그인
+include::{snippets}/view-single-normal-post-login/http-request.adoc[]
+
+비로그인
+include::{snippets}/view-single-normal-post-no-login/http-request.adoc[]
+
+.Sample Response
+
+로그인
+include::{snippets}/view-single-normal-post-login/http-response.adoc[]
+
+비로그인
+include::{snippets}/view-single-normal-post-no-login/http-response.adoc[]
+
+.Request Header
+
+로그인
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/view-single-normal-post-login/request-headers.adoc[]
+
+비로그인
+
+로그인을 하지 않았으므로 Authorization 헤더에 access token을 넣지 않습니다.
+
+.Response Body
+
+로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
+
+include::{snippets}/view-single-normal-post-login/response-body.adoc[]
+include::{snippets}/view-single-normal-post-login/response-fields.adoc[]
+
 ==== 글 등록
 
 .description

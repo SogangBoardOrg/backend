@@ -36,6 +36,7 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
@@ -87,7 +88,7 @@ class PostServiceImplTest {
             id = UUID.randomUUID(),
             email = "test@test.com",
             password = "test1234!",
-            username = "test",
+            nickname = "test",
             providerType = ProviderType.LOCAL,
             role = Role.ROLE_VERIFIED_USER,
         )
@@ -103,7 +104,7 @@ class PostServiceImplTest {
             id = UUID.randomUUID(),
             email = "test2@test.com",
             password = "test1234!",
-            username = "test2",
+            nickname = "test2",
             providerType = ProviderType.LOCAL,
             role = Role.ROLE_VERIFIED_USER,
         )
@@ -143,23 +144,19 @@ class PostServiceImplTest {
         // when
 
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(normalPostString)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+            RestDocumentationRequestBuilders.post(finalUrl).contentType(MediaType.APPLICATION_JSON)
+                .content(normalPostString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "normal-post-create",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
                         fieldWithPath("title").description("제목"),
@@ -218,23 +215,19 @@ class PostServiceImplTest {
         val editNormalPostRequestString = objectMapper.writeValueAsString(editNormalPostRequestDto)
 
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.put(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(editNormalPostRequestString)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+            RestDocumentationRequestBuilders.put(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .content(editNormalPostRequestString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "normal-post-edit",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
                         fieldWithPath("title").description("제목"),
@@ -278,22 +271,18 @@ class PostServiceImplTest {
         )
 
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "normal-post-delete",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -335,23 +324,19 @@ class PostServiceImplTest {
         val blackPostRequestDtoString = objectMapper.writeValueAsString(blackPostRequestDto)
 
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(blackPostRequestDtoString)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .content(blackPostRequestDtoString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "normal-post-black",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
                         fieldWithPath("blackReason").description("신고 사유"),
@@ -395,22 +380,18 @@ class PostServiceImplTest {
 
         // when
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "like-post-add",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -457,22 +438,18 @@ class PostServiceImplTest {
 
         // when
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "like-post-cancel",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -521,22 +498,18 @@ class PostServiceImplTest {
 
         // when
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "scrap-post-add",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -547,10 +520,8 @@ class PostServiceImplTest {
 
         // 2번 글도 스크래핑
         mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl, post2.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.post(finalUrl, post2.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         // then
@@ -594,38 +565,30 @@ class PostServiceImplTest {
 
         // when
         mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.post(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         // 2번 글도 스크래핑
         mockMvc.perform(
-            RestDocumentationRequestBuilders.post(finalUrl, post2.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.post(finalUrl, post2.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
-                .accept(MediaType.APPLICATION_JSON),
+            RestDocumentationRequestBuilders.delete(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
         )
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success")))
-            .andDo(
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
                     "scrap-post-cancel",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                            .description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -640,5 +603,134 @@ class PostServiceImplTest {
         scrapeList.size shouldBe 1
         user2.scrapPostList.size shouldBe 1
         user2.scrapPostList[0].post shouldBe post2
+    }
+
+    @Test
+    @Rollback(true)
+    fun 글_단건_조회_회원() {
+        // given
+        val urlPoint = "/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val post2 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_2",
+                content = "content_2",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.get(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}").accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                document(
+                    "view-single-normal-post-login",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 보는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("data.title").description("게시글 제목"),
+                        fieldWithPath("data.content").description("게시글 내용"),
+                        fieldWithPath("data.writerName").description("게시글 작성자 이름"),
+                        fieldWithPath("data.isAnon").description("게시글 작성자 익명 여부"),
+                        fieldWithPath("data.isLiked").description("게시글 좋아요 여부"),
+                        fieldWithPath("data.isScraped").description("게시글 스크랩 여부"),
+                        fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
+                        fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
+                        fieldWithPath("data.createdTime").description("게시글 작성 시간"),
+                        fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+    }
+
+    @Test
+    @Rollback(true)
+    fun 글_단건_조회_비회원() {
+        // given
+        val urlPoint = "/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val post2 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_2",
+                content = "content_2",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.get(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(jsonPath("$.data.isLiked", false).exists())
+            .andExpect(jsonPath("$.data.isScraped", false).exists())
+            .andExpect(jsonPath("$.data.isWriter", false).exists())
+            .andDo(
+                document(
+                    "view-single-normal-post-no-login",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("data.title").description("게시글 제목"),
+                        fieldWithPath("data.content").description("게시글 내용"),
+                        fieldWithPath("data.writerName").description("게시글 작성자 이름"),
+                        fieldWithPath("data.isAnon").description("게시글 작성자 익명 여부"),
+                        fieldWithPath("data.isLiked").description("게시글 좋아요 여부"),
+                        fieldWithPath("data.isScraped").description("게시글 스크랩 여부"),
+                        fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
+                        fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
+                        fieldWithPath("data.createdTime").description("게시글 작성 시간"),
+                        fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
     }
 }

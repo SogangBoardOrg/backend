@@ -11,7 +11,7 @@ data class UserSignUpDto(
     fun toUser(): User {
         return User(
             email = email,
-            username = username,
+            nickname = username,
             password = password,
             providerType = ProviderType.LOCAL,
         )

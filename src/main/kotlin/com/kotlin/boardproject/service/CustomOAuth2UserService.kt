@@ -60,7 +60,7 @@ class CustomOAuth2UserService(
     private fun createUser(userInfo: OAuth2UserInfo, providerType: ProviderType): User {
         val user = User(
             email = userInfo.getEmail(),
-            username = userInfo.getName(),
+            nickname = userInfo.getName(),
             providerType = providerType,
             profileImageUrl = userInfo.getImageUrl(),
             providerId = userInfo.getId(),
