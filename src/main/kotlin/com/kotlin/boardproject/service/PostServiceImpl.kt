@@ -43,13 +43,32 @@ class PostServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findOneNormalPostById(postId: Long): OneNormalPostResponseDto {
+    override fun findOneNormalPostById(
+        username: String?,
+        postId: Long,
+    ): OneNormalPostResponseDto {
         val post =
             normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
+        val user = username?.let {
+            userRepository.findByEmail(it)
+        }
+
+        val isLiked = user?.let {
+            likePostRepository.existsByUserAndPost(user, post)
+        } ?: false
+
+        val isScraped = user?.let {
+            scrapPostRepository.existsByUserAndPost(user, post)
+        } ?: false
+
         // TODO: comment 막혀 있으면 정보 제공 x 또한 삭제된 comment는 전달 x
-        return post.toOneNormalPostReponseDto()
+        return post.toOneNormalPostReponseDto(
+            isLiked = isLiked,
+            isScraped = isScraped,
+            isWriter = (user == post.writer),
+        )
     }
 
     @Transactional

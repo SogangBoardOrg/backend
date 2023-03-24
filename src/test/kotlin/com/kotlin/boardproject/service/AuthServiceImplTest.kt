@@ -26,7 +26,7 @@ class AuthServiceImplTest {
         id = UUID.randomUUID(),
         email = "test@test.com",
         password = "test1234!",
-        username = "test",
+        nickname = "test",
         providerType = ProviderType.LOCAL,
     )
 

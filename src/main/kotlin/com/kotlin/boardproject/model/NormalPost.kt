@@ -35,15 +35,18 @@ class NormalPost(
         this.content = editNormalPostRequestDto.content
     }
 
-    fun toOneNormalPostReponseDto(): OneNormalPostResponseDto {
+    fun toOneNormalPostReponseDto(isLiked: Boolean, isWriter: Boolean, isScraped: Boolean): OneNormalPostResponseDto {
         return OneNormalPostResponseDto(
             id = this.id!!,
             commentOn = this.commentOn,
             title = this.title,
             isAnon = this.isAnon,
             content = this.title,
-            writerName = if (this.isAnon) "Anon" else this.writer.username,
-            createTime = this.createdAt!!,
+            isLiked = isLiked,
+            isWriter = isWriter,
+            isScraped = isScraped,
+            writerName = if (this.isAnon) "Anon" else this.writer.nickname,
+            createdTime = this.createdAt!!,
             lastModifiedTime = this.updatedAt,
         )
     }

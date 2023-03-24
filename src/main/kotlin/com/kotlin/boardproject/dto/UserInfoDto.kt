@@ -6,7 +6,7 @@ import java.util.*
 
 data class UserInfoDto(
     val id: UUID,
-    val username: String,
+    val nickname: String,
     val email: String,
     val role: Role,
     val accessToken: String?,
@@ -14,7 +14,7 @@ data class UserInfoDto(
 ) {
     constructor(user: User, accessToken: String? = null, refreshToken: String? = null) : this(
         user.id!!,
-        user.username,
+        user.nickname,
         user.email,
         user.role,
         accessToken,

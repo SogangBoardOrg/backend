@@ -17,10 +17,10 @@ class User(
     var id: UUID? = null,
 
     @Column(name = "email", unique = true, columnDefinition = "VARCHAR(30)")
-    var email: String,
+    var email: String, // username 과 동의어
 
     @Column(name = "username", unique = true, columnDefinition = "VARCHAR(100)")
-    var username: String,
+    var nickname: String,
 
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     var password: String = "NO_PASSWORD",
@@ -57,7 +57,7 @@ class User(
     @OneToMany(mappedBy = "user")
     val scrapPostList: MutableList<ScrapPost> = mutableListOf(),
 
-) : BaseEntity() {
+    ) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword
     }

@@ -1,12 +1,14 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
+import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @RestController
 @RequestMapping("/api/v1/post")
@@ -26,9 +28,11 @@ class PostController(
     @GetMapping("/{postId}")
     fun findOneNormalPostById(
         @PathVariable("postId") postId: Long,
+        principal: Principal?,
     ): ApiResponse<OneNormalPostResponseDto> {
-        // TODO: 여기는 principal 생성해서 로그인 한 경우는 like 정보를 보내줘야 한다.
-        val data = postService.findOneNormalPostById(postId) // post 객체 반환
+        log.info("username: ${principal?.name}")
+
+        val data = postService.findOneNormalPostById(principal?.name, postId) // post 객체 반환
         return ApiResponse.success(data)
     }
 
@@ -96,7 +100,6 @@ class PostController(
         val data = postService.cancelScrapPost(loginUser.username, postId)
         return ApiResponse.success(data)
     }
-
 
 //    @GetMapping("free/v/")
 //    fun readAllPost(

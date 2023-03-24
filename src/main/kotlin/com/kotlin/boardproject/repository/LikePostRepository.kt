@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface LikePostRepository : JpaRepository<LikePost, Long> {
     fun findByUserAndPost(user: User, post: BasePost): LikePost?
+    fun existsByUserAndPost(user: User, post: BasePost): Boolean
     fun deleteByUserAndPost(user: User, post: BasePost)
 }

@@ -8,7 +8,10 @@ data class OneNormalPostResponseDto(
     val content: String,
     val writerName: String,
     val isAnon: Boolean,
+    val isLiked: Boolean,
+    val isScraped: Boolean,
+    val isWriter: Boolean,
     val commentOn: Boolean,
-    val createTime: LocalDateTime,
+    val createdTime: LocalDateTime,
     val lastModifiedTime: LocalDateTime?,
 )
