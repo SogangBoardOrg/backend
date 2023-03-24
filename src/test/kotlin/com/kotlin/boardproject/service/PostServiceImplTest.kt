@@ -646,7 +646,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
-                    "view-single-post-login",
+                    "view-single-normal-post-login",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
@@ -713,7 +713,7 @@ class PostServiceImplTest {
             .andExpect(jsonPath("$.data.isWriter", false).exists())
             .andDo(
                 document(
-                    "view-single-post-no-login",
+                    "view-single-normal-post-no-login",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
