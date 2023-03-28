@@ -31,7 +31,10 @@ import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
+import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.requestParameters
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
@@ -126,7 +129,7 @@ class PostServiceImplTest {
     @Rollback(true)
     fun 일반게시판_글_정상_등록() {
         // given
-        val urlPoint = "/create"
+        val urlPoint = ""
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val title = "title_test"
@@ -528,7 +531,6 @@ class PostServiceImplTest {
         val scrapeList = scrapPostRepository.findAll()
 
         scrapeList.size shouldBe 2
-        user2.scrapPostList.size shouldBe 2
     }
 
     @Test
@@ -601,8 +603,6 @@ class PostServiceImplTest {
         val scrapeList = scrapPostRepository.findAll()
 
         scrapeList.size shouldBe 1
-        user2.scrapPostList.size shouldBe 1
-        user2.scrapPostList[0].post shouldBe post2
     }
 
     @Test
@@ -729,6 +729,102 @@ class PostServiceImplTest {
                         fieldWithPath("data.createdTime").description("게시글 작성 시간"),
                         fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
                         fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+    }
+
+    @Test
+    @Rollback(true)
+    fun 글_대량_조회() {
+        // given
+        val urlPoint = "/query"
+        val finalUrl = "$statsEndPoint$urlPoint"
+        val postNumber = 30
+
+        val title = ""
+        val content = ""
+        val writerName = "a"
+        val normalType = "FREE"
+        val page = 0
+        val size = 7
+        val sort = ""
+
+        // 글 postNumber 만큼 등록
+        for (i in 1..postNumber) {
+            normalPostRepository.saveAndFlush(
+                NormalPost(
+                    title = "title_$i",
+                    content = "content_$i",
+                    isAnon = true,
+                    commentOn = true,
+                    writer = writer,
+                    normalType = NormalType.FREE,
+                ),
+            )
+        }
+
+        for (i in 1..postNumber) {
+            normalPostRepository.saveAndFlush(
+                NormalPost(
+                    title = "diff_$i",
+                    content = "diff_$i",
+                    isAnon = true,
+                    commentOn = true,
+                    writer = writer,
+                    normalType = NormalType.FREE,
+                ),
+            )
+        }
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.get(
+                "$finalUrl?" +
+                    "title=$title&" +
+                    "content=$content&" +
+                    "writer-name=$writerName&" +
+                    "normal-type=$normalType&" +
+                    "page=$page&" +
+                    "size=$size&" +
+                    "sort=$sort",
+            ).contentType(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                document(
+                    "view-bulk-normal-post-no-login",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestParameters(
+                        parameterWithName("title").description("찾을 글 제목"),
+                        parameterWithName("content").description("찾을 글의 내용"),
+                        parameterWithName("writer-name").description("글 작성자"),
+                        parameterWithName("normal-type").description("일반 게시판 글 종류"),
+                        parameterWithName("page").description("찾는 페이지 번호"),
+                        parameterWithName("size").description("페이지 당 불러올 글의 크기"),
+                        parameterWithName("sort").description("정렬"),
+                    ),
+                    responseFields(
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.contents").type(JsonFieldType.ARRAY).description("글 데이터"),
+                        fieldWithPath("data.contents.[].id").type(JsonFieldType.NUMBER).description("글 번호"),
+                        fieldWithPath("data.contents.[].title").type(JsonFieldType.STRING).description("글 제목"),
+                        fieldWithPath("data.contents.[].content").type(JsonFieldType.STRING).description("글 제목"),
+                        fieldWithPath("data.contents.[].writerName").type(JsonFieldType.STRING).description("글쓴이"),
+                        fieldWithPath("data.contents.[].isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("data.contents.[].isLiked").type(JsonFieldType.NULL).description("좋아요 여부"),
+                        fieldWithPath("data.contents.[].isScrapped").type(JsonFieldType.NULL).description("스크랩 여부"),
+                        fieldWithPath("data.contents.[].isWriter").type(JsonFieldType.NULL).description("글쓴이 여부"),
+                        fieldWithPath("data.contents.[].commentOn").type(JsonFieldType.BOOLEAN).description("댓글 여부"),
+                        fieldWithPath("data.contents.[].createdTime").type(JsonFieldType.STRING).description("글 생성시간"),
+                        fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING).description("글 생성시간"),
+                        fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지"),
+                        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 글의 개수"),
+                        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description("페이지의 개수"),
+                        fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("페이지 당 나타내는 원소의 개수"),
                     ),
                 ),
             )

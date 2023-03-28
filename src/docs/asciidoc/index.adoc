@@ -38,7 +38,7 @@ endif::[]
     "data" : {
         "posts" : [
             { "id" : 1, "title" : "A blog post", "body" : "Some useful content" },
-            { "id" : 2, "title" : "Another blog post", "body" : "More content" },
+            { "id" : 2, "title" : "Another blog post", "body" : "More content" }
         ]
      }
 }
@@ -115,6 +115,52 @@ include::{snippets}/view-single-normal-post-login/request-headers.adoc[]
 include::{snippets}/view-single-normal-post-login/response-body.adoc[]
 include::{snippets}/view-single-normal-post-login/response-fields.adoc[]
 
+==== 글 쿼리 조회
+
+.description
+[source]
+----
+글을 쿼리에 따라서 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/post/query
+----
+
+.Sample Request
+
+로그인
+// include::{snippets}/view-bulk-normal-post-no-login/http-request.adoc[]
+
+비로그인
+include::{snippets}/view-bulk-normal-post-no-login/http-request.adoc[]
+
+.Sample Response
+
+로그인
+// include::{snippets}/view-bulk-normal-post-no-login/http-response.adoc[]
+
+비로그인
+include::{snippets}/view-bulk-normal-post-no-login/http-response.adoc[]
+
+.Request Header
+
+로그인
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+// include::{snippets}/view-bulk-normal-post-no-login/request-headers.adoc[]
+
+비로그인
+
+로그인을 하지 않았으므로 Authorization 헤더에 access token을 넣지 않습니다.
+
+
+.Response Body
+
+로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
+
+include::{snippets}/view-bulk-normal-post-no-login/response-body.adoc[]
+include::{snippets}/view-bulk-normal-post-no-login/response-fields.adoc[]
+
 ==== 글 등록
 
 .description
@@ -122,8 +168,8 @@ include::{snippets}/view-single-normal-post-login/response-fields.adoc[]
 ----
 글을 등록하기 위한 API입니다.
 
-HTTP Method : GET
-End-Point : /api/v1/post/create
+HTTP Method : POST
+End-Point : /api/v1/post
 ----
 
 .Sample Request

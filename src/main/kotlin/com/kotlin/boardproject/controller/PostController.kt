@@ -1,11 +1,15 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
+import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.post.normalpost.NormalPostSearchResponseDto
+import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.service.PostService
+import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -16,7 +20,23 @@ class PostController(
     private val postService: PostService,
 ) {
 
-    @PostMapping("/create")
+    // TODO: 로그인을 요구하자 / 그렇게해서 자기가 쓴글은 자기가 썻다고 표시가 가능하게
+    @GetMapping("/query")
+    fun testPagination(
+        @RequestParam("title", required = false) title: String?,
+        @RequestParam("content", required = false) content: String?,
+        @RequestParam("writer-name", required = false) writerName: String?,
+        @RequestParam("normal-type", required = true) normalType: NormalType,
+        pageable: Pageable,
+        principal: Principal?,
+    ): ApiResponse<NormalPostSearchResponseDto> {
+        val postSearchDto = PostSearchDto(title, content, writerName, normalType)
+
+        val data = postService.findNormalPostByQuery(principal?.name, pageable, postSearchDto)
+        return ApiResponse.success(data)
+    }
+
+    @PostMapping("")
     fun createNormalPost(
         @LoginUser loginUser: User,
         @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
