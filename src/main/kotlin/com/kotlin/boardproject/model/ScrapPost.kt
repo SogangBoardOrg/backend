@@ -16,12 +16,4 @@ class ScrapPost(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     val post: BasePost,
-) : BaseEntity() {
-    fun scrapPost(user: User) {
-        user.scrapPostList.add(this)
-    }
-
-    fun cancelScrapPost(user: User) {
-        user.scrapPostList.remove(this)
-    }
-}
+) : BaseEntity()

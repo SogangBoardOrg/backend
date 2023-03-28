@@ -1,7 +1,9 @@
 package com.kotlin.boardproject.service
 
+import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
+import org.springframework.data.domain.Pageable
 
 interface PostService {
     // TODO: 게시물 생성
@@ -12,13 +14,10 @@ interface PostService {
     ): CreateNormalPostResponseDto
 
     // TODO: 게시물 하나 읽기
-    fun findOneNormalPostById(username: String?, postId: Long): OneNormalPostResponseDto
-
-    // TODO: 게시물 페이지 읽기 -> 게시판 들어가면
-    // fun readPagePost(): ReadPagePostResponseDto
-
-    // TODO: 게시물 검색해서 찾는 기능 -> query dsl 사용
-    // fun findNormalPost()
+    fun findOneNormalPostById(
+        username: String?,
+        postId: Long,
+    ): OneNormalPostResponseDto
 
     fun editNormalPost(
         username: String,
@@ -26,17 +25,42 @@ interface PostService {
         editNormalPostRequestDto: EditNormalPostRequestDto,
     ): EditNormalPostResponseDto
 
-    fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto
+    fun deleteNormalPost(
+        username: String,
+        postId: Long,
+    ): DeleteNormalPostResponseDto
 
-    fun blackPost(username: String, postId: Long, blackPostRequestDto: BlackPostRequestDto): BlackPostResponseDto
+    fun blackPost(
+        username: String,
+        postId: Long,
+        blackPostRequestDto: BlackPostRequestDto,
+    ): BlackPostResponseDto
 
-    fun likePost(username: String, postId: Long): LikePostResponseDto
+    fun likePost(
+        username: String,
+        postId: Long,
+    ): LikePostResponseDto
 
-    fun cancelLikePost(username: String, postId: Long): CancelLikePostResponseDto
+    fun cancelLikePost(
+        username: String,
+        postId: Long,
+    ): CancelLikePostResponseDto
 
-    fun scrapPost(username: String, postId: Long): ScrapPostResponseDto
+    fun scrapPost(
+        username: String,
+        postId: Long,
+    ): ScrapPostResponseDto
 
-    fun cancelScrapPost(username: String, postId: Long): CancelScrapPostResponseDto
+    fun cancelScrapPost(
+        username: String,
+        postId: Long,
+    ): CancelScrapPostResponseDto
+
+    fun findNormalPostByQuery(
+        username: String?,
+        pageable: Pageable,
+        postSearchDto: PostSearchDto,
+    ): NormalPostSearchResponseDto
 
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 

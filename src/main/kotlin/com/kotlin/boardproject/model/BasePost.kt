@@ -13,7 +13,7 @@ import javax.persistence.*
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "boardType")
+@DiscriminatorColumn(name = "postType")
 open class BasePost(
     @Id
     @Column(name = "post_id")

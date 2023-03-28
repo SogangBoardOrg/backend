@@ -4,12 +4,15 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
+import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.model.BlackPost
 import com.kotlin.boardproject.model.LikePost
 import com.kotlin.boardproject.model.ScrapPost
 import com.kotlin.boardproject.repository.*
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,6 +25,30 @@ class PostServiceImpl(
     private val likePostRepository: LikePostRepository,
     private val scrapPostRepository: ScrapPostRepository,
 ) : PostService {
+
+    override fun findNormalPostByQuery(
+        username: String?,
+        pageable: Pageable,
+        postSearchDto: PostSearchDto,
+    ): NormalPostSearchResponseDto {
+        log.info(postSearchDto.writerName)
+
+        val writer = postSearchDto.writerName
+            ?.takeIf { it.isNotEmpty() }
+            ?.run {
+                userRepository.findUserByNickname(this)
+            }
+
+        val result = normalPostRepository.findByQuery(
+            title = postSearchDto.title,
+            content = postSearchDto.content,
+            writer = writer,
+            normalType = postSearchDto.normalType,
+            pageable = pageable,
+        )
+
+        return NormalPostSearchResponseDto.createDtoFromPageable(result, writer)
+    }
 
     @Transactional
     override fun createNormalPost(
@@ -64,9 +91,9 @@ class PostServiceImpl(
         } ?: false
 
         // TODO: comment 막혀 있으면 정보 제공 x 또한 삭제된 comment는 전달 x
-        return post.toOneNormalPostReponseDto(
+        return post.toOneNormalPostResponseDto(
             isLiked = isLiked,
-            isScraped = isScraped,
+            isScrapped = isScraped,
             isWriter = (user == post.writer),
         )
     }
@@ -187,7 +214,6 @@ class PostServiceImpl(
             post = post,
         )
 
-        scrapPost.scrapPost(user)
         scrapPostRepository.save(scrapPost)
 
         return ScrapPostResponseDto(post.id!!)
@@ -203,7 +229,6 @@ class PostServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         scrapPostRepository.findByUserAndPost(user, post)?.let {
-            it.cancelScrapPost(user)
             scrapPostRepository.delete(it)
         }
 
