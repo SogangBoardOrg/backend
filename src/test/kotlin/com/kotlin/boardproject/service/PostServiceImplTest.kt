@@ -659,7 +659,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.writerName").description("게시글 작성자 이름"),
                         fieldWithPath("data.isAnon").description("게시글 작성자 익명 여부"),
                         fieldWithPath("data.isLiked").description("게시글 좋아요 여부"),
-                        fieldWithPath("data.isScraped").description("게시글 스크랩 여부"),
+                        fieldWithPath("data.isScrapped").description("게시글 스크랩 여부"),
                         fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
                         fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
                         fieldWithPath("data.createdTime").description("게시글 작성 시간"),
@@ -709,7 +709,7 @@ class PostServiceImplTest {
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(jsonPath("$.data.isLiked", false).exists())
-            .andExpect(jsonPath("$.data.isScraped", false).exists())
+            .andExpect(jsonPath("$.data.isScrapped", false).exists())
             .andExpect(jsonPath("$.data.isWriter", false).exists())
             .andDo(
                 document(
@@ -723,7 +723,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.writerName").description("게시글 작성자 이름"),
                         fieldWithPath("data.isAnon").description("게시글 작성자 익명 여부"),
                         fieldWithPath("data.isLiked").description("게시글 좋아요 여부"),
-                        fieldWithPath("data.isScraped").description("게시글 스크랩 여부"),
+                        fieldWithPath("data.isScrapped").description("게시글 스크랩 여부"),
                         fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
                         fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
                         fieldWithPath("data.createdTime").description("게시글 작성 시간"),
