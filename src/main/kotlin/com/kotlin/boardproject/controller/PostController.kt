@@ -36,14 +36,7 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("")
-    fun createNormalPost(
-        @LoginUser loginUser: User,
-        @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): ApiResponse<CreateNormalPostResponseDto> {
-        val responseDto = postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
-        return ApiResponse.success(responseDto)
-    }
+
 
     @GetMapping("/{postId}")
     fun findOneNormalPostById(

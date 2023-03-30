@@ -182,6 +182,10 @@ include::{snippets}/normal-post-create/http-response.adoc[]
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 include::{snippets}/normal-post-create/request-headers.adoc[]
 
+.Request Body
+include::{snippets}/normal-post-create/request-body.adoc[]
+include::{snippets}/normal-post-create/request-fields.adoc[]
+
 .Response Body
 include::{snippets}/normal-post-create/response-body.adoc[]
 include::{snippets}/normal-post-create/response-fields.adoc[]
@@ -206,6 +210,10 @@ include::{snippets}/normal-post-edit/http-response.adoc[]
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 include::{snippets}/normal-post-edit/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/normal-post-edit/request-body.adoc[]
+include::{snippets}/normal-post-edit/request-fields.adoc[]
 
 .Response Body
 include::{snippets}/normal-post-edit/response-body.adoc[]
@@ -256,6 +264,11 @@ include::{snippets}/normal-post-black/http-response.adoc[]
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 include::{snippets}/normal-post-black/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/normal-post-black/request-body.adoc[]
+include::{snippets}/normal-post-black/request-fields.adoc[]
+
 
 .Response Body
 include::{snippets}/normal-post-black/response-body.adoc[]
@@ -360,3 +373,40 @@ include::{snippets}/scrap-post-cancel/request-headers.adoc[]
 .Response Body
 include::{snippets}/scrap-post-cancel/response-body.adoc[]
 include::{snippets}/scrap-post-cancel/response-fields.adoc[]
+
+=== COMMENT API ( /api/v1/comment )
+
+==== 댓글 생성
+
+.description
+[source]
+----
+댓글을 생성하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/comment
+----
+
+.Sample Request
+
+include::{snippets}/add-single-comment/http-request.adoc[]
+
+.Sample Response
+
+include::{snippets}/add-single-comment/http-response.adoc[]
+
+.Request Header
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/add-single-comment/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/add-single-comment/request-body.adoc[]
+include::{snippets}/add-single-comment/request-fields.adoc[]
+
+.Response Body
+
+로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
+
+include::{snippets}/add-single-comment/response-body.adoc[]
+include::{snippets}/add-single-comment/response-fields.adoc[]
