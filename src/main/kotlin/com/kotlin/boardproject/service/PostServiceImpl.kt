@@ -26,7 +26,7 @@ class PostServiceImpl(
     private val scrapPostRepository: ScrapPostRepository,
 ) : PostService {
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     override fun findNormalPostByQuery(
         username: String?,
         pageable: Pageable,
@@ -57,7 +57,9 @@ class PostServiceImpl(
         createNormalPostRequestDto: CreateNormalPostRequestDto,
     ): CreateNormalPostResponseDto {
         // 유저 확인
-        val user = userRepository.findByEmail(username) ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+        log.info(username)
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         // TODO: newbie이면 글 쓰기가 안됨 -> security config
 

@@ -3,7 +3,6 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.post.normalpost.NormalPostSearchResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
@@ -36,7 +35,14 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-
+    @PostMapping("")
+    fun createNormalPost(
+        @LoginUser loginUser: User,
+        @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
+    ): ApiResponse<CreateNormalPostResponseDto> {
+        val responseDto = postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
+        return ApiResponse.success(responseDto)
+    }
 
     @GetMapping("/{postId}")
     fun findOneNormalPostById(
