@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.PostStautus
 import javax.persistence.*
 
 @Entity
@@ -17,9 +18,17 @@ class Comment(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    val postId: BasePost,
+    val post: BasePost,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val writer: User,
-) : BaseEntity()
+
+    @Enumerated(EnumType.STRING)
+    var status: PostStautus = PostStautus.NORMAL,
+) : BaseEntity() {
+
+    fun addComment(post: BasePost) {
+        post.commentList.add(this)
+    }
+}

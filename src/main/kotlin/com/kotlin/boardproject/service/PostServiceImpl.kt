@@ -26,6 +26,7 @@ class PostServiceImpl(
     private val scrapPostRepository: ScrapPostRepository,
 ) : PostService {
 
+    @Transactional(readOnly=true)
     override fun findNormalPostByQuery(
         username: String?,
         pageable: Pageable,

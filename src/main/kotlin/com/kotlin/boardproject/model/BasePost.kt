@@ -33,7 +33,10 @@ open class BasePost(
     var commentOn: Boolean,
 
     @Enumerated(EnumType.STRING)
-    var status: PostStautus,
+    var status: PostStautus = PostStautus.NORMAL,
+
+    @OneToMany
+    val commentList: MutableList<Comment> = mutableListOf(),
 ) : BaseEntity() {
     fun addPost(user: User) {
         user.postList.add(this)
