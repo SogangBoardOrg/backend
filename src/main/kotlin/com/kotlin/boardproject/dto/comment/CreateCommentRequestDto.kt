@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.dto.comment
 
-class CreateCommentRequestDto(
+data class CreateCommentRequestDto(
     val content: String,
     val isAnon: Boolean,
     val postId: Long,

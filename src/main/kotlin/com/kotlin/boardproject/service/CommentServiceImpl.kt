@@ -2,14 +2,11 @@ package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
-import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
-import com.kotlin.boardproject.dto.comment.CreateCommentResponseDto
-import com.kotlin.boardproject.dto.comment.DeleteCommentResponseDto
+import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.repository.BasePostRepository
 import com.kotlin.boardproject.repository.CommentRepository
 import com.kotlin.boardproject.repository.UserRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityNotFoundException
@@ -52,6 +49,32 @@ class CommentServiceImpl(
     }
 
     @Transactional
+    override fun updateComment(
+        username: String,
+        commentId: Long,
+        updateCommentRequestDto: UpdateCommentRequestDto,
+    ): UpdateCommentResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
+
+        val comment = commentPostRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+            ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
+
+        // 주인과 일치하는지 확인
+
+        if (user == comment.writer) {
+            comment.content = updateCommentRequestDto.content
+        } else {
+            throw ConditionConflictException("해당 댓글의 유저가 아닙니다!")
+        }
+
+        return UpdateCommentResponseDto(
+            comment.id!!,
+            comment.content,
+        )
+    }
+
+    @Transactional
     override fun deleteComment(
         username: String,
         commentId: Long,
@@ -59,8 +82,8 @@ class CommentServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comment = commentPostRepository.findByIdOrNull(commentId)
-            ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
+        val comment = commentPostRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+            ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
 
         // 주인과 일치하는지 확인
 
