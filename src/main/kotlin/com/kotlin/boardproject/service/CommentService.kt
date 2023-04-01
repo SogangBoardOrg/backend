@@ -18,4 +18,9 @@ interface CommentService {
         commentId: Long,
         updateCommentRequestDto: UpdateCommentRequestDto,
     ): UpdateCommentResponseDto
+
+    fun likeComment(
+        username: String,
+        commentId: Long,
+    ): LikeCommentResponseDto
 }

@@ -3,6 +3,7 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
+import com.kotlin.boardproject.dto.post.LikePostResponseDto
 import com.kotlin.boardproject.service.CommentService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
@@ -31,6 +32,16 @@ class CommentController(
         @RequestBody updateCommentRequestDto: UpdateCommentRequestDto,
     ): ApiResponse<UpdateCommentResponseDto> {
         val responseDto = commentService.updateComment(loginUser.username, commentId, updateCommentRequestDto)
+
+        return ApiResponse.success(responseDto)
+    }
+
+    @PostMapping("/like/{commentId}")
+    fun likeComment(
+        @LoginUser loginUser: User,
+        @PathVariable("commentId") commentId: Long,
+    ): ApiResponse<LikeCommentResponseDto> {
+        val responseDto = commentService.likeComment(loginUser.username, commentId)
 
         return ApiResponse.success(responseDto)
     }

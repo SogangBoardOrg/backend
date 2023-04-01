@@ -1,11 +1,14 @@
 package com.kotlin.boardproject.service
 
+import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.model.Comment
+import com.kotlin.boardproject.model.LikeComment
 import com.kotlin.boardproject.repository.BasePostRepository
 import com.kotlin.boardproject.repository.CommentRepository
+import com.kotlin.boardproject.repository.LikeCommentRepository
 import com.kotlin.boardproject.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +18,8 @@ import javax.persistence.EntityNotFoundException
 class CommentServiceImpl(
     private val postRepository: BasePostRepository,
     private val userRepository: UserRepository,
-    private val commentPostRepository: CommentRepository,
+    private val commentRepository: CommentRepository,
+    private val likeCommentRepository: LikeCommentRepository,
 ) : CommentService {
 
     @Transactional
@@ -44,7 +48,7 @@ class CommentServiceImpl(
         comment.addComment(post)
 
         return CreateCommentResponseDto(
-            commentPostRepository.save(comment).id!!,
+            commentRepository.save(comment).id!!,
         )
     }
 
@@ -57,7 +61,7 @@ class CommentServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comment = commentPostRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+        val comment = commentRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
             ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
 
         // 주인과 일치하는지 확인
@@ -82,7 +86,7 @@ class CommentServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comment = commentPostRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+        val comment = commentRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
             ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
 
         // 주인과 일치하는지 확인
@@ -94,6 +98,33 @@ class CommentServiceImpl(
         }
 
         return DeleteCommentResponseDto(
+            comment.id!!,
+        )
+    }
+
+    @Transactional
+    override fun likeComment(
+        username: String,
+        commentId: Long,
+    ): LikeCommentResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw com.kotlin.boardproject.common.exception.EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val comment =
+            commentRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+                ?: throw com.kotlin.boardproject.common.exception.EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        likeCommentRepository.findByUserAndComment(user, comment)?.let {
+            throw ConditionConflictException("이미 추천을 했습니다.")
+        }
+
+        val likeComment = LikeComment(
+            user = user,
+            comment = comment,
+        )
+        likeCommentRepository.save(likeComment)
+
+        return LikeCommentResponseDto(
             comment.id!!,
         )
     }

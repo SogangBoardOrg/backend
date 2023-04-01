@@ -1,12 +1,13 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.BlackReason
 import javax.persistence.*
 
 @Entity
-class LikePost(
+class BlackComment(
     @Id
     @GeneratedValue
-    @Column(name = "like_post_id")
+    @Column(name = "black_post_id")
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -15,5 +16,8 @@ class LikePost(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    val post: BasePost,
+    val comment: Comment,
+
+    @Enumerated(EnumType.STRING)
+    val blackReason: BlackReason,
 ) : BaseEntity()

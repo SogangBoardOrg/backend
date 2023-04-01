@@ -61,7 +61,7 @@ class CommentServiceImplTest {
     private lateinit var blackPostRepository: BlackPostRepository
 
     @Autowired
-    private lateinit var likePostRepository: LikePostRepository
+    private lateinit var likeCommentRepository: LikeCommentRepository
 
     @Autowired
     private lateinit var scrapPostRepository: ScrapPostRepository
@@ -301,5 +301,55 @@ class CommentServiceImplTest {
         commentList.size shouldBe 1
         commentList[0].status shouldBe PostStautus.NORMAL
         commentList[0].content shouldBe updateComment
+    }
+
+    @Test
+    @Rollback(true)
+    fun 댓글_추천() {
+        // given
+        val urlPoint = "/like/{commentId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val comment = Comment(
+            content = content,
+            isAnon = true,
+            post = post,
+            writer = commentWriter,
+        )
+
+        commentRepository.saveAndFlush(comment)
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, comment.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "like-comment-add",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+
+        // then
+        val likes = likeCommentRepository.findAll()
+
+        likes.size shouldBe 1
+        likes[0].user shouldBe commentWriter
+        likes[0].comment shouldBe comment
     }
 }
