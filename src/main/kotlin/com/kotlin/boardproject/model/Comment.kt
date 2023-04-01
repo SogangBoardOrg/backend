@@ -14,8 +14,6 @@ class Comment(
 
     val isAnon: Boolean,
 
-    // var showStatus: ,
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     val post: BasePost,

@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.dto
+package com.kotlin.boardproject.dto.comment
 
 class CreateCommentRequestDto(
     val content: String,

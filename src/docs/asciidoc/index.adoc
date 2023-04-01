@@ -406,7 +406,34 @@ include::{snippets}/add-single-comment/request-fields.adoc[]
 
 .Response Body
 
-로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
-
 include::{snippets}/add-single-comment/response-body.adoc[]
 include::{snippets}/add-single-comment/response-fields.adoc[]
+
+==== 댓글 삭제
+
+.description
+[source]
+----
+댓글을 삭제하기 위한 API입니다.
+
+HTTP Method : DELETE
+End-Point : /api/v1/comment/{postId : Long}
+----
+
+.Sample Request
+
+include::{snippets}/delete-single-comment/http-request.adoc[]
+
+.Sample Response
+
+include::{snippets}/delete-single-comment/http-response.adoc[]
+
+.Request Header
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/delete-single-comment/request-headers.adoc[]
+
+.Response Body
+
+include::{snippets}/delete-single-comment/response-body.adoc[]
+include::{snippets}/delete-single-comment/response-fields.adoc[]
