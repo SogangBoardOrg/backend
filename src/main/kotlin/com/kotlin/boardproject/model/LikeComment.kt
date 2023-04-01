@@ -3,7 +3,7 @@ package com.kotlin.boardproject.model
 import javax.persistence.*
 
 @Entity
-class LikePost(
+class LikeComment(
     @Id
     @GeneratedValue
     @Column(name = "like_post_id")
@@ -14,6 +14,6 @@ class LikePost(
     val user: User,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    val post: BasePost,
+    @JoinColumn(name = "comment_id")
+    val comment: Comment,
 ) : BaseEntity()

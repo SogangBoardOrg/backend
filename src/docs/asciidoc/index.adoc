@@ -324,7 +324,7 @@ include::{snippets}/like-post-cancel/request-headers.adoc[]
 include::{snippets}/like-post-cancel/response-body.adoc[]
 include::{snippets}/like-post-cancel/response-fields.adoc[]
 
-==== 글 스크랩 기능
+==== 글 스크랩
 
 .description
 [source]
@@ -376,12 +376,12 @@ include::{snippets}/scrap-post-cancel/response-fields.adoc[]
 
 === COMMENT API ( /api/v1/comment )
 
-==== 댓글 생성
+==== 댓글 등록
 
 .description
 [source]
 ----
-댓글을 생성하기 위한 API입니다.
+댓글을 등록하기 위한 API입니다.
 
 HTTP Method : POST
 End-Point : /api/v1/comment
@@ -471,3 +471,28 @@ include::{snippets}/update-single-comment/request-fields.adoc[]
 
 include::{snippets}/update-single-comment/response-body.adoc[]
 include::{snippets}/update-single-comment/response-fields.adoc[]
+
+==== 댓글 추천
+
+.description
+[source]
+----
+댓글을 추천하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/comment/like/{postId: Long}
+----
+
+.Sample Request
+include::{snippets}/like-comment-add/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/like-comment-add/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/like-comment-add/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/like-comment-add/response-body.adoc[]
+include::{snippets}/like-comment-add/response-fields.adoc[]
