@@ -437,3 +437,37 @@ include::{snippets}/delete-single-comment/request-headers.adoc[]
 
 include::{snippets}/delete-single-comment/response-body.adoc[]
 include::{snippets}/delete-single-comment/response-fields.adoc[]
+
+==== 댓글 수정
+
+.description
+[source]
+----
+댓글을 수정하기 위한 API입니다.
+
+HTTP Method : PUT
+End-Point : /api/v1/comment/{postId : Long}
+----
+
+.Sample Request
+
+include::{snippets}/update-single-comment/http-request.adoc[]
+
+.Sample Response
+
+include::{snippets}/update-single-comment/http-response.adoc[]
+
+.Request Header
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/update-single-comment/request-headers.adoc[]
+
+.Request Body
+
+include::{snippets}/update-single-comment/request-body.adoc[]
+include::{snippets}/update-single-comment/request-fields.adoc[]
+
+.Response Body
+
+include::{snippets}/update-single-comment/response-body.adoc[]
+include::{snippets}/update-single-comment/response-fields.adoc[]

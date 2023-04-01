@@ -1,8 +1,6 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
-import com.kotlin.boardproject.dto.comment.CreateCommentResponseDto
-import com.kotlin.boardproject.dto.comment.DeleteCommentResponseDto
+import com.kotlin.boardproject.dto.comment.*
 
 interface CommentService {
     fun createComment(
@@ -14,4 +12,10 @@ interface CommentService {
         username: String,
         commentId: Long,
     ): DeleteCommentResponseDto
+
+    fun updateComment(
+        username: String,
+        commentId: Long,
+        updateCommentRequestDto: UpdateCommentRequestDto,
+    ): UpdateCommentResponseDto
 }
