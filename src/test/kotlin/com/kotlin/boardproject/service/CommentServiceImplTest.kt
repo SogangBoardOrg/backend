@@ -5,9 +5,11 @@ import com.kotlin.boardproject.auth.AuthToken
 import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.NormalType
+import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.dto.CreateCommentRequestDto
+import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
 import com.kotlin.boardproject.model.BasePost
+import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.*
@@ -181,6 +183,58 @@ class CommentServiceImplTest {
 
         commentList.size shouldBe 1
         commentList[0].content shouldBe "comment_test"
+        commentList[0].post shouldBe post
+    }
+
+    @Test
+    @Rollback(true)
+    fun 댓글_삭제() {
+        // given
+        val urlPoint = "/{commentId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val content = "comment_test"
+
+        // log.info(post.id!!.toString())
+
+        val comment = Comment(
+            content = content,
+            isAnon = true,
+            post = post,
+            writer = commentWriter,
+        )
+
+        commentRepository.saveAndFlush(comment)
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(finalUrl, comment.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "delete-single-comment",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    ),
+                ),
+            )
+
+        val commentList = commentRepository.findAll()
+
+        commentList.size shouldBe 1
+        commentList[0].status shouldBe PostStautus.DELETED
         commentList[0].post shouldBe post
     }
 }
