@@ -335,7 +335,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
-                    "normal-post-black",
+                    "post-black",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(

@@ -1,7 +1,6 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.comment.*
-import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
 
 interface CommentService {
     fun createComment(
@@ -29,4 +28,10 @@ interface CommentService {
         username: String,
         commentId: Long,
     ): CancelLikeCommentResponseDto
+
+    fun blackComment(
+        username: String,
+        commentId: Long,
+        blackCommentRequestDto: BlackCommentRequestDto,
+    ): BlackCommentResponseDto
 }

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.auth.AuthToken
 import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
+import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.enums.Role
+import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
 import com.kotlin.boardproject.model.*
@@ -55,7 +57,7 @@ class CommentServiceImplTest {
     private lateinit var commentRepository: CommentRepository
 
     @Autowired
-    private lateinit var blackPostRepository: BlackPostRepository
+    private lateinit var blackCommentRepository: BlackCommentRepository
 
     @Autowired
     private lateinit var likeCommentRepository: LikeCommentRepository
@@ -307,7 +309,6 @@ class CommentServiceImplTest {
         val urlPoint = "/like/{commentId}"
         val finalUrl = "$statsEndPoint$urlPoint"
 
-        val title = "title_test"
         val content = "content_test"
 
         val comment = Comment(
@@ -403,5 +404,63 @@ class CommentServiceImplTest {
         val likes = likeCommentRepository.findAll()
 
         likes.size shouldBe 0
+    }
+
+    @Test
+    @Rollback(true)
+    fun 댓글_신고() {
+        val urlPoint = "/black/{commentId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val content = "content_test"
+
+        val comment = Comment(
+            content = content,
+            isAnon = true,
+            post = post,
+            writer = commentWriter,
+        )
+
+        commentRepository.saveAndFlush(comment)
+
+        val blackCommentRequestDto = BlackCommentRequestDto(
+            blackReason = BlackReason.HATE,
+        )
+        val blackCommentRequestDtoString = objectMapper.writeValueAsString(blackCommentRequestDto)
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, comment.id!!).contentType(MediaType.APPLICATION_JSON)
+                .content(blackCommentRequestDtoString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenPost.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "comment-black",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 댓글을 신고하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    PayloadDocumentation.requestFields(
+                        PayloadDocumentation.fieldWithPath("blackReason").description("신고 사유"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+        // then
+
+        val blackComment = blackCommentRepository.findAll()
+
+        blackComment.size shouldBe 1
+        blackComment[0].comment shouldBe comment
+        blackComment[0].comment.post shouldBe post
+        blackComment[0].user shouldBe postWriter
+        blackComment[0].blackReason shouldBe BlackReason.HATE
     }
 }

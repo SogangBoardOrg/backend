@@ -2,8 +2,8 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.comment.*
+import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.common.ApiResponse
-import com.kotlin.boardproject.dto.post.LikePostResponseDto
 import com.kotlin.boardproject.service.CommentService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
@@ -64,5 +64,16 @@ class CommentController(
         val responseDto = commentService.deleteComment(loginUser.username, commentId)
 
         return ApiResponse.success(responseDto)
+    }
+
+    @PostMapping("/black/{commentId}")
+    fun blackComment(
+        @LoginUser loginUser: User,
+        @PathVariable("commentId") commentId: Long,
+        @RequestBody blackCommentRequestDto: BlackCommentRequestDto,
+    ): ApiResponse<BlackCommentResponseDto> {
+        val data = commentService.blackComment(loginUser.username, commentId, blackCommentRequestDto)
+
+        return ApiResponse.success(data)
     }
 }
