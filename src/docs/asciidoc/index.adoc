@@ -256,23 +256,23 @@ End-Point : /api/v1/post/black/{postId: Long}
 ----
 
 .Sample Request
-include::{snippets}/normal-post-black/http-request.adoc[]
+include::{snippets}/post-black/http-request.adoc[]
 
 .Sample Response
-include::{snippets}/normal-post-black/http-response.adoc[]
+include::{snippets}/post-black/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-include::{snippets}/normal-post-black/request-headers.adoc[]
+include::{snippets}/post-black/request-headers.adoc[]
 
 .Request Body
-include::{snippets}/normal-post-black/request-body.adoc[]
-include::{snippets}/normal-post-black/request-fields.adoc[]
+include::{snippets}/post-black/request-body.adoc[]
+include::{snippets}/post-black/request-fields.adoc[]
 
 
 .Response Body
-include::{snippets}/normal-post-black/response-body.adoc[]
-include::{snippets}/normal-post-black/response-fields.adoc[]
+include::{snippets}/post-black/response-body.adoc[]
+include::{snippets}/post-black/response-fields.adoc[]
 
 ==== 글 추천
 
@@ -473,6 +473,37 @@ include::{snippets}/delete-single-comment/request-headers.adoc[]
 
 include::{snippets}/delete-single-comment/response-body.adoc[]
 include::{snippets}/delete-single-comment/response-fields.adoc[]
+
+==== 글 신고
+
+.description
+[source]
+----
+댓글을 신고하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/comment/black/{postId: Long}
+----
+
+.Sample Request
+include::{snippets}/comment-black/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/comment-black/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/comment-black/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/comment-black/request-body.adoc[]
+include::{snippets}/comment-black/request-fields.adoc[]
+
+
+.Response Body
+include::{snippets}/comment-black/response-body.adoc[]
+include::{snippets}/comment-black/response-fields.adoc[]
+
 
 ==== 댓글 추천
 

@@ -4,12 +4,10 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.dto.comment.*
+import com.kotlin.boardproject.model.BlackComment
 import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.model.LikeComment
-import com.kotlin.boardproject.repository.BasePostRepository
-import com.kotlin.boardproject.repository.CommentRepository
-import com.kotlin.boardproject.repository.LikeCommentRepository
-import com.kotlin.boardproject.repository.UserRepository
+import com.kotlin.boardproject.repository.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityNotFoundException
@@ -20,6 +18,7 @@ class CommentServiceImpl(
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
     private val likeCommentRepository: LikeCommentRepository,
+    private val blackCommentRepository: BlackCommentRepository,
 ) : CommentService {
 
     @Transactional
@@ -144,5 +143,32 @@ class CommentServiceImpl(
         likeCommentRepository.deleteByUserAndComment(user, comment)
 
         return CancelLikeCommentResponseDto(comment.id!!)
+    }
+
+    @Transactional
+    override fun blackComment(
+        username: String,
+        commentId: Long,
+        blackCommentRequestDto: BlackCommentRequestDto,
+    ): BlackCommentResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val comment =
+            commentRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        blackCommentRepository.findByUserAndComment(user, comment)?.let {
+            throw ConditionConflictException("해당 댓글은 이미 신고가 되었습니다.")
+        }
+
+        val blackComment = BlackComment(
+            user = user,
+            comment = comment,
+            blackReason = blackCommentRequestDto.blackReason,
+        )
+        blackCommentRepository.save(blackComment)
+
+        return BlackCommentResponseDto(comment.id!!)
     }
 }

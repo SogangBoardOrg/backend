@@ -135,26 +135,6 @@ class PostServiceImpl(
     }
 
     @Transactional
-    override fun blackPost(
-        username: String,
-        postId: Long,
-        blackPostRequestDto: BlackPostRequestDto,
-    ): BlackPostResponseDto {
-        // TODO: 뉴비는 신고 못함 -> security config 로 설정
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
-
-        val post =
-            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
-                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
-
-        val blackPost = BlackPost(user = user, post = post, blackReason = blackPostRequestDto.blackReason)
-        blackPostRepository.save(blackPost)
-
-        return BlackPostResponseDto(post.id!!)
-    }
-
-    @Transactional
     override fun likePost(
         username: String,
         postId: Long,
@@ -194,6 +174,30 @@ class PostServiceImpl(
         likePostRepository.deleteByUserAndPost(user, post)
 
         return CancelLikePostResponseDto(post.id!!)
+    }
+
+    @Transactional
+    override fun blackPost(
+        username: String,
+        postId: Long,
+        blackPostRequestDto: BlackPostRequestDto,
+    ): BlackPostResponseDto {
+        // TODO: 뉴비는 신고 못함 -> security config 로 설정
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val post =
+            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        blackPostRepository.findByUserAndPost(user, post)?.let {
+            throw ConditionConflictException("해당 글은 이미 신고가 되었습니다.")
+        }
+
+        val blackPost = BlackPost(user = user, post = post, blackReason = blackPostRequestDto.blackReason)
+        blackPostRepository.save(blackPost)
+
+        return BlackPostResponseDto(post.id!!)
     }
 
     @Transactional
