@@ -128,4 +128,21 @@ class CommentServiceImpl(
             comment.id!!,
         )
     }
+
+    @Transactional
+    override fun cancelLikeComment(
+        username: String,
+        commentId: Long,
+    ): CancelLikeCommentResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw com.kotlin.boardproject.common.exception.EntityNotFoundException("존재하지 않는 유저 입니다.")
+
+        val comment =
+            commentRepository.findByIdAndStatus(commentId, PostStautus.NORMAL)
+                ?: throw com.kotlin.boardproject.common.exception.EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+
+        likeCommentRepository.deleteByUserAndComment(user, comment)
+
+        return CancelLikeCommentResponseDto(comment.id!!)
+    }
 }

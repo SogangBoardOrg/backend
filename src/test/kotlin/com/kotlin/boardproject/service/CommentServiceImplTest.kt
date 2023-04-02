@@ -9,10 +9,7 @@ import com.kotlin.boardproject.common.enums.PostStautus
 import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
-import com.kotlin.boardproject.model.BasePost
-import com.kotlin.boardproject.model.Comment
-import com.kotlin.boardproject.model.NormalPost
-import com.kotlin.boardproject.model.User
+import com.kotlin.boardproject.model.*
 import com.kotlin.boardproject.repository.*
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
@@ -351,5 +348,60 @@ class CommentServiceImplTest {
         likes.size shouldBe 1
         likes[0].user shouldBe commentWriter
         likes[0].comment shouldBe comment
+    }
+
+    @Test
+    @Rollback(true)
+    fun 댓글_추천_취소() {
+        // given
+        val urlPoint = "/like/{postId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val content = "content_test"
+
+        val comment = Comment(
+            content = content,
+            isAnon = true,
+            post = post,
+            writer = commentWriter,
+        )
+
+        commentRepository.saveAndFlush(comment)
+
+        likeCommentRepository.save(
+            LikeComment(
+                user = postWriter,
+                comment = comment,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(finalUrl, comment.id!!).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenPost.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "like-comment-cancel",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("data.id").description("게시글 번호"),
+                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+
+        // then
+        val likes = likeCommentRepository.findAll()
+
+        likes.size shouldBe 0
     }
 }

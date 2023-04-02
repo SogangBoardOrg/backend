@@ -46,6 +46,16 @@ class CommentController(
         return ApiResponse.success(responseDto)
     }
 
+    @DeleteMapping("/like/{commentId}")
+    fun cancelLikeComment(
+        @LoginUser loginUser: User,
+        @PathVariable("commentId") commentId: Long,
+    ): ApiResponse<CancelLikeCommentResponseDto> {
+        val responseDto = commentService.cancelLikeComment(loginUser.username, commentId)
+
+        return ApiResponse.success(responseDto)
+    }
+
     @DeleteMapping("/{commentId}")
     fun deleteComment(
         @LoginUser loginUser: User,

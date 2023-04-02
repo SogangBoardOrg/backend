@@ -70,6 +70,35 @@ endif::[]
 
 === POST API ( /api/v1/post )
 
+==== 글 등록
+
+.description
+[source]
+----
+글을 등록하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/post
+----
+
+.Sample Request
+include::{snippets}/normal-post-create/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/normal-post-create/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/normal-post-create/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/normal-post-create/request-body.adoc[]
+include::{snippets}/normal-post-create/request-fields.adoc[]
+
+.Response Body
+include::{snippets}/normal-post-create/response-body.adoc[]
+include::{snippets}/normal-post-create/response-fields.adoc[]
+
 ==== 글 단건 조회
 
 .description
@@ -160,35 +189,6 @@ request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, acces
 
 include::{snippets}/view-bulk-normal-post-no-login/response-body.adoc[]
 include::{snippets}/view-bulk-normal-post-no-login/response-fields.adoc[]
-
-==== 글 등록
-
-.description
-[source]
-----
-글을 등록하기 위한 API입니다.
-
-HTTP Method : POST
-End-Point : /api/v1/post
-----
-
-.Sample Request
-include::{snippets}/normal-post-create/http-request.adoc[]
-
-.Sample Response
-include::{snippets}/normal-post-create/http-response.adoc[]
-
-.Request Header
-request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-include::{snippets}/normal-post-create/request-headers.adoc[]
-
-.Request Body
-include::{snippets}/normal-post-create/request-body.adoc[]
-include::{snippets}/normal-post-create/request-fields.adoc[]
-
-.Response Body
-include::{snippets}/normal-post-create/response-body.adoc[]
-include::{snippets}/normal-post-create/response-fields.adoc[]
 
 ==== 글 수정
 
@@ -409,34 +409,7 @@ include::{snippets}/add-single-comment/request-fields.adoc[]
 include::{snippets}/add-single-comment/response-body.adoc[]
 include::{snippets}/add-single-comment/response-fields.adoc[]
 
-==== 댓글 삭제
-
-.description
-[source]
-----
-댓글을 삭제하기 위한 API입니다.
-
-HTTP Method : DELETE
-End-Point : /api/v1/comment/{postId : Long}
-----
-
-.Sample Request
-
-include::{snippets}/delete-single-comment/http-request.adoc[]
-
-.Sample Response
-
-include::{snippets}/delete-single-comment/http-response.adoc[]
-
-.Request Header
-
-request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-include::{snippets}/delete-single-comment/request-headers.adoc[]
-
-.Response Body
-
-include::{snippets}/delete-single-comment/response-body.adoc[]
-include::{snippets}/delete-single-comment/response-fields.adoc[]
+==== 댓글 조회
 
 ==== 댓글 수정
 
@@ -472,6 +445,35 @@ include::{snippets}/update-single-comment/request-fields.adoc[]
 include::{snippets}/update-single-comment/response-body.adoc[]
 include::{snippets}/update-single-comment/response-fields.adoc[]
 
+==== 댓글 삭제
+
+.description
+[source]
+----
+댓글을 삭제하기 위한 API입니다.
+
+HTTP Method : DELETE
+End-Point : /api/v1/comment/{postId : Long}
+----
+
+.Sample Request
+
+include::{snippets}/delete-single-comment/http-request.adoc[]
+
+.Sample Response
+
+include::{snippets}/delete-single-comment/http-response.adoc[]
+
+.Request Header
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/delete-single-comment/request-headers.adoc[]
+
+.Response Body
+
+include::{snippets}/delete-single-comment/response-body.adoc[]
+include::{snippets}/delete-single-comment/response-fields.adoc[]
+
 ==== 댓글 추천
 
 .description
@@ -496,3 +498,28 @@ include::{snippets}/like-comment-add/request-headers.adoc[]
 .Response Body
 include::{snippets}/like-comment-add/response-body.adoc[]
 include::{snippets}/like-comment-add/response-fields.adoc[]
+
+==== 댓글 추천 취소
+
+.description
+[source]
+----
+댓글을 추천을 취소하기 위한 API입니다.
+
+HTTP Method : DELETE
+End-Point : /api/v1/comment/like/{postId: Long}
+----
+
+.Sample Request
+include::{snippets}/like-comment-cancel/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/like-comment-cancel/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/like-comment-cancel/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/like-comment-cancel/response-body.adoc[]
+include::{snippets}/like-comment-cancel/response-fields.adoc[]
