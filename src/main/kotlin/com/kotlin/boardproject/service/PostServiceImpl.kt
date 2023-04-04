@@ -122,7 +122,7 @@ class PostServiceImpl(
     @Transactional
     override fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto {
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
@@ -140,7 +140,7 @@ class PostServiceImpl(
         postId: Long,
     ): LikePostResponseDto {
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
@@ -165,7 +165,7 @@ class PostServiceImpl(
         postId: Long,
     ): CancelLikePostResponseDto {
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
@@ -184,7 +184,7 @@ class PostServiceImpl(
     ): BlackPostResponseDto {
         // TODO: 뉴비는 신고 못함 -> security config 로 설정
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("${username}은 존재하지 않는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
@@ -206,7 +206,7 @@ class PostServiceImpl(
         postId: Long,
     ): ScrapPostResponseDto {
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
@@ -229,7 +229,7 @@ class PostServiceImpl(
     @Transactional
     override fun cancelScrapPost(username: String, postId: Long): CancelScrapPostResponseDto {
         val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)

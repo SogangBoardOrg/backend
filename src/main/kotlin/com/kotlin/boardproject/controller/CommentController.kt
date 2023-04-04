@@ -2,7 +2,6 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.comment.*
-import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import org.springframework.security.core.userdetails.User
@@ -14,13 +13,20 @@ class CommentController(
     private val commentService: CommentService,
 ) {
 
-    @PostMapping("")
+    @PostMapping("/{parentCommentId}", "")
     fun createComment(
         @LoginUser loginUser: User,
+        @PathVariable("parentCommentId", required = false) parentCommentId: Long?,
         @RequestBody createCommentRequestDto: CreateCommentRequestDto,
     ): ApiResponse<CreateCommentResponseDto> {
         // path variable requried를 false로 설정해서 댓글과 대댓글 구분하자
-        val responseDto = commentService.createComment(loginUser.username, createCommentRequestDto)
+        // log.info(parentCommentId.toString())
+
+        val responseDto = commentService.createComment(
+            loginUser.username,
+            createCommentRequestDto,
+            parentCommentId,
+        )
 
         return ApiResponse.success(responseDto)
     }
