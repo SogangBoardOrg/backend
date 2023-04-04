@@ -6,6 +6,7 @@ interface CommentService {
     fun createComment(
         username: String,
         createCommentRequestDto: CreateCommentRequestDto,
+        parentCommentId: Long?,
     ): CreateCommentResponseDto
 
     fun deleteComment(

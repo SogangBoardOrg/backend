@@ -409,6 +409,39 @@ include::{snippets}/add-single-comment/request-fields.adoc[]
 include::{snippets}/add-single-comment/response-body.adoc[]
 include::{snippets}/add-single-comment/response-fields.adoc[]
 
+==== 대댓글 등록
+
+.description
+[source]
+----
+대댓글을 등록하기 위한 API입니다.
+
+HTTP Method : POST
+End-Point : /api/v1/comment/{parentCommentId : Long}
+----
+
+.Sample Request
+
+include::{snippets}/add-single-parent-comment/http-request.adoc[]
+
+.Sample Response
+
+include::{snippets}/add-single-parent-comment/http-response.adoc[]
+
+.Request Header
+
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+include::{snippets}/add-single-parent-comment/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/add-single-parent-comment/request-body.adoc[]
+include::{snippets}/add-single-parent-comment/request-fields.adoc[]
+
+.Response Body
+
+include::{snippets}/add-single-parent-comment/response-body.adoc[]
+include::{snippets}/add-single-parent-comment/response-fields.adoc[]
+
 ==== 댓글 조회
 
 ==== 댓글 수정
@@ -419,7 +452,7 @@ include::{snippets}/add-single-comment/response-fields.adoc[]
 댓글을 수정하기 위한 API입니다.
 
 HTTP Method : PUT
-End-Point : /api/v1/comment/{postId : Long}
+End-Point : /api/v1/comment/{commentId : Long}
 ----
 
 .Sample Request
@@ -453,7 +486,7 @@ include::{snippets}/update-single-comment/response-fields.adoc[]
 댓글을 삭제하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/comment/{postId : Long}
+End-Point : /api/v1/comment/{commentId : Long}
 ----
 
 .Sample Request
@@ -482,7 +515,7 @@ include::{snippets}/delete-single-comment/response-fields.adoc[]
 댓글을 신고하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/comment/black/{postId: Long}
+End-Point : /api/v1/comment/black/{commentId: Long}
 ----
 
 .Sample Request
@@ -513,7 +546,7 @@ include::{snippets}/comment-black/response-fields.adoc[]
 댓글을 추천하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/comment/like/{postId: Long}
+End-Point : /api/v1/comment/like/{commentId: Long}
 ----
 
 .Sample Request
@@ -538,7 +571,7 @@ include::{snippets}/like-comment-add/response-fields.adoc[]
 댓글을 추천을 취소하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/comment/like/{postId: Long}
+End-Point : /api/v1/comment/like/{commentId: Long}
 ----
 
 .Sample Request

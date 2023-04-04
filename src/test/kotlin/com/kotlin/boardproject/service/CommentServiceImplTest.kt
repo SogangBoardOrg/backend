@@ -188,6 +188,158 @@ class CommentServiceImplTest {
 
     @Test
     @Rollback(true)
+    fun 대댓글_추가() {
+        val urlPoint = "/{parentId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val ancestorContent = "ancestor_comment_test"
+        val parentContent = "parent_comment_test"
+        // log.info(post.id!!.toString())
+
+        // 선조 댓글 생성
+        val ancestorComment = Comment(
+            content = ancestorContent,
+            isAnon = true,
+            post = post,
+            writer = commentWriter,
+        )
+
+        commentRepository.saveAndFlush(ancestorComment)
+        // 선조 댓글 생성
+
+        val createParentCommentDto = CreateCommentRequestDto(
+            parentContent,
+            isAnon = true,
+            postId = post.id!!,
+        )
+
+        val createParentCommentDtoString = objectMapper.writeValueAsString(createParentCommentDto)
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, ancestorComment.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createParentCommentDtoString)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "add-single-parent-comment",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
+                    ),
+                    PayloadDocumentation.requestFields(
+                        PayloadDocumentation.fieldWithPath("content").description("글 내용"),
+                        PayloadDocumentation.fieldWithPath("isAnon").description("익명 여부"),
+                        PayloadDocumentation.fieldWithPath("postId").description("글 번호"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    ),
+                ),
+            )
+
+        val commentList = commentRepository.findAll()
+
+        commentList.size shouldBe 2
+        commentList[1].content shouldBe "parent_comment_test"
+        commentList[1].post shouldBe post
+        commentList[1].ancestor shouldBe ancestorComment
+        commentList[1].parent shouldBe ancestorComment
+    }
+
+    @Test
+    @Rollback(true)
+    fun 대댓글의_댓글_추가() {
+        val urlPoint = "/{parentId}"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val ancestorContent = "ancestor_comment_test"
+        val parentContent = "parent_comment_test"
+        val underContent = "under_comment_test"
+        // log.info(post.id!!.toString())
+
+        // 선조 댓글 생성
+        val ancestorComment = Comment(
+            content = ancestorContent,
+            isAnon = true,
+            post = post,
+            writer = commentWriter,
+        )
+
+        commentRepository.saveAndFlush(ancestorComment)
+        // 선조 댓글 생성
+
+        val parentComment = Comment(
+            content = parentContent,
+            isAnon = true,
+            post = post,
+            writer = postWriter,
+            ancestor = ancestorComment,
+            parent = ancestorComment,
+        )
+
+        commentRepository.saveAndFlush(parentComment)
+
+        val createUnderCommentDto = CreateCommentRequestDto(
+            underContent,
+            isAnon = true,
+            postId = post.id!!,
+        )
+
+        val createParentCommentDtoString = objectMapper.writeValueAsString(createUnderCommentDto)
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.post(finalUrl, parentComment.id!!)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createParentCommentDtoString)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "add-single-descendent-comment",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
+                    ),
+                    PayloadDocumentation.requestFields(
+                        PayloadDocumentation.fieldWithPath("content").description("글 내용"),
+                        PayloadDocumentation.fieldWithPath("isAnon").description("익명 여부"),
+                        PayloadDocumentation.fieldWithPath("postId").description("글 번호"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    ),
+                ),
+            )
+
+        val commentList = commentRepository.findAll()
+
+        commentList.size shouldBe 3
+        commentList[2].content shouldBe underContent
+        commentList[2].post shouldBe post
+        commentList[2].ancestor shouldBe ancestorComment
+        commentList[2].parent shouldBe parentComment
+    }
+
+    @Test
+    @Rollback(true)
     fun 댓글_삭제() {
         // given
         val urlPoint = "/{commentId}"
@@ -430,7 +582,8 @@ class CommentServiceImplTest {
 
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.post(finalUrl, comment.id!!).contentType(MediaType.APPLICATION_JSON)
-                .content(blackCommentRequestDtoString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenPost.token}")
+                .content(blackCommentRequestDtoString)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenPost.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
