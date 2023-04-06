@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.model
 
 import com.kotlin.boardproject.common.enums.NormalType
-import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.OneNormalPostResponseDto
 import javax.persistence.Entity
@@ -24,7 +24,7 @@ class NormalPost(
     isAnon = isAnon,
     commentOn = commentOn,
     writer = writer,
-    status = PostStautus.NORMAL,
+    status = PostStatus.NORMAL,
 ) {
     fun editPost(editNormalPostRequestDto: EditNormalPostRequestDto) {
         // TODO:질문 글이면 수정 불가능하게 만들기

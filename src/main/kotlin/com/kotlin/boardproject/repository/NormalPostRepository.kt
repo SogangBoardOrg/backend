@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.repository
 
 import com.kotlin.boardproject.common.enums.NormalType
-import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import org.springframework.data.domain.Page
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface NormalPostRepository : JpaRepository<NormalPost, Long> {
-    fun findByIdAndStatus(id: Long, status: PostStautus): NormalPost?
+    fun findByIdAndStatus(id: Long, status: PostStatus): NormalPost?
 
     @Query(
         "SELECT np FROM NormalPost AS np WHERE ((np.writer = :writer AND np.isAnon = FALSE) OR :writer IS NULL )" +

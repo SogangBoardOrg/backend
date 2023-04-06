@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.model
 
 import com.kotlin.boardproject.common.enums.ErrorCode
-import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.UnAuthorizedException
 import javax.persistence.*
 
@@ -33,7 +33,7 @@ open class BasePost(
     var commentOn: Boolean,
 
     @Enumerated(EnumType.STRING)
-    var status: PostStautus = PostStautus.NORMAL,
+    var status: PostStatus = PostStatus.NORMAL,
 
     @OneToMany
     val commentList: MutableList<Comment> = mutableListOf(),
@@ -51,7 +51,7 @@ open class BasePost(
     }
 
     fun deletePost(user: User) {
-        this.status = PostStautus.DELETED
+        this.status = PostStatus.DELETED
         user.postList.remove(this)
     }
 }

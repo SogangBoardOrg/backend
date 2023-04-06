@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.enums.ErrorCode
-import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
@@ -78,7 +78,7 @@ class PostServiceImpl(
         postId: Long,
     ): OneNormalPostResponseDto {
         val post =
-            normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         val user = username?.let {
@@ -109,7 +109,7 @@ class PostServiceImpl(
     ): EditNormalPostResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
-        val post = normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+        val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
         // TODO: 메시지 어떻게 할지 고민
 
@@ -123,7 +123,7 @@ class PostServiceImpl(
     override fun deleteNormalPost(username: String, postId: Long): DeleteNormalPostResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
-        val post = normalPostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+        val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
         // TODO: 질문 게시글이면 삭제가 불가능하게 설정한다.
@@ -143,7 +143,7 @@ class PostServiceImpl(
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         likePostRepository.findByUserAndPost(user, post)?.let {
@@ -168,7 +168,7 @@ class PostServiceImpl(
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         likePostRepository.deleteByUserAndPost(user, post)
@@ -187,7 +187,7 @@ class PostServiceImpl(
             ?: throw EntityNotFoundException("${username}은 존재하지 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         blackPostRepository.findByUserAndPost(user, post)?.let {
@@ -209,7 +209,7 @@ class PostServiceImpl(
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         scrapPostRepository.findByUserAndPost(user, post)?.let {
@@ -232,7 +232,7 @@ class PostServiceImpl(
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatus(postId, PostStautus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         scrapPostRepository.findByUserAndPost(user, post)?.let {

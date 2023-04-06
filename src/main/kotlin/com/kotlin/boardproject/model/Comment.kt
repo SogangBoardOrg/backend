@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.model
 
-import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.enums.PostStatus
 import javax.persistence.*
 
 @Entity
@@ -35,7 +35,7 @@ class Comment(
     val descendentList: MutableList<Comment> = mutableListOf(),
 
     @Enumerated(EnumType.STRING)
-    var status: PostStautus = PostStautus.NORMAL,
+    var status: PostStatus = PostStatus.NORMAL,
 ) : BaseEntity() {
 
     fun addComment(post: BasePost) {

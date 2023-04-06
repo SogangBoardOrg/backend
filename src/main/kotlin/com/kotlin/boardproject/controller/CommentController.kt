@@ -13,7 +13,7 @@ class CommentController(
     private val commentService: CommentService,
 ) {
 
-    @PostMapping("/{parentCommentId}", "")
+    @PostMapping("", "/{parentCommentId}")
     fun createComment(
         @LoginUser loginUser: User,
         @PathVariable("parentCommentId", required = false) parentCommentId: Long?,

@@ -1,5 +1,5 @@
 package com.kotlin.boardproject.common.enums
 
-enum class PostStautus {
+enum class PostStatus {
     DELETED, NORMAL
 }
