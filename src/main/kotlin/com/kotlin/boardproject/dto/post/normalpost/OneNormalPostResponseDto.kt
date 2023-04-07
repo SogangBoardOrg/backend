@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.dto.post.normalpost
 
+import com.kotlin.boardproject.dto.comment.CommentDto
 import java.time.LocalDateTime
 
 data class OneNormalPostResponseDto(
@@ -14,4 +15,5 @@ data class OneNormalPostResponseDto(
     val commentOn: Boolean,
     val createdTime: LocalDateTime,
     val lastModifiedTime: LocalDateTime?,
+    val commentList: MutableList<CommentDto> = mutableListOf(),
 )

@@ -11,6 +11,11 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface NormalPostRepository : JpaRepository<NormalPost, Long> {
+
+    // 작성자 여부
+    // 좋아요 여부
+    // 스크랩 여부
+
     fun findByIdAndStatus(id: Long, status: PostStatus): NormalPost?
 
     @Query(
@@ -26,4 +31,17 @@ interface NormalPostRepository : JpaRepository<NormalPost, Long> {
         @Param("normalType") normalType: NormalType,
         pageable: Pageable,
     ): Page<NormalPost>
+
+    @Query(
+        "SELECT np " +
+            "FROM NormalPost AS np " +
+            "LEFT JOIN FETCH np.commentList " +
+            "LEFT JOIN FETCH np.likeList " +
+            "LEFT JOIN FETCH np.scrapList " +
+            "WHERE np.id = :id AND np.status = :status",
+    )
+    fun findPostCustom(
+        @Param("id") id: Long,
+        @Param("status") status: PostStatus,
+    ): NormalPost?
 }

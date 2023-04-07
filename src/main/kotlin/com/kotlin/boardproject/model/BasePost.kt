@@ -35,17 +35,37 @@ open class BasePost(
     @Enumerated(EnumType.STRING)
     var status: PostStatus = PostStatus.NORMAL,
 
-    @OneToMany
-    val commentList: MutableList<Comment> = mutableListOf(),
+    @OneToMany(fetch = FetchType.LAZY)
+    val commentList: MutableSet<Comment> = mutableSetOf(),
+
+    @OneToMany(fetch = FetchType.LAZY)
+    val likeList: MutableSet<LikePost> = mutableSetOf(),
+
+    @OneToMany(fetch = FetchType.LAZY)
+    val scrapList: MutableSet<ScrapPost> = mutableSetOf(),
 ) : BaseEntity() {
     fun addPost(user: User) {
         user.postList.add(this)
     }
 
+    fun addLikePost(likePost: LikePost) {
+        this.likeList.add(likePost)
+    }
+
+    fun cancelLikePost(likePost: LikePost) {
+        this.likeList.remove(likePost)
+    }
+
+    fun addScrapPost(scrapPost: ScrapPost) {
+        this.scrapList.add(scrapPost)
+    }
+
+    fun cancelScrapPost(scrapPost: ScrapPost) {
+        this.scrapList.remove(scrapPost)
+    }
+
     fun checkWriter(user: User) {
         if (this.writer != user) {
-            println(this.writer)
-            println(user)
             throw UnAuthorizedException(ErrorCode.FORBIDDEN, "해당 글의 주인이 아닙니다.")
         }
     }

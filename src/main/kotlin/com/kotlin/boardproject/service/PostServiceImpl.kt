@@ -77,28 +77,18 @@ class PostServiceImpl(
         username: String?,
         postId: Long,
     ): OneNormalPostResponseDto {
-        val post =
-            normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
-                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
-
         val user = username?.let {
             userRepository.findByEmail(it)
         }
 
-        val isLiked = user?.let {
-            likePostRepository.existsByUserAndPost(user, post)
-        } ?: false
+        val post =
+            normalPostRepository.findPostCustom(postId, PostStatus.NORMAL)
+                ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
 
-        val isScraped = user?.let {
-            scrapPostRepository.existsByUserAndPost(user, post)
-        } ?: false
-
-        // TODO: comment 막혀 있으면 정보 제공 x 또한 삭제된 comment는 전달 x
-        return post.toOneNormalPostResponseDto(
-            isLiked = isLiked,
-            isScrapped = isScraped,
-            isWriter = (user == post.writer),
-        )
+        // 댓글 목록 추가,
+        log.info(post.toString())
+        log.info(post.commentList.toString())
+        return post.toOneNormalPostResponseDto(user)
     }
 
     @Transactional
@@ -155,6 +145,7 @@ class PostServiceImpl(
             post = post,
         )
         likePostRepository.save(likePost)
+        post.addLikePost(likePost)
 
         return LikePostResponseDto(post.id!!)
     }
@@ -171,7 +162,10 @@ class PostServiceImpl(
             basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
-        likePostRepository.deleteByUserAndPost(user, post)
+        likePostRepository.findByUserAndPost(user, post)?.let {
+            post.cancelLikePost(it)
+            likePostRepository.delete(it)
+        }
 
         return CancelLikePostResponseDto(post.id!!)
     }
@@ -222,12 +216,16 @@ class PostServiceImpl(
         )
 
         scrapPostRepository.save(scrapPost)
+        post.addScrapPost(scrapPost)
 
         return ScrapPostResponseDto(post.id!!)
     }
 
     @Transactional
-    override fun cancelScrapPost(username: String, postId: Long): CancelScrapPostResponseDto {
+    override fun cancelScrapPost(
+        username: String,
+        postId: Long,
+    ): CancelScrapPostResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
@@ -236,6 +234,7 @@ class PostServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         scrapPostRepository.findByUserAndPost(user, post)?.let {
+            post.cancelScrapPost(it)
             scrapPostRepository.delete(it)
         }
 

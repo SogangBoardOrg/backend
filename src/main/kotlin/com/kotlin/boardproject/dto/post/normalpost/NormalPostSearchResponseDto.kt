@@ -5,7 +5,7 @@ import com.kotlin.boardproject.model.User
 import org.springframework.data.domain.Page
 
 data class NormalPostSearchResponseDto(
-    val contents: List<OneNormalPostResponseDto>,
+    val contents: List<OneNormalPostResponseDto>? = null,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -15,12 +15,12 @@ data class NormalPostSearchResponseDto(
     companion object {
         fun createDtoFromPageable(pageData: Page<NormalPost>, writer: User?): NormalPostSearchResponseDto {
             val content = pageData.content.map {
-                it.toOneNormalPostResponseDto()
+                // it.toOneNormalPostResponseDto()
             }
             // TODO: 이거 내부로직 고치기
 
             return NormalPostSearchResponseDto(
-                contents = content,
+                contents = null,
                 currentPage = pageData.pageable.pageNumber,
                 totalPages = pageData.totalPages,
                 totalElements = pageData.totalElements,
