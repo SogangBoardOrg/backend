@@ -19,7 +19,18 @@ interface NormalPostRepository : JpaRepository<NormalPost, Long> {
     fun findByIdAndStatus(id: Long, status: PostStatus): NormalPost?
 
     @Query(
-        "SELECT np FROM NormalPost AS np WHERE ((np.writer = :writer AND np.isAnon = FALSE) OR :writer IS NULL )" +
+        value = "SELECT np " +
+            "FROM NormalPost AS np " +
+            "LEFT JOIN FETCH np.commentList " +
+            "LEFT JOIN FETCH np.likeList " +
+            "LEFT JOIN FETCH np.scrapList " +
+            "WHERE ((np.writer = :writer AND np.isAnon = FALSE) OR :writer IS NULL )" +
+            "AND (np.title LIKE '%' || :title || '%' OR :title IS NULL)" +
+            "AND (np.content LIKE '%' || :content || '%' OR :content IS NULL)" +
+            "AND (np.normalType = :normalType)",
+        countQuery = "SELECT COUNT(DISTINCT np) " +
+            "FROM NormalPost AS np " +
+            "WHERE ((np.writer = :writer AND np.isAnon = FALSE) OR :writer IS NULL )" +
             "AND (np.title LIKE '%' || :title || '%' OR :title IS NULL)" +
             "AND (np.content LIKE '%' || :content || '%' OR :content IS NULL)" +
             "AND (np.normalType = :normalType)",

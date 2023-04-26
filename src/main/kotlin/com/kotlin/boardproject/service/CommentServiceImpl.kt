@@ -144,6 +144,7 @@ class CommentServiceImpl(
             comment = comment,
         )
         likeCommentRepository.save(likeComment)
+        comment.likeComment(likeComment)
 
         return LikeCommentResponseDto(
             comment.id!!,
@@ -162,7 +163,10 @@ class CommentServiceImpl(
             commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
-        likeCommentRepository.deleteByUserAndComment(user, comment)
+        likeCommentRepository.findByUserAndComment(user, comment)?.let {
+            comment.cancelLikeComment(it)
+            likeCommentRepository.delete(it)
+        }
 
         return CancelLikeCommentResponseDto(comment.id!!)
     }

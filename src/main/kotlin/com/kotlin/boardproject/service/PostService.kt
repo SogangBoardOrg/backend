@@ -60,7 +60,7 @@ interface PostService {
         username: String?,
         pageable: Pageable,
         postSearchDto: PostSearchDto,
-    ): NormalPostSearchResponseDto
+    ): QueryNormalPostSearchResponseDto
 
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 

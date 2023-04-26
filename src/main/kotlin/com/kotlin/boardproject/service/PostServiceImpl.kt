@@ -31,8 +31,11 @@ class PostServiceImpl(
         username: String?,
         pageable: Pageable,
         postSearchDto: PostSearchDto,
-    ): NormalPostSearchResponseDto {
+    ): QueryNormalPostSearchResponseDto {
         log.info(postSearchDto.writerName)
+        val user = username?.let {
+            userRepository.findByEmail(it)
+        }
 
         val writer = postSearchDto.writerName
             ?.takeIf { it.isNotEmpty() }
@@ -47,8 +50,8 @@ class PostServiceImpl(
             normalType = postSearchDto.normalType,
             pageable = pageable,
         )
-
-        return NormalPostSearchResponseDto.createDtoFromPageable(result, writer)
+        // return QueryNormalPostSearchResponseDto(null, 1, 1, 1, 1, 1)
+        return QueryNormalPostSearchResponseDto.createDtoFromPageable(result, user)
     }
 
     @Transactional

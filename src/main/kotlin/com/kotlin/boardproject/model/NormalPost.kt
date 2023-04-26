@@ -5,6 +5,7 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.dto.comment.CommentDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.OneNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.QueryOneNormalPostResponseDto
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -61,7 +62,7 @@ class NormalPost(
         val commentDtoList: MutableList<CommentDto> = this.commentList.map {
             CommentDto(
                 id = it.id!!,
-                content = it.content,
+                content = if (it.status == PostStatus.DELETED) "삭제된 댓글입니다." else it.content,
                 isAnon = it.isAnon,
                 // isLiked = it.likeList.find { it.user == user }?.let { true } ?: false,
                 isWriter = it.writer == user,
@@ -107,6 +108,31 @@ class NormalPost(
             createdTime = this.createdAt!!,
             lastModifiedTime = this.updatedAt,
             commentList = if (!commentOn) mutableListOf() else ancestorList,
+        )
+    }
+
+    fun toQueryOneNormalPostResponseDto(
+        user: User? = null,
+    ): QueryOneNormalPostResponseDto {
+        val isWriter = user?.let { this.writer == user } ?: false
+        val isLiked = this.likeList.find { it.user == this.writer }?.let { true } ?: false
+        val isScrapped = user?.let { this.scrapList.find { it.user == user }?.let { true } ?: false } ?: false
+
+        return QueryOneNormalPostResponseDto(
+            id = this.id!!,
+            commentOn = this.commentOn,
+            title = this.title,
+            isAnon = this.isAnon,
+            content = this.title,
+            isLiked = isLiked,
+            isWriter = isWriter,
+            isScrapped = isScrapped,
+            writerName = if (this.isAnon) "Anon" else this.writer.nickname,
+            createdTime = this.createdAt!!,
+            lastModifiedTime = this.updatedAt,
+            commentCnt = this.commentList.size,
+            likeCnt = this.likeList.size,
+            scrapCnt = this.scrapList.size,
         )
     }
 }

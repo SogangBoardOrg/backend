@@ -32,9 +32,12 @@ class Comment(
     @JoinColumn(name = "user_id")
     val writer: User,
 
-    // == 부모 댓글을 삭제해도 후손 댓글은 남아있음 ==//
+// == 부모 댓글을 삭제해도 후손 댓글은 남아있음 ==//
     @OneToMany(mappedBy = "ancestor")
     val descendentList: MutableList<Comment> = mutableListOf(),
+
+    @OneToMany(mappedBy = "comment")
+    val likeList: MutableSet<LikeComment> = mutableSetOf(),
 
     @Enumerated(EnumType.STRING)
     var status: PostStatus = PostStatus.NORMAL,
@@ -46,5 +49,13 @@ class Comment(
 
     fun joinAncestor(ancestor: Comment?) {
         ancestor?.descendentList?.add(this)
+    }
+
+    fun likeComment(likeComment: LikeComment) {
+        this.likeList.add(likeComment)
+    }
+
+    fun cancelLikeComment(likeComment: LikeComment) {
+        this.likeList.remove(likeComment)
     }
 }
