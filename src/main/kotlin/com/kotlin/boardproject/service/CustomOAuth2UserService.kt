@@ -62,21 +62,22 @@ class CustomOAuth2UserService(
         // TODO: nickname 임의의 닉네임 생성, 임의의 문자열 생성후에 서버에서 중복검사를 해야함, 만약에 중복이면 다시 생성
 
         // generate random nickname
-        // val nickname = UUID.randomUUID().toString().substring(0, 32)
+        var nickname = UUID.randomUUID().toString().substring(0, 32)
 
-        // check duplicate nickname
-        // val duplicateNickname = userRepository.findUserByNickname(nickname)
+        while (userRepository.findUserByNickname(nickname) != null) {
+            nickname = UUID.randomUUID().toString().substring(0, 32)
+        }
 
         val user = User(
             email = userInfo.getEmail(),
-            nickname = userInfo.getName(),
+            nickname = nickname,
             providerType = providerType,
             profileImageUrl = userInfo.getImageUrl(),
             providerId = userInfo.getId(),
         )
         println("user : $user")
         println("user info: " + userInfo.getId())
-        println("user name: " + userInfo.getName())
+        println("user name: $nickname")
         println("provider type: $providerType")
         println("user email: " + userInfo.getEmail())
 
