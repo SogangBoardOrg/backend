@@ -10,6 +10,7 @@ import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.model.LikePost
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
@@ -56,6 +57,9 @@ class PostServiceImplTest {
 
     @Autowired
     private lateinit var userRepository: UserRepository
+
+    @Autowired
+    private lateinit var commentRepository: CommentRepository
 
     @Autowired
     private lateinit var normalPostRepository: NormalPostRepository
@@ -637,6 +641,15 @@ class PostServiceImplTest {
             ),
         )
 
+        val comment = commentRepository.saveAndFlush(
+            Comment(
+                content = "comment_content",
+                writer = writer,
+                post = post,
+                isAnon = true,
+            ),
+        )
+
         // when
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.get(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
@@ -665,16 +678,25 @@ class PostServiceImplTest {
                         fieldWithPath("data.createdTime").description("게시글 작성 시간"),
                         fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").description("댓글 내용"),
-//                        fieldWithPath("data.commentList.[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
-//                        fieldWithPath("data.commentList.[].content").type(JsonFieldType.STRING).description("댓글 내용"),
-//                        fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN).description("댓글 작성자 익명 여부"),
-//                        fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING).description("댓글 작성인 이름"),
-//                        fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN).description("댓글의 작성자 여부"),
-//                        fieldWithPath("data.commentList.[].createdTime").type(JsonFieldType.STRING).description("댓글 생성 시간"),
-//                        fieldWithPath("data.commentList.[].lastModifiedTime").type(JsonFieldType.STRING).description("댓글 최종 수정 시간"),
-//                        fieldWithPath("data.commentList.[].parentId").type(JsonFieldType.NUMBER).description("조상 댓글 번호"),
-//                        fieldWithPath("data.commentList.[].ancestorId").type(JsonFieldType.NUMBER).description("조상 댓글 번호"),
-//                        fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
+                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
+                            .description("댓글 작성자 익명 여부"),
+                        fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING)
+                            .description("댓글 작성인 이름"),
+                        fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글의 작성자 여부"),
+                        fieldWithPath("data.commentList.[].createdTime").type(JsonFieldType.STRING)
+                            .description("댓글 생성 시간"),
+                        fieldWithPath("data.commentList.[].lastModifiedTime").type(JsonFieldType.STRING)
+                            .description("댓글 최종 수정 시간"),
+                        fieldWithPath("data.commentList.[].parentId").type(JsonFieldType.NUMBER).optional()
+                            .description("부모 댓글 번호"),
+                        fieldWithPath("data.commentList.[].ancestorId").type(JsonFieldType.NUMBER).optional()
+                            .description("조상 댓글 번호"),
+                        fieldWithPath("data.commentList.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                        fieldWithPath("data.commentList.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                        fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
                         fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
@@ -713,6 +735,15 @@ class PostServiceImplTest {
             ),
         )
 
+        val comment = commentRepository.saveAndFlush(
+            Comment(
+                content = "comment_content",
+                writer = writer,
+                post = post,
+                isAnon = true,
+            ),
+        )
+
         // when
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.get(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON),
@@ -737,10 +768,28 @@ class PostServiceImplTest {
                         fieldWithPath("data.isScrapped").description("게시글 스크랩 여부"),
                         fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
                         fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
-                        fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
-                        fieldWithPath("data.commentList").description("게시글 댓글 리스트"),
-                        fieldWithPath("data.createdTime").description("게시글 생성 시간"),
+                        fieldWithPath("data.createdTime").description("게시글 작성 시간"),
                         fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
+                        fieldWithPath("data.commentList").description("댓글 내용"),
+                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
+                            .description("댓글 작성자 익명 여부"),
+                        fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING)
+                            .description("댓글 작성인 이름"),
+                        fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글의 작성자 여부"),
+                        fieldWithPath("data.commentList.[].createdTime").type(JsonFieldType.STRING)
+                            .description("댓글 생성 시간"),
+                        fieldWithPath("data.commentList.[].lastModifiedTime").type(JsonFieldType.STRING)
+                            .description("댓글 최종 수정 시간"),
+                        fieldWithPath("data.commentList.[].parentId").type(JsonFieldType.NUMBER).optional()
+                            .description("부모 댓글 번호"),
+                        fieldWithPath("data.commentList.[].ancestorId").type(JsonFieldType.NUMBER).optional()
+                            .description("조상 댓글 번호"),
+                        fieldWithPath("data.commentList.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                        fieldWithPath("data.commentList.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                        fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
                         fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
@@ -835,7 +884,8 @@ class PostServiceImplTest {
                         fieldWithPath("data.contents.[].likeCnt").type(JsonFieldType.NUMBER).description("글 생성시간"),
                         fieldWithPath("data.contents.[].scrapCnt").type(JsonFieldType.NUMBER).description("글 생성시간"),
                         fieldWithPath("data.contents.[].createdTime").type(JsonFieldType.STRING).description("글 생성시간"),
-                        fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING).description("글 생성시간"),
+                        fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING)
+                            .description("글 생성시간"),
                         fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지"),
                         fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 글의 개수"),
