@@ -39,6 +39,7 @@ class NormalPost(
 
     fun toOneNormalPostResponseDto(
         user: User? = null,
+        commentList: List<Comment> = emptyList(),
     ): OneNormalPostResponseDto {
         val isWriter = user?.let { this.writer == user } ?: false
         val isLiked = user?.let { this.likeList.find { it.user == user }?.let { true } ?: false } ?: false
@@ -53,24 +54,25 @@ class NormalPost(
         // 익명 번호 메기기
         val writerList: MutableList<User> = mutableListOf()
         writerList.add(this.writer)
-        for (i in this.commentList) {
+        for (i in commentList) {
             if (writerList.find { it == i.writer } == null) {
                 writerList.add(i.writer)
             }
         }
 
-        val commentDtoList: MutableList<CommentDto> = this.commentList.map {
+        val commentDtoList: MutableList<CommentDto> = commentList.map {
             CommentDto(
                 id = it.id!!,
                 content = if (it.status == PostStatus.DELETED) "삭제된 댓글입니다." else it.content,
                 isAnon = it.isAnon,
-                // isLiked = it.likeList.find { it.user == user }?.let { true } ?: false,
+                isLiked = it.likeList.find { it.user == user }?.let { true } ?: false,
                 isWriter = it.writer == user,
                 writerName = if (it.writer == this.writer) "글쓴이" else if (it.isAnon) "익명 ${writerList.indexOf(it.writer)}" else it.writer.nickname,
                 createdTime = it.createdAt!!,
                 lastModifiedTime = it.updatedAt,
                 ancestorId = it.ancestor?.id,
                 parentId = it.parent?.id,
+                likeCnt = it.likeList.size,
                 child = mutableListOf<CommentDto>(),
             )
         }.toMutableList()

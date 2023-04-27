@@ -24,6 +24,7 @@ class PostServiceImpl(
     private val blackPostRepository: BlackPostRepository,
     private val likePostRepository: LikePostRepository,
     private val scrapPostRepository: ScrapPostRepository,
+    private val commentRepository: CommentRepository,
 ) : PostService {
 
     @Transactional(readOnly = true)
@@ -87,11 +88,13 @@ class PostServiceImpl(
         val post =
             normalPostRepository.findPostCustom(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
+        val commentList =
+            commentRepository.findByPost(post)
 
         // 댓글 목록 추가,
         log.info(post.toString())
         log.info(post.commentList.toString())
-        return post.toOneNormalPostResponseDto(user)
+        return post.toOneNormalPostResponseDto(user, commentList)
     }
 
     @Transactional
