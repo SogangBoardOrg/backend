@@ -20,6 +20,7 @@ import java.util.*
 class CustomOAuth2UserService(
     private val userRepository: UserRepository,
 ) : DefaultOAuth2UserService() {
+    // 받아온 token을 분석해서 필요한 정보를 넘겨주는 역할
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
         val user = super.loadUser(userRequest)
 
@@ -41,7 +42,7 @@ class CustomOAuth2UserService(
         val accessToken = userRequest.accessToken.tokenValue
 
         val attributes = user.attributes.toMutableMap()
-
+        // 유저가 존재하거나 존재하지 않으면 UserPrincipal을 생성한다.
         return UserPrincipal.create(getOrCreateUser(providerType, attributes), attributes)
     }
 
@@ -58,6 +59,14 @@ class CustomOAuth2UserService(
     }
 
     private fun createUser(userInfo: OAuth2UserInfo, providerType: ProviderType): User {
+        // TODO: nickname 임의의 닉네임 생성, 임의의 문자열 생성후에 서버에서 중복검사를 해야함, 만약에 중복이면 다시 생성
+
+        // generate random nickname
+        // val nickname = UUID.randomUUID().toString().substring(0, 32)
+
+        // check duplicate nickname
+        // val duplicateNickname = userRepository.findUserByNickname(nickname)
+
         val user = User(
             email = userInfo.getEmail(),
             nickname = userInfo.getName(),

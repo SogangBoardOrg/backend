@@ -6,7 +6,7 @@ import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
-import com.kotlin.boardproject.common.enums.PostStautus
+import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
@@ -386,7 +386,7 @@ class CommentServiceImplTest {
         val commentList = commentRepository.findAll()
 
         commentList.size shouldBe 1
-        commentList[0].status shouldBe PostStautus.DELETED
+        commentList[0].status shouldBe PostStatus.DELETED
         commentList[0].post shouldBe post
     }
 
@@ -450,7 +450,7 @@ class CommentServiceImplTest {
         val commentList = commentRepository.findAll()
 
         commentList.size shouldBe 1
-        commentList[0].status shouldBe PostStautus.NORMAL
+        commentList[0].status shouldBe PostStatus.NORMAL
         commentList[0].content shouldBe updateComment
     }
 

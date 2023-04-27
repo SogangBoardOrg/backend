@@ -28,8 +28,9 @@ class PostController(
         @RequestParam("normal-type", required = true) normalType: NormalType,
         pageable: Pageable,
         principal: Principal?,
-    ): ApiResponse<NormalPostSearchResponseDto> {
+    ): ApiResponse<QueryNormalPostSearchResponseDto> {
         val postSearchDto = PostSearchDto(title, content, writerName, normalType)
+        log.info("username: ${principal?.name}")
 
         val data = postService.findNormalPostByQuery(principal?.name, pageable, postSearchDto)
         return ApiResponse.success(data)

@@ -86,6 +86,7 @@ class SpringSecurityConfig(
             .baseUri("/*/oauth2/code/*")
             .and()
             .userInfoEndpoint()
+            // 받아온 token을 분석해서 필요한 정보를 넘겨주는 역할
             .userService(oAuth2UserService)
             .and()
             .successHandler(oAuth2AuthenticationSuccessHandler())
@@ -116,7 +117,7 @@ class SpringSecurityConfig(
         return TokenAuthenticationFilter(authTokenProvider)
     }
 
-    // Oauth 인증 실패 핸들러
+    // Oauth 인증 성공 핸들러
     @Bean
     fun oAuth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler {
         return OAuth2AuthenticationSuccessHandler(
@@ -127,6 +128,7 @@ class SpringSecurityConfig(
         )
     }
 
+    // Oauth 인증 실패 핸들러
     @Bean
     fun oAuth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler {
         return OAuth2AuthenticationFailureHandler(
