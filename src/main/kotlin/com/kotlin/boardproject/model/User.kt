@@ -19,7 +19,7 @@ class User(
     @Column(name = "email", unique = true, columnDefinition = "VARCHAR(30)")
     var email: String, // username 과 동의어
 
-    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(100)")
+    @Column(name = "nickname", unique = true, columnDefinition = "VARCHAR(100)")
     var nickname: String,
 
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
