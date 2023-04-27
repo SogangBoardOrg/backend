@@ -41,7 +41,7 @@ class NormalPost(
         user: User? = null,
     ): OneNormalPostResponseDto {
         val isWriter = user?.let { this.writer == user } ?: false
-        val isLiked = this.likeList.find { it.user == this.writer }?.let { true } ?: false
+        val isLiked = user?.let { this.likeList.find { it.user == user }?.let { true } ?: false } ?: false
         val isScrapped = user?.let { this.scrapList.find { it.user == user }?.let { true } ?: false } ?: false
 
         // 1. 댓글 전체 수색
@@ -115,7 +115,7 @@ class NormalPost(
         user: User? = null,
     ): QueryOneNormalPostResponseDto {
         val isWriter = user?.let { this.writer == user } ?: false
-        val isLiked = this.likeList.find { it.user == this.writer }?.let { true } ?: false
+        val isLiked = user?.let { this.likeList.find { it.user == user }?.let { true } ?: false } ?: false
         val isScrapped = user?.let { this.scrapList.find { it.user == user }?.let { true } ?: false } ?: false
 
         return QueryOneNormalPostResponseDto(
