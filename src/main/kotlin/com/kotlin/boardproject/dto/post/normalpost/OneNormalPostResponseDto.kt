@@ -16,4 +16,5 @@ data class OneNormalPostResponseDto(
     val createdTime: LocalDateTime,
     val lastModifiedTime: LocalDateTime?,
     val commentList: MutableList<CommentDto> = mutableListOf(),
+    val photoList: List<String>,
 )

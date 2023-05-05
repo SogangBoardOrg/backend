@@ -9,8 +9,9 @@ data class CreateNormalPostRequestDto(
     val content: String,
     val isAnon: Boolean,
     val commentOn: Boolean,
-    val normalType: NormalType
-){
+    val normalType: NormalType,
+    val photoList: List<String>,
+) {
     fun toPost(user: User): NormalPost {
         return NormalPost(
             title = title,
@@ -19,6 +20,7 @@ data class CreateNormalPostRequestDto(
             isAnon = isAnon,
             commentOn = commentOn,
             normalType = normalType,
+            photoList = photoList,
         )
     }
 }

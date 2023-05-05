@@ -43,6 +43,9 @@ open class BasePost(
 
     @OneToMany(fetch = FetchType.LAZY)
     val scrapList: MutableSet<ScrapPost> = mutableSetOf(),
+
+    @ElementCollection
+    var photoList: List<String> = emptyList(),
 ) : BaseEntity() {
     fun addPost(user: User) {
         user.postList.add(this)
