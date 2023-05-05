@@ -17,7 +17,7 @@ class NormalPost(
     isAnon: Boolean,
     commentOn: Boolean,
     writer: User,
-
+    photoList: List<String> = emptyList(),
     @Enumerated(EnumType.STRING)
     val normalType: NormalType,
 ) : BasePost(
@@ -27,6 +27,7 @@ class NormalPost(
     commentOn = commentOn,
     writer = writer,
     status = PostStatus.NORMAL,
+    photoList = photoList,
 ) {
     fun editPost(editNormalPostRequestDto: EditNormalPostRequestDto) {
         // TODO:질문 글이면 수정 불가능하게 만들기
@@ -35,6 +36,7 @@ class NormalPost(
         this.isAnon = editNormalPostRequestDto.isAnon
         this.commentOn = editNormalPostRequestDto.commentOn
         this.content = editNormalPostRequestDto.content
+        this.photoList = editNormalPostRequestDto.photoList
     }
 
     fun toOneNormalPostResponseDto(
@@ -110,6 +112,7 @@ class NormalPost(
             createdTime = this.createdAt!!,
             lastModifiedTime = this.updatedAt,
             commentList = if (!commentOn) mutableListOf() else ancestorList,
+            photoList = this.photoList,
         )
     }
 
@@ -135,6 +138,7 @@ class NormalPost(
             commentCnt = this.commentList.size,
             likeCnt = this.likeList.size,
             scrapCnt = this.scrapList.size,
+            photoCnt = this.photoList.size,
         )
     }
 }

@@ -17,4 +17,5 @@ data class QueryOneNormalPostResponseDto(
     val commentCnt: Int,
     val likeCnt: Int,
     val scrapCnt: Int,
+    val photoCnt: Int,
 )

@@ -125,6 +125,7 @@ class CommentServiceImplTest {
                 commentOn = true,
                 writer = postWriter,
                 normalType = NormalType.FREE,
+                photoList = emptyList(),
             ),
         )
     }

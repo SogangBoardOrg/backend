@@ -5,4 +5,5 @@ class EditNormalPostRequestDto(
     val content: String,
     val isAnon: Boolean,
     val commentOn: Boolean,
+    val photoList: List<String> = emptyList(),
 )

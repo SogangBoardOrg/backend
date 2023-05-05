@@ -24,6 +24,7 @@ interface NormalPostRepository : JpaRepository<NormalPost, Long> {
             "LEFT JOIN FETCH np.commentList " +
             "LEFT JOIN FETCH np.likeList " +
             "LEFT JOIN FETCH np.scrapList " +
+            "LEFT JOIN FETCH np.photoList " +
             "WHERE ((np.writer = :writer AND np.isAnon = FALSE) OR :writer IS NULL )" +
             "AND (np.title LIKE '%' || :title || '%' OR :title IS NULL)" +
             "AND (np.content LIKE '%' || :content || '%' OR :content IS NULL)" +
@@ -49,6 +50,7 @@ interface NormalPostRepository : JpaRepository<NormalPost, Long> {
             "LEFT JOIN FETCH np.commentList " +
             "LEFT JOIN FETCH np.likeList " +
             "LEFT JOIN FETCH np.scrapList " +
+            "LEFT JOIN FETCH np.photoList " +
             "WHERE np.id = :id AND np.status = :status",
     )
     fun findPostCustom(

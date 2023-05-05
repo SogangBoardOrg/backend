@@ -145,6 +145,7 @@ class PostServiceImplTest {
             isAnon = true,
             commentOn = true,
             normalType = NormalType.FREE,
+            photoList = listOf(),
         )
 
         val normalPostString = objectMapper.writeValueAsString(createNormalPostRequestDto)
@@ -171,6 +172,7 @@ class PostServiceImplTest {
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("commentOn").description("댓글 여부"),
                         fieldWithPath("normalType").description("일반 포스트의 게시판 타입"),
+                        fieldWithPath("photoList").description("사진 url 배열"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -209,6 +211,7 @@ class PostServiceImplTest {
                 commentOn = true,
                 writer = writer,
                 normalType = NormalType.FREE,
+                photoList = listOf(),
             ),
         )
 
@@ -241,6 +244,7 @@ class PostServiceImplTest {
                         fieldWithPath("content").description("글 내용"),
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("commentOn").description("댓글 여부"),
+                        fieldWithPath("photoList").description("사진 url 배열"),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -678,6 +682,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.createdTime").description("게시글 작성 시간"),
                         fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").description("댓글 내용"),
+                        fieldWithPath("data.photoList").type(JsonFieldType.ARRAY).description("사진 url 배열"),
                         fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                         fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
@@ -721,6 +726,7 @@ class PostServiceImplTest {
                 commentOn = true,
                 writer = writer,
                 normalType = NormalType.FREE,
+                photoList = listOf(),
             ),
         )
 
@@ -732,6 +738,7 @@ class PostServiceImplTest {
                 commentOn = true,
                 writer = writer,
                 normalType = NormalType.FREE,
+                photoList = listOf(),
             ),
         )
 
@@ -771,6 +778,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.createdTime").description("게시글 작성 시간"),
                         fieldWithPath("data.lastModifiedTime").description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").description("댓글 내용"),
+                        fieldWithPath("data.photoList").description("사진 url 배열"),
                         fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                         fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
@@ -880,9 +888,10 @@ class PostServiceImplTest {
                         fieldWithPath("data.contents.[].isScrapped").type(JsonFieldType.BOOLEAN).description("스크랩 여부"),
                         fieldWithPath("data.contents.[].isWriter").type(JsonFieldType.BOOLEAN).description("글쓴이 여부"),
                         fieldWithPath("data.contents.[].commentOn").type(JsonFieldType.BOOLEAN).description("댓글 여부"),
-                        fieldWithPath("data.contents.[].commentCnt").type(JsonFieldType.NUMBER).description("글 생성시간"),
-                        fieldWithPath("data.contents.[].likeCnt").type(JsonFieldType.NUMBER).description("글 생성시간"),
-                        fieldWithPath("data.contents.[].scrapCnt").type(JsonFieldType.NUMBER).description("글 생성시간"),
+                        fieldWithPath("data.contents.[].commentCnt").type(JsonFieldType.NUMBER).description("댓글 개수"),
+                        fieldWithPath("data.contents.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                        fieldWithPath("data.contents.[].scrapCnt").type(JsonFieldType.NUMBER).description("스크랩 개수"),
+                        fieldWithPath("data.contents.[].photoCnt").type(JsonFieldType.NUMBER).description("사진 개수"),
                         fieldWithPath("data.contents.[].createdTime").type(JsonFieldType.STRING).description("글 생성시간"),
                         fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING)
                             .description("글 생성시간"),
