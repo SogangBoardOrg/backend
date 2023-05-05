@@ -3,7 +3,6 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.FileService
-import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,10 +22,9 @@ class FileController(
         @RequestPart("file") file: MultipartFile,
     ): ApiResponse<String> {
         println(loginUser.username)
-        return runBlocking {
-            val fileUrl = fileService.uploadFile(file)
-            // url 리턴하기
-            ApiResponse.success(fileUrl)
-        }
+
+        val fileUrl = fileService.uploadFile(file)
+        // url 리턴하기
+        return ApiResponse.success(fileUrl)
     }
 }

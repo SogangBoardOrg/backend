@@ -1,12 +1,16 @@
 package com.kotlin.boardproject.service
 
-import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.services.s3.S3Client
-import aws.smithy.kotlin.runtime.content.ByteStream
+import com.amazonaws.services.s3.AmazonS3
+import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.services.s3.model.CannedAccessControlList
+import com.amazonaws.services.s3.model.ObjectMetadata
+import com.amazonaws.services.s3.model.PutObjectRequest
+import com.amazonaws.util.IOUtils
 import com.kotlin.boardproject.common.util.log
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.ByteArrayInputStream
 import java.util.UUID
 
 @Service
@@ -20,30 +24,30 @@ class FileServiceImpl(
     @Value("\${aws.s3.bucket}")
     private val bucketName: String,
 
-    @Value("\${aws.region}")
+    @Value("\${aws.region.static}")
     private val S3region: String,
+
+    private val s3Client: AmazonS3,
 ) : FileService {
-    override suspend fun uploadFile(
+    override fun uploadFile(
         file: MultipartFile,
     ): String {
         val fileName = "static/${UUID.randomUUID()}-${file.originalFilename}"
+
         log.info("fileName: $fileName")
 
-        S3Client {
-            region = S3region
-            credentialsProvider = StaticCredentialsProvider {
-                accessKeyId = accessKey
-                secretAccessKey = secretKey
-            }
-        }.use {
-            log.info("fileName: $fileName")
-            it.putObject {
-                this.bucket = bucketName
-                this.key = fileName
-                this.body = ByteStream.fromBytes(file.bytes)
-            }
-        }
+        val objMeta = ObjectMetadata()
 
-        return "http://$bucketName.s3.$S3region.amazonaws.com/$fileName"
+        val bytes = IOUtils.toByteArray(file.inputStream)
+        objMeta.contentLength = bytes.size.toLong()
+
+        val byteArrayIs = ByteArrayInputStream(bytes)
+
+        s3Client.putObject(
+            PutObjectRequest(bucketName, fileName, byteArrayIs, objMeta)
+                .withCannedAcl(CannedAccessControlList.PublicRead),
+        )
+
+        return s3Client.getUrl(bucketName, fileName).toString()
     }
 }

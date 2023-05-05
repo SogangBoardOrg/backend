@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @Service
 interface FileService {
-    suspend fun uploadFile(
+    fun uploadFile(
         file: MultipartFile,
     ): String
 }
