@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.common
+package com.kotlin.boardproject.common.config
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials

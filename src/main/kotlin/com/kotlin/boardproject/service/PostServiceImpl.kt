@@ -143,7 +143,7 @@ class PostServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         likePostRepository.findByUserAndPost(user, post)?.let {
-            throw ConditionConflictException("이미 추천을 했습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "이미 추천을 했습니다.")
         }
 
         val likePost = LikePost(
@@ -191,7 +191,7 @@ class PostServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         blackPostRepository.findByUserAndPost(user, post)?.let {
-            throw ConditionConflictException("해당 글은 이미 신고가 되었습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 글은 이미 신고가 되었습니다.")
         }
 
         val blackPost = BlackPost(user = user, post = post, blackReason = blackPostRequestDto.blackReason)
@@ -213,7 +213,7 @@ class PostServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         scrapPostRepository.findByUserAndPost(user, post)?.let {
-            throw ConditionConflictException("이미 스크랩을 하였습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "이미 스크랩을 하였습니다.")
         }
 
         val scrapPost = ScrapPost(

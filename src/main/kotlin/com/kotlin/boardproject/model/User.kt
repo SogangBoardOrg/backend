@@ -54,6 +54,9 @@ class User(
     @OneToMany(mappedBy = "writer")
     val commentList: MutableList<BasePost> = mutableListOf(),
 
+    @OneToMany(mappedBy = "to")
+    val notificationList: MutableList<Notification> = mutableListOf(),
+
 ) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword

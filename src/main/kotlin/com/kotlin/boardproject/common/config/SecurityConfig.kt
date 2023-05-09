@@ -1,6 +1,5 @@
 package com.kotlin.boardproject.common.config
 
-
 import com.kotlin.boardproject.common.config.properties.AppProperties
 import com.kotlin.boardproject.common.config.properties.CorsProperties
 import com.kotlin.boardproject.common.enums.Role
@@ -9,6 +8,7 @@ import com.kotlin.boardproject.common.filter.TokenAuthenticationFilter
 import com.kotlin.boardproject.common.handler.OAuth2AuthenticationFailureHandler
 import com.kotlin.boardproject.common.handler.OAuth2AuthenticationSuccessHandler
 import com.kotlin.boardproject.common.handler.TokenAccessDeniedHandler
+import com.kotlin.boardproject.repository.RedisRepository
 import com.kotlin.boardproject.repository.UserRepository
 import com.kotlin.boardproject.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
 import com.kotlin.boardproject.service.CustomOAuth2UserService
@@ -35,7 +35,7 @@ class SpringSecurityConfig(
     private val appProperties: AppProperties,
     private val authTokenProvider: com.kotlin.boardproject.auth.AuthTokenProvider,
     private val oAuth2UserService: CustomOAuth2UserService,
-    // private val redisRepository: RedisRepository,
+    private val redisRepository: RedisRepository,
     private val tokenAccessDeniedHandler: TokenAccessDeniedHandler,
     private val userRepository: UserRepository,
 ) {
@@ -124,6 +124,7 @@ class SpringSecurityConfig(
             appProperties,
             oAuth2AuthorizationRequestBasedOnCookieRepository(),
             authTokenProvider,
+            redisRepository,
             userRepository,
         )
     }

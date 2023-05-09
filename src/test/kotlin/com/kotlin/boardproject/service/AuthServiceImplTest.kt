@@ -20,7 +20,7 @@ class AuthServiceImplTest {
     private val authTokenProvider: com.kotlin.boardproject.auth.AuthTokenProvider = mockk(relaxed = true)
     private val appProperties: AppProperties = mockk(relaxed = true)
     private val authService: AuthServiceImpl =
-        AuthServiceImpl(userRepository, appProperties, authTokenProvider, passwordEncoder)
+        AuthServiceImpl(userRepository, appProperties, authTokenProvider, passwordEncoder, redisRepository = mockk())
 
     private val user: User = User(
         id = UUID.randomUUID(),

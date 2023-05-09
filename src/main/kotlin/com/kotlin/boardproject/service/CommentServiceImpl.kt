@@ -47,8 +47,10 @@ class CommentServiceImpl(
         // 2. 부모가 있으면 부모의 선조가 있는지 찾음 -> 없으면 자신의 선조를 부모로 지정.
         // 3. 부모가 있고, 선조가 있다면 해당 선조를 자신의 선조로 만든다.
         val ancestorComment = parentComment?.let {
+            // 대댓글로 판정되었을 시 로직
             if (parentComment.post != post) {
                 throw ConditionConflictException(
+                    ErrorCode.CONDITION_NOT_FULFILLED,
                     "부모 댓글의 글 번호 ${parentComment.post.id} 와 현재 글의 번호 ${post.id}" +
                         " 는 일치하지 않습니다",
                 )
@@ -90,7 +92,7 @@ class CommentServiceImpl(
         if (user == comment.writer) {
             comment.content = updateCommentRequestDto.content
         } else {
-            throw ConditionConflictException("해당 댓글의 유저가 아닙니다!")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 유저가 아닙니다!")
         }
 
         return UpdateCommentResponseDto(
@@ -115,7 +117,7 @@ class CommentServiceImpl(
         if (user == comment.writer) {
             comment.status = PostStatus.DELETED
         } else {
-            throw ConditionConflictException("해당 댓글의 유저가 아닙니다!")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED ,"해당 댓글의 유저가 아닙니다!")
         }
 
         return DeleteCommentResponseDto(
@@ -136,7 +138,7 @@ class CommentServiceImpl(
                 ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
 
         likeCommentRepository.findByUserAndComment(user, comment)?.let {
-            throw ConditionConflictException("이미 추천을 했습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED ,"이미 추천을 했습니다.")
         }
 
         val likeComment = LikeComment(
@@ -185,7 +187,7 @@ class CommentServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         blackCommentRepository.findByUserAndComment(user, comment)?.let {
-            throw ConditionConflictException("해당 댓글은 이미 신고가 되었습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED ,"해당 댓글은 이미 신고가 되었습니다.")
         }
 
         val blackComment = BlackComment(
