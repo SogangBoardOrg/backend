@@ -117,7 +117,7 @@ class CommentServiceImpl(
         if (user == comment.writer) {
             comment.status = PostStatus.DELETED
         } else {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED ,"해당 댓글의 유저가 아닙니다!")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 유저가 아닙니다!")
         }
 
         return DeleteCommentResponseDto(
@@ -138,7 +138,7 @@ class CommentServiceImpl(
                 ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
 
         likeCommentRepository.findByUserAndComment(user, comment)?.let {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED ,"이미 추천을 했습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "이미 추천을 했습니다.")
         }
 
         val likeComment = LikeComment(
@@ -187,7 +187,7 @@ class CommentServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         blackCommentRepository.findByUserAndComment(user, comment)?.let {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED ,"해당 댓글은 이미 신고가 되었습니다.")
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글은 이미 신고가 되었습니다.")
         }
 
         val blackComment = BlackComment(
