@@ -13,14 +13,12 @@ class Notification(
     @JoinColumn(name = "user_id")
     val to: User,
 
-    val title: String,
-
     val url: String,
 
     val message: String,
-) : BaseEntity() {
 
-    private var isRead: Boolean = false
+    var isRead: Boolean = false,
+) : BaseEntity() {
 
     fun read() {
         isRead = true

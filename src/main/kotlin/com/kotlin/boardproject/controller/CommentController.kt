@@ -4,6 +4,7 @@ import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
+import com.kotlin.boardproject.service.NotificationService
 import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/comment")
 class CommentController(
     private val commentService: CommentService,
-    private val postService: PostService,
+    private val notificationService: NotificationService,
 ) {
 
     @PostMapping("", "/{parentCommentId}")
@@ -21,8 +22,6 @@ class CommentController(
         @PathVariable("parentCommentId", required = false) parentCommentId: Long?,
         @RequestBody createCommentRequestDto: CreateCommentRequestDto,
     ): ApiResponse<CreateCommentResponseDto> {
-        // path variable requried를 false로 설정해서 댓글과 대댓글 구분하자
-        // log.info(parentCommentId.toString())
 
         val responseDto = commentService.createComment(
             loginUser.username,
@@ -30,11 +29,11 @@ class CommentController(
             parentCommentId,
         )
         // TODO: 여기에 댓글 생성 시 알림 기능 추가
-        // 1. 댓글을 파악한다 -> parentCommentId 여부에 따라서 댓글인지 대댓글인지 구분
+        // 1. 댓글을 파악한다 -> 댓글에 쿼리를 보내서 parentId가 null이면 일반댓글 아니면 대댓글
         // parentCommentId가 null이면 해당 comment의 글의 주인에게 nofitication을 보낸다.
         // parentCommentId가 null이 아니면 해당 comment의 주인에게 notification을 보낸다.
         // 자신이 작성한 글이나 댓글이면 알림을 보내지 아니한다.
-
+        notificationService.createNotification(loginUser.username, responseDto)
 
         return ApiResponse.success(responseDto)
     }
