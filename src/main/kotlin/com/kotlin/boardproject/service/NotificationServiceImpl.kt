@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
+import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.CreateCommentResponseDto
 import com.kotlin.boardproject.dto.notification.GetNotificationsResponseDto
 import com.kotlin.boardproject.dto.notification.NotificationResponseDto
@@ -44,7 +45,7 @@ class NotificationServiceImpl(
         val comment = commentRepository.findByIdOrNull(createCommentResponseDto.id)
             ?: throw EntityNotFoundException("댓글이 존재하지 않습니다.")
         val post = comment.post
-
+        log.info("post: $post")
         val toId = comment.parent?.writer?.id ?: comment.post.writer.id
 
         val user = userRepository.findByIdOrNull(toId)
@@ -54,7 +55,7 @@ class NotificationServiceImpl(
 
         val notification = Notification(
             to = user,
-            message = "댓글이 달렸습니다.",
+            message = "message is being set.",
             url = "/post/${post.id}",
         )
         notificationRepository.save(notification)

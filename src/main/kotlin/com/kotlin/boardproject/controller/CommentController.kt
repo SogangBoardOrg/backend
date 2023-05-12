@@ -5,7 +5,6 @@ import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.NotificationService
-import com.kotlin.boardproject.service.PostService
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
 
