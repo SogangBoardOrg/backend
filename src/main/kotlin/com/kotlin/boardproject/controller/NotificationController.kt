@@ -33,12 +33,12 @@ class NotificationController(
         return ApiResponse.success(getNotificationsResponseDto)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{notificationId}")
     fun readNotification(
-        @PathVariable id: Long,
+        @PathVariable notificationId: Long,
         @LoginUser loginUser: User,
     ): ApiResponse<String> {
-        notificationService.deleteNotificationByEmailAndNotificationId(loginUser.username, id)
+        notificationService.deleteNotificationByEmailAndNotificationId(loginUser.username, notificationId)
         return ApiResponse.success("success")
     }
 

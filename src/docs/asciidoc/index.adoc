@@ -13,7 +13,7 @@ endif::[]
 추가 사항으로, 권한 인증이 필요한 API는 클라이언트에서 가지고 있는 JWT 토큰을 요청시 Authorization 헤더에 Bearer token과 같은 형태로 함께 전송해야합니다.
 
 |===
-|Type | Description	| Required Keys
+|Type | Description    | Required Keys
 
 |`+success+`
 |요청이 성공하였으며, 일반적으로 데이터를 응답합니다.
@@ -31,6 +31,7 @@ endif::[]
 === Example
 
 ==== Success
+
 [source,json,options="nowrap"]
 ----
 {
@@ -45,6 +46,7 @@ endif::[]
 ----
 
 ==== Fail
+
 [source,json,options="nowrap"]
 ----
 {
@@ -56,6 +58,7 @@ endif::[]
 ----
 
 ==== Error
+
 [source,json,options="nowrap"]
 ----
 {
@@ -89,6 +92,7 @@ include::{snippets}/normal-post-create/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/normal-post-create/request-headers.adoc[]
 
 .Request Body
@@ -111,26 +115,28 @@ End-Point : /api/v1/post/{postId : Long}
 ----
 
 .Sample Request
-
 로그인
+
 include::{snippets}/view-single-normal-post-login/http-request.adoc[]
 
 비로그인
+
 include::{snippets}/view-single-normal-post-no-login/http-request.adoc[]
 
 .Sample Response
-
 로그인
+
 include::{snippets}/view-single-normal-post-login/http-response.adoc[]
 
 비로그인
+
 include::{snippets}/view-single-normal-post-no-login/http-response.adoc[]
 
 .Request Header
-
 로그인
 
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/view-single-normal-post-login/request-headers.adoc[]
 
 비로그인
@@ -138,7 +144,6 @@ include::{snippets}/view-single-normal-post-login/request-headers.adoc[]
 로그인을 하지 않았으므로 Authorization 헤더에 access token을 넣지 않습니다.
 
 .Response Body
-
 로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
 
 include::{snippets}/view-single-normal-post-login/response-body.adoc[]
@@ -156,23 +161,22 @@ End-Point : /api/v1/post/query
 ----
 
 .Sample Request
-
 로그인
 // include::{snippets}/view-bulk-normal-post-no-login/http-request.adoc[]
 
 비로그인
+
 include::{snippets}/view-bulk-normal-post-no-login/http-request.adoc[]
 
 .Sample Response
-
 로그인
 // include::{snippets}/view-bulk-normal-post-no-login/http-response.adoc[]
 
 비로그인
+
 include::{snippets}/view-bulk-normal-post-no-login/http-response.adoc[]
 
 .Request Header
-
 로그인
 
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
@@ -182,9 +186,7 @@ request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, acces
 
 로그인을 하지 않았으므로 Authorization 헤더에 access token을 넣지 않습니다.
 
-
 .Response Body
-
 로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
 
 include::{snippets}/view-bulk-normal-post-no-login/response-body.adoc[]
@@ -209,6 +211,7 @@ include::{snippets}/normal-post-edit/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/normal-post-edit/request-headers.adoc[]
 
 .Request Body
@@ -238,6 +241,7 @@ include::{snippets}/normal-post-delete/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/normal-post-delete/request-headers.adoc[]
 
 .Response Body
@@ -263,6 +267,7 @@ include::{snippets}/post-black/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/post-black/request-headers.adoc[]
 
 .Request Body
@@ -293,6 +298,7 @@ include::{snippets}/like-post-add/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/like-post-add/request-headers.adoc[]
 
 .Response Body
@@ -318,6 +324,7 @@ include::{snippets}/like-post-cancel/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/like-post-cancel/request-headers.adoc[]
 
 .Response Body
@@ -343,6 +350,7 @@ include::{snippets}/scrap-post-add/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/scrap-post-add/request-headers.adoc[]
 
 .Response Body
@@ -368,6 +376,7 @@ include::{snippets}/scrap-post-cancel/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/scrap-post-cancel/request-headers.adoc[]
 
 .Response Body
@@ -388,16 +397,14 @@ End-Point : /api/v1/comment
 ----
 
 .Sample Request
-
 include::{snippets}/add-single-comment/http-request.adoc[]
 
 .Sample Response
-
 include::{snippets}/add-single-comment/http-response.adoc[]
 
 .Request Header
-
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/add-single-comment/request-headers.adoc[]
 
 .Request Body
@@ -405,7 +412,6 @@ include::{snippets}/add-single-comment/request-body.adoc[]
 include::{snippets}/add-single-comment/request-fields.adoc[]
 
 .Response Body
-
 include::{snippets}/add-single-comment/response-body.adoc[]
 include::{snippets}/add-single-comment/response-fields.adoc[]
 
@@ -421,16 +427,14 @@ End-Point : /api/v1/comment/{parentCommentId : Long}
 ----
 
 .Sample Request
-
 include::{snippets}/add-single-parent-comment/http-request.adoc[]
 
 .Sample Response
-
 include::{snippets}/add-single-parent-comment/http-response.adoc[]
 
 .Request Header
-
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/add-single-parent-comment/request-headers.adoc[]
 
 .Request Body
@@ -438,7 +442,6 @@ include::{snippets}/add-single-parent-comment/request-body.adoc[]
 include::{snippets}/add-single-parent-comment/request-fields.adoc[]
 
 .Response Body
-
 include::{snippets}/add-single-parent-comment/response-body.adoc[]
 include::{snippets}/add-single-parent-comment/response-fields.adoc[]
 
@@ -456,25 +459,21 @@ End-Point : /api/v1/comment/{commentId : Long}
 ----
 
 .Sample Request
-
 include::{snippets}/update-single-comment/http-request.adoc[]
 
 .Sample Response
-
 include::{snippets}/update-single-comment/http-response.adoc[]
 
 .Request Header
-
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/update-single-comment/request-headers.adoc[]
 
 .Request Body
-
 include::{snippets}/update-single-comment/request-body.adoc[]
 include::{snippets}/update-single-comment/request-fields.adoc[]
 
 .Response Body
-
 include::{snippets}/update-single-comment/response-body.adoc[]
 include::{snippets}/update-single-comment/response-fields.adoc[]
 
@@ -490,20 +489,17 @@ End-Point : /api/v1/comment/{commentId : Long}
 ----
 
 .Sample Request
-
 include::{snippets}/delete-single-comment/http-request.adoc[]
 
 .Sample Response
-
 include::{snippets}/delete-single-comment/http-response.adoc[]
 
 .Request Header
-
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/delete-single-comment/request-headers.adoc[]
 
 .Response Body
-
 include::{snippets}/delete-single-comment/response-body.adoc[]
 include::{snippets}/delete-single-comment/response-fields.adoc[]
 
@@ -526,6 +522,7 @@ include::{snippets}/comment-black/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/comment-black/request-headers.adoc[]
 
 .Request Body
@@ -536,7 +533,6 @@ include::{snippets}/comment-black/request-fields.adoc[]
 .Response Body
 include::{snippets}/comment-black/response-body.adoc[]
 include::{snippets}/comment-black/response-fields.adoc[]
-
 
 ==== 댓글 추천
 
@@ -557,6 +553,7 @@ include::{snippets}/like-comment-add/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/like-comment-add/request-headers.adoc[]
 
 .Response Body
@@ -582,8 +579,89 @@ include::{snippets}/like-comment-cancel/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
 include::{snippets}/like-comment-cancel/request-headers.adoc[]
 
 .Response Body
 include::{snippets}/like-comment-cancel/response-body.adoc[]
 include::{snippets}/like-comment-cancel/response-fields.adoc[]
+
+=== NOTIFICATION API ( /api/v1/notifications )
+
+==== 알림 전체 조회
+
+.description
+[source]
+----
+알림과 관련된 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/notifications
+----
+
+.Sample Request
+include::{snippets}/get-all-notification/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/get-all-notification/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/get-all-notification/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/get-all-notification/response-body.adoc[]
+include::{snippets}/get-all-notification/response-fields.adoc[]
+
+==== 알림 단건 읽음 처리
+
+.description
+[source]
+----
+알림을 단건 읽음 처리하기 위한 API입니다.
+
+HTTP Method : DELETE
+End-Point : /api/v1/notifications/{postId : Long}
+----
+
+.Sample Request
+include::{snippets}/read-one-notification/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/read-one-notification/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/read-one-notification/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/read-one-notification/response-body.adoc[]
+include::{snippets}/read-one-notification/response-fields.adoc[]
+
+==== 알림 전체 읽음 처리
+
+.description
+[source]
+----
+자신이 읽지 않은 알림을 모두 읽음 처리를 허기 위한 API입니다.
+
+HTTP Method : DELETE
+End-Point : /api/v1/notifications
+----
+
+.Sample Request
+include::{snippets}/read-all-notification/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/read-all-notification/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/read-all-notification/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/read-all-notification/response-body.adoc[]
+include::{snippets}/read-all-notification/response-fields.adoc[]
