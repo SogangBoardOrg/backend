@@ -21,7 +21,6 @@ class CommentController(
         @PathVariable("parentCommentId", required = false) parentCommentId: Long?,
         @RequestBody createCommentRequestDto: CreateCommentRequestDto,
     ): ApiResponse<CreateCommentResponseDto> {
-
         val responseDto = commentService.createComment(
             loginUser.username,
             createCommentRequestDto,

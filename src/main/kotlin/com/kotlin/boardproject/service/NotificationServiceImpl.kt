@@ -46,11 +46,14 @@ class NotificationServiceImpl(
             ?: throw EntityNotFoundException("댓글이 존재하지 않습니다.")
         val post = comment.post
         log.info("post: $post")
+        // TODO: 대댓글 애러 고치기
+        log.info("post: $comment")
+
         val toId = comment.parent?.writer?.id ?: comment.post.writer.id
 
         val user = userRepository.findByIdOrNull(toId)
             ?: throw EntityNotFoundException("사용자가 존재하지 않습니다.")
-
+        // TODO: 여기가 문제인거 같음
         if (user.email == email) return
 
         val notification = Notification(

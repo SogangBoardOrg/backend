@@ -5,6 +5,7 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -51,29 +52,7 @@ class PostServiceImpl(
             normalType = postSearchDto.normalType,
             pageable = pageable,
         )
-        // return QueryNormalPostSearchResponseDto(null, 1, 1, 1, 1, 1)
         return QueryNormalPostSearchResponseDto.createDtoFromPageable(result, user)
-    }
-
-    @Transactional
-    override fun createNormalPost(
-        username: String,
-        createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): CreateNormalPostResponseDto {
-        // 유저 확인
-        log.info(username)
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
-
-        // TODO: newbie이면 글 쓰기가 안됨 -> security config
-
-        // 포스트 생성 지금은 그냥 진행 -> 태그 null 값이면 다른 post로 취급?
-        val post = createNormalPostRequestDto.toPost(user)
-
-        // user post list에 추가
-        post.addPost(user)
-
-        return CreateNormalPostResponseDto(normalPostRepository.save(post).id!!)
     }
 
     @Transactional(readOnly = true)
@@ -95,6 +74,42 @@ class PostServiceImpl(
         log.info(post.toString())
         log.info(post.commentList.toString())
         return post.toOneNormalPostResponseDto(user, commentList)
+    }
+
+    @Transactional(readOnly = true)
+    override fun findMyWrittenPost(
+        username: String,
+        pageable: Pageable,
+    ): MyWrittenPostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
+
+        val postList = basePostRepository.findByWriterAndStatus(user, PostStatus.NORMAL, pageable)
+
+        log.info(postList.toString())
+
+        return MyWrittenPostResponseDto.createDtoFromPageable(postList)
+    }
+
+    @Transactional
+    override fun createNormalPost(
+        username: String,
+        createNormalPostRequestDto: CreateNormalPostRequestDto,
+    ): CreateNormalPostResponseDto {
+        // 유저 확인
+        log.info(username)
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
+
+        // TODO: newbie이면 글 쓰기가 안됨 -> security config
+
+        // 포스트 생성 지금은 그냥 진행 -> 태그 null 값이면 다른 post로 취급?
+        val post = createNormalPostRequestDto.toPost(user)
+
+        // user post list에 추가
+        post.addPost(user)
+
+        return CreateNormalPostResponseDto(normalPostRepository.save(post).id!!)
     }
 
     @Transactional

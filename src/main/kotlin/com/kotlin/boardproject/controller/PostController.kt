@@ -3,6 +3,7 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
@@ -33,6 +34,16 @@ class PostController(
         log.info("username: ${principal?.name}")
 
         val data = postService.findNormalPostByQuery(principal?.name, pageable, postSearchDto)
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("/mywritten")
+    fun myPost(
+        pageable: Pageable,
+        @LoginUser loginUser: User,
+    ): ApiResponse<MyWrittenPostResponseDto> {
+        val data = postService.findMyWrittenPost(loginUser.username, pageable)
+
         return ApiResponse.success(data)
     }
 

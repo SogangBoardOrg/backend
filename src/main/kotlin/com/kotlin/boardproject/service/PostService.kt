@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.service
 
+import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -62,6 +63,10 @@ interface PostService {
         postSearchDto: PostSearchDto,
     ): QueryNormalPostSearchResponseDto
 
+    fun findMyWrittenPost(
+        username: String,
+        pageable: Pageable,
+    ): MyWrittenPostResponseDto
     // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 
     // TODO: 어드민 전용 메뉴로 해당 게시물 정지하면 blackpost 상태 변경

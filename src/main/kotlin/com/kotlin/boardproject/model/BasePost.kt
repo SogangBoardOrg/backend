@@ -3,6 +3,7 @@ package com.kotlin.boardproject.model
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.UnAuthorizedException
+import com.kotlin.boardproject.dto.post.OneBasePostResponseDto
 import javax.persistence.*
 
 // 게시판 상관없이 모두 적용되는 속성을 넣는다.
@@ -76,5 +77,15 @@ open class BasePost(
     fun deletePost(user: User) {
         this.status = PostStatus.DELETED
         user.postList.remove(this)
+    }
+
+    fun toOneBasePostResponseDto(): OneBasePostResponseDto {
+        return OneBasePostResponseDto(
+            id = this.id!!,
+            title = this.title,
+            content = this.title,
+            createdTime = this.createdAt!!,
+            lastModifiedTime = this.updatedAt,
+        )
     }
 }
