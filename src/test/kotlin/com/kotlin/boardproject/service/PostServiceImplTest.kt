@@ -8,6 +8,7 @@ import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.enums.Role
+import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
@@ -996,38 +997,58 @@ class PostServiceImplTest {
         // given
         val urlPoint = "/myscrap"
         val finalUrl = "$statsEndPoint$urlPoint"
-        val postNumber = 30
 
         val page = 0
         val size = 7
         val sort = ""
 
         // 글 postNumber 만큼 등록
-        for (i in 1..postNumber) {
-            normalPostRepository.saveAndFlush(
-                NormalPost(
-                    title = "title_$i",
-                    content = "content_$i",
-                    isAnon = true,
-                    commentOn = true,
-                    writer = writer,
-                    normalType = NormalType.FREE,
-                ),
-            )
-        }
+
+        val post1 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_1",
+                content = "content_1",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val post2 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_2",
+                content = "content_2",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
+
+        val post3 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_3",
+                content = "content_3",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+            ),
+        )
 
         // 글 1번 스크랩
         scrapPostRepository.saveAndFlush(
             ScrapPost(
                 user = user2,
-                post = basePostRepository.findByIdAndStatus(1L, PostStatus.NORMAL)!!,
+                post = post1,
             ),
         )
         // 글 3번 스크랩
         scrapPostRepository.saveAndFlush(
             ScrapPost(
                 user = user2,
-                post = basePostRepository.findByIdAndStatus(3L, PostStatus.NORMAL)!!,
+                post = post3,
             ),
         )
 
