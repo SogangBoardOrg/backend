@@ -142,11 +142,4 @@ class PostController(
         val data = postService.cancelScrapPost(loginUser.username, postId)
         return ApiResponse.success(data)
     }
-
-//    @GetMapping("free/v/")
-//    fun readAllPost(
-//    ): ApiResponse<ReadAllPostResponseDto> {
-//        val postDto = postService.readOnePost(postId) // post 객체 반환
-//        return ApiResponse.success(postDto)
-//    }
 }

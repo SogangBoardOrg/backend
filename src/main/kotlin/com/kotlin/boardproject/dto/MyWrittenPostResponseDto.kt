@@ -5,7 +5,7 @@ import com.kotlin.boardproject.model.BasePost
 import org.springframework.data.domain.Page
 
 data class MyWrittenPostResponseDto(
-    val contents: List<OneBasePostResponseDto>? = null,
+    val contents: List<OneBasePostResponseDto>? = mutableListOf(),
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,

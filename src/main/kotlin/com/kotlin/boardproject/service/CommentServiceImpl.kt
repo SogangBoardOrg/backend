@@ -4,11 +4,13 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.FindMyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.model.BlackComment
 import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.model.LikeComment
 import com.kotlin.boardproject.repository.*
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityNotFoundException
@@ -73,6 +75,19 @@ class CommentServiceImpl(
         return CreateCommentResponseDto(
             commentRepository.save(comment).id!!,
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun findMyComment(
+        username: String,
+        pageable: Pageable,
+    ): FindMyCommentResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
+
+        val comments = commentRepository.findByWriterAndStatus(user, PostStatus.NORMAL, pageable)
+
+        return FindMyCommentResponseDto.createDtoFromPageable(comments)
     }
 
     @Transactional

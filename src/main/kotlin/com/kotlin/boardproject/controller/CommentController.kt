@@ -1,10 +1,12 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
+import com.kotlin.boardproject.dto.FindMyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.NotificationService
+import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
 
@@ -15,13 +17,23 @@ class CommentController(
     private val notificationService: NotificationService,
 ) {
 
+    @GetMapping("/mycomment")
+    fun myComment(
+        @LoginUser loginUser: User,
+        pageable: Pageable,
+    ): ApiResponse<FindMyCommentResponseDto> {
+        val data = commentService.findMyComment(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
     @PostMapping("", "/{parentCommentId}")
     fun createComment(
         @LoginUser loginUser: User,
         @PathVariable("parentCommentId", required = false) parentCommentId: Long?,
         @RequestBody createCommentRequestDto: CreateCommentRequestDto,
     ): ApiResponse<CreateCommentResponseDto> {
-        val responseDto = commentService.createComment(
+        val data = commentService.createComment(
             loginUser.username,
             createCommentRequestDto,
             parentCommentId,
@@ -31,9 +43,9 @@ class CommentController(
         // parentCommentId가 null이면 해당 comment의 글의 주인에게 nofitication을 보낸다.
         // parentCommentId가 null이 아니면 해당 comment의 주인에게 notification을 보낸다.
         // 자신이 작성한 글이나 댓글이면 알림을 보내지 아니한다.
-        notificationService.createNotification(loginUser.username, responseDto)
+        notificationService.createNotification(loginUser.username, data)
 
-        return ApiResponse.success(responseDto)
+        return ApiResponse.success(data)
     }
 
     @PutMapping("/{commentId}")
@@ -42,9 +54,9 @@ class CommentController(
         @PathVariable commentId: Long,
         @RequestBody updateCommentRequestDto: UpdateCommentRequestDto,
     ): ApiResponse<UpdateCommentResponseDto> {
-        val responseDto = commentService.updateComment(loginUser.username, commentId, updateCommentRequestDto)
+        val data = commentService.updateComment(loginUser.username, commentId, updateCommentRequestDto)
 
-        return ApiResponse.success(responseDto)
+        return ApiResponse.success(data)
     }
 
     @PostMapping("/like/{commentId}")
@@ -52,9 +64,9 @@ class CommentController(
         @LoginUser loginUser: User,
         @PathVariable("commentId") commentId: Long,
     ): ApiResponse<LikeCommentResponseDto> {
-        val responseDto = commentService.likeComment(loginUser.username, commentId)
+        val data = commentService.likeComment(loginUser.username, commentId)
 
-        return ApiResponse.success(responseDto)
+        return ApiResponse.success(data)
     }
 
     @DeleteMapping("/like/{commentId}")
@@ -62,9 +74,9 @@ class CommentController(
         @LoginUser loginUser: User,
         @PathVariable("commentId") commentId: Long,
     ): ApiResponse<CancelLikeCommentResponseDto> {
-        val responseDto = commentService.cancelLikeComment(loginUser.username, commentId)
+        val data = commentService.cancelLikeComment(loginUser.username, commentId)
 
-        return ApiResponse.success(responseDto)
+        return ApiResponse.success(data)
     }
 
     @DeleteMapping("/{commentId}")
@@ -72,9 +84,9 @@ class CommentController(
         @LoginUser loginUser: User,
         @PathVariable commentId: Long,
     ): ApiResponse<DeleteCommentResponseDto> {
-        val responseDto = commentService.deleteComment(loginUser.username, commentId)
+        val data = commentService.deleteComment(loginUser.username, commentId)
 
-        return ApiResponse.success(responseDto)
+        return ApiResponse.success(data)
     }
 
     @PostMapping("/black/{commentId}")

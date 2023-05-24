@@ -10,8 +10,8 @@ data class CommentDto(
     val writerName: String,
     val isLiked: Boolean?,
     val isWriter: Boolean?, // 로그인 한 사람이 댓글 작성자
-    val createdTime: LocalDateTime?,
-    val lastModifiedTime: LocalDateTime?,
+    val createdTime: LocalDateTime,
+    val lastModifiedTime: LocalDateTime,
     val parentId: Long?,
     val ancestorId: Long?,
     val likeCnt: Int?,

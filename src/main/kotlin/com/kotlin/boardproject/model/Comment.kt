@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.model
 
 import com.kotlin.boardproject.common.enums.PostStatus
+import com.kotlin.boardproject.dto.OneCommentResponseDto
 import javax.persistence.*
 
 @Entity
@@ -57,5 +58,15 @@ class Comment(
 
     fun cancelLikeComment(likeComment: LikeComment) {
         this.likeList.remove(likeComment)
+    }
+
+    fun toOneCommentResponseDto(): OneCommentResponseDto {
+        return OneCommentResponseDto(
+            id = this.id!!,
+            postId = this.post.id!!,
+            content = this.content,
+            createdTime = this.createdAt!!,
+            lastModifiedTime = this.updatedAt!!,
+        )
     }
 }

@@ -62,7 +62,7 @@ class NormalPost(
             }
         }
 
-        val commentDtoList: MutableList<CommentDto> = commentList.map {
+        val commentDtoList: MutableList<CommentDto> = commentList.map { it ->
             CommentDto(
                 id = it.id!!,
                 content = if (it.status == PostStatus.DELETED) "삭제된 댓글입니다." else it.content,
@@ -71,7 +71,7 @@ class NormalPost(
                 isWriter = it.writer == user,
                 writerName = if (it.writer == this.writer) "글쓴이" else if (it.isAnon) "익명 ${writerList.indexOf(it.writer)}" else it.writer.nickname,
                 createdTime = it.createdAt!!,
-                lastModifiedTime = it.updatedAt,
+                lastModifiedTime = it.updatedAt!!,
                 ancestorId = it.ancestor?.id,
                 parentId = it.parent?.id,
                 likeCnt = it.likeList.size,

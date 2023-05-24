@@ -497,7 +497,30 @@ include::{snippets}/add-single-parent-comment/request-fields.adoc[]
 include::{snippets}/add-single-parent-comment/response-body.adoc[]
 include::{snippets}/add-single-parent-comment/response-fields.adoc[]
 
-==== 댓글 조회
+==== 자신이 작성한 댓글 조회
+.description
+[source]
+----
+자신이 작성한 댓글을 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/comment/mycomment
+----
+
+.Sample Request
+include::{snippets}/view-my-comment/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-comment/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-comment/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-comment/response-body.adoc[]
+include::{snippets}/view-my-comment/response-fields.adoc[]
 
 ==== 댓글 수정
 

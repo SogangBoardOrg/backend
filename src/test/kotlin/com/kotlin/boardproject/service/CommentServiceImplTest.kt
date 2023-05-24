@@ -28,7 +28,10 @@ import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors
+import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
+import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
@@ -169,13 +172,13 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     PayloadDocumentation.requestFields(
-                        PayloadDocumentation.fieldWithPath("content").description("글 내용"),
-                        PayloadDocumentation.fieldWithPath("isAnon").description("익명 여부"),
-                        PayloadDocumentation.fieldWithPath("postId").description("글 번호"),
+                        fieldWithPath("content").description("글 내용"),
+                        fieldWithPath("isAnon").description("익명 여부"),
+                        fieldWithPath("postId").description("글 번호"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").description("댓글 번호"),
                     ),
                 ),
             )
@@ -237,13 +240,13 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     PayloadDocumentation.requestFields(
-                        PayloadDocumentation.fieldWithPath("content").description("글 내용"),
-                        PayloadDocumentation.fieldWithPath("isAnon").description("익명 여부"),
-                        PayloadDocumentation.fieldWithPath("postId").description("글 번호"),
+                        fieldWithPath("content").description("글 내용"),
+                        fieldWithPath("isAnon").description("익명 여부"),
+                        fieldWithPath("postId").description("글 번호"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    responseFields(
+                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
             )
@@ -319,13 +322,13 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     PayloadDocumentation.requestFields(
-                        PayloadDocumentation.fieldWithPath("content").description("글 내용"),
-                        PayloadDocumentation.fieldWithPath("isAnon").description("익명 여부"),
-                        PayloadDocumentation.fieldWithPath("postId").description("글 번호"),
+                        fieldWithPath("content").description("글 내용"),
+                        fieldWithPath("isAnon").description("익명 여부"),
+                        fieldWithPath("postId").description("글 번호"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").description("댓글 번호"),
                     ),
                 ),
             )
@@ -377,9 +380,9 @@ class CommentServiceImplTest {
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").description("댓글 번호"),
                     ),
                 ),
             )
@@ -438,12 +441,12 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
                     PayloadDocumentation.requestFields(
-                        PayloadDocumentation.fieldWithPath("content").description("수정할 댓글 내용"),
+                        fieldWithPath("content").description("수정할 댓글 내용"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
-                        PayloadDocumentation.fieldWithPath("data.content").description("수정된 댓글 내용"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("data.content").description("수정된 댓글 내용"),
                     ),
                 ),
             )
@@ -489,9 +492,9 @@ class CommentServiceImplTest {
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                    responseFields(
+                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
             )
@@ -546,9 +549,9 @@ class CommentServiceImplTest {
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("data.id").description("게시글 번호"),
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                    responseFields(
+                        fieldWithPath("data.id").description("게시글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
             )
@@ -599,11 +602,11 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 신고하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     PayloadDocumentation.requestFields(
-                        PayloadDocumentation.fieldWithPath("blackReason").description("신고 사유"),
+                        fieldWithPath("blackReason").description("신고 사유"),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("data.id").description("댓글 번호"),
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
+                    responseFields(
+                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
             )
@@ -616,5 +619,74 @@ class CommentServiceImplTest {
         blackComment[0].comment.post shouldBe post
         blackComment[0].user shouldBe postWriter
         blackComment[0].blackReason shouldBe BlackReason.HATE
+    }
+
+    @Test
+    @Rollback(true)
+    fun 작성_댓글_조회() {
+        val urlPoint = "/mycomment"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val content = "comment_test"
+
+        // log.info(post.id!!.toString())
+
+        commentRepository.saveAndFlush(
+            Comment(
+                content = content,
+                isAnon = true,
+                post = post,
+                writer = commentWriter,
+            ),
+        )
+
+        commentRepository.saveAndFlush(
+            Comment(
+                content = content,
+                isAnon = true,
+                post = post,
+                writer = commentWriter,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.get(finalUrl).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        // then
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "view-my-comment",
+                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                            .description("인증을 위한 Access 토큰, 자신이 쓴 댓글을 조회하는 유저를 위해 필요함"),
+                    ),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.contents.[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.contents.[].postId").type(JsonFieldType.NUMBER)
+                            .description("댓글이 달려있는 글의 번호"),
+                        fieldWithPath("data.contents.[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("data.contents.[].createdTime").type(JsonFieldType.STRING).description("글 생성시간"),
+                        fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING)
+                            .description("글 수정시간"),
+                        fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지"),
+                        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 글의 개수"),
+                        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description("페이지의 개수"),
+                        fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("페이지 당 나타내는 원소의 개수"),
+                    ),
+                ),
+            )
+
+        val commentList = commentRepository.findAll()
+
+        commentList.size shouldBe 2
     }
 }
