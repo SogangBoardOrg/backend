@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.service
 
+import com.kotlin.boardproject.dto.MyScarpPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.post.*
@@ -67,7 +68,9 @@ interface PostService {
         username: String,
         pageable: Pageable,
     ): MyWrittenPostResponseDto
-    // TODO: 핫한 게시물 보여주기 -> 별도 알고리즘
 
-    // TODO: 어드민 전용 메뉴로 해당 게시물 정지하면 blackpost 상태 변경
+    fun findMyScrapPost(
+        username: String,
+        pageable: Pageable,
+    ): MyScarpPostResponseDto
 }

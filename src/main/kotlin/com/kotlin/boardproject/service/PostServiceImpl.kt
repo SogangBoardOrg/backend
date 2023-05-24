@@ -5,6 +5,7 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.MyScarpPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.post.*
@@ -86,9 +87,17 @@ class PostServiceImpl(
 
         val postList = basePostRepository.findByWriterAndStatus(user, PostStatus.NORMAL, pageable)
 
-        log.info(postList.toString())
-
         return MyWrittenPostResponseDto.createDtoFromPageable(postList)
+    }
+
+    @Transactional(readOnly = true)
+    override fun findMyScrapPost(username: String, pageable: Pageable): MyScarpPostResponseDto {
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
+
+        val postList = scrapPostRepository.findByUser(user, pageable)
+
+        return MyScarpPostResponseDto.createDtoFromPageable(postList)
     }
 
     @Transactional

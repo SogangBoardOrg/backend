@@ -6,14 +6,12 @@ import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
+import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.model.Comment
-import com.kotlin.boardproject.model.LikePost
-import com.kotlin.boardproject.model.NormalPost
-import com.kotlin.boardproject.model.User
+import com.kotlin.boardproject.model.*
 import com.kotlin.boardproject.repository.*
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
@@ -63,6 +61,9 @@ class PostServiceImplTest {
 
     @Autowired
     private lateinit var normalPostRepository: NormalPostRepository
+
+    @Autowired
+    private lateinit var basePostRepository: BasePostRepository
 
     @Autowired
     private lateinit var blackPostRepository: BlackPostRepository
@@ -907,7 +908,7 @@ class PostServiceImplTest {
 
     @Test
     @Rollback(true)
-    fun 자기가_쓴_글_조회() {
+    fun 자신이_쓴_글_조회() {
         // given
         val urlPoint = "/mywritten"
         val finalUrl = "$statsEndPoint$urlPoint"
@@ -963,7 +964,93 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 자신의 글을 찾는 유저를 식별하기 위해서 반드시 필요함"),
+                    ),
+                    requestParameters(
+                        parameterWithName("page").description("찾는 페이지 번호"),
+                        parameterWithName("size").description("페이지 당 불러올 글의 크기"),
+                        parameterWithName("sort").description("정렬"),
+                    ),
+                    responseFields(
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.contents").type(JsonFieldType.ARRAY).description("글 데이터"),
+                        fieldWithPath("data.contents.[].id").type(JsonFieldType.NUMBER).description("글 번호"),
+                        fieldWithPath("data.contents.[].title").type(JsonFieldType.STRING).description("글 제목"),
+                        fieldWithPath("data.contents.[].content").type(JsonFieldType.STRING).description("글 제목"),
+                        fieldWithPath("data.contents.[].createdTime").type(JsonFieldType.STRING).description("글 생성시간"),
+                        fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING)
+                            .description("글 생성시간"),
+                        fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지"),
+                        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 글의 개수"),
+                        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description("페이지의 개수"),
+                        fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("페이지 당 나타내는 원소의 개수"),
+                    ),
+                ),
+            )
+    }
+
+    @Test
+    @Rollback(true)
+    fun 자신이_스크랩_한_글_조회() {
+        // given
+        val urlPoint = "/myscrap"
+        val finalUrl = "$statsEndPoint$urlPoint"
+        val postNumber = 30
+
+        val page = 0
+        val size = 7
+        val sort = ""
+
+        // 글 postNumber 만큼 등록
+        for (i in 1..postNumber) {
+            normalPostRepository.saveAndFlush(
+                NormalPost(
+                    title = "title_$i",
+                    content = "content_$i",
+                    isAnon = true,
+                    commentOn = true,
+                    writer = writer,
+                    normalType = NormalType.FREE,
+                ),
+            )
+        }
+
+        // 글 1번 스크랩
+        scrapPostRepository.saveAndFlush(
+            ScrapPost(
+                user = user2,
+                post = basePostRepository.findByIdAndStatus(1L, PostStatus.NORMAL)!!,
+            ),
+        )
+        // 글 3번 스크랩
+        scrapPostRepository.saveAndFlush(
+            ScrapPost(
+                user = user2,
+                post = basePostRepository.findByIdAndStatus(3L, PostStatus.NORMAL)!!,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.get(
+                "$finalUrl?" +
+                    "page=$page&" +
+                    "size=$size&" +
+                    "sort=$sort ",
+            ).contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken2.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                document(
+                    "view-my-scrap-post",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 자신이 스크랩한 글을 찾는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestParameters(
                         parameterWithName("page").description("찾는 페이지 번호"),

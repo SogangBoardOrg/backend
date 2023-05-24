@@ -383,8 +383,33 @@ include::{snippets}/scrap-post-cancel/request-headers.adoc[]
 include::{snippets}/scrap-post-cancel/response-body.adoc[]
 include::{snippets}/scrap-post-cancel/response-fields.adoc[]
 
-==== 자신이 작성한 글 조회
+==== 자신이 스크랩한 글 조회
 
+.description
+[source]
+----
+자신이 스크랩한 글의 목록을 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/post/myscrap
+----
+
+.Sample Request
+include::{snippets}/view-my-scrap-post/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-scrap-post/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-scrap-post/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-scrap-post/response-body.adoc[]
+include::{snippets}/view-my-scrap-post/response-fields.adoc[]
+
+==== 자신이 작성한 글 조회
 .description
 [source]
 ----
@@ -408,6 +433,7 @@ include::{snippets}/view-my-written-post/request-headers.adoc[]
 .Response Body
 include::{snippets}/view-my-written-post/response-body.adoc[]
 include::{snippets}/view-my-written-post/response-fields.adoc[]
+
 
 === COMMENT API ( /api/v1/comment )
 

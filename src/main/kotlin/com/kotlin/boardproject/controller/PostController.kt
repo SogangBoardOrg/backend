@@ -3,6 +3,7 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.MyScarpPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.common.ApiResponse
@@ -39,10 +40,20 @@ class PostController(
 
     @GetMapping("/mywritten")
     fun myPost(
-        pageable: Pageable,
         @LoginUser loginUser: User,
+        pageable: Pageable,
     ): ApiResponse<MyWrittenPostResponseDto> {
         val data = postService.findMyWrittenPost(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("/myscrap")
+    fun myScrapped(
+        @LoginUser loginUser: User,
+        pageable: Pageable,
+    ): ApiResponse<MyScarpPostResponseDto> {
+        val data = postService.findMyScrapPost(loginUser.username, pageable)
 
         return ApiResponse.success(data)
     }
