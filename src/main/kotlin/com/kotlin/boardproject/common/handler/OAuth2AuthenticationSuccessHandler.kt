@@ -9,7 +9,7 @@ import com.kotlin.boardproject.common.util.addCookie
 import com.kotlin.boardproject.common.util.deleteCookie
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.RedisRepository
+import com.kotlin.boardproject.repository.common.RedisRepository
 import com.kotlin.boardproject.repository.UserRepository
 import com.kotlin.boardproject.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
 import com.kotlin.boardproject.repository.common.REDIRECT_URI_PARAM_COOKIE_NAME

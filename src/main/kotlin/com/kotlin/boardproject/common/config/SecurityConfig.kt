@@ -8,7 +8,7 @@ import com.kotlin.boardproject.common.filter.TokenAuthenticationFilter
 import com.kotlin.boardproject.common.handler.OAuth2AuthenticationFailureHandler
 import com.kotlin.boardproject.common.handler.OAuth2AuthenticationSuccessHandler
 import com.kotlin.boardproject.common.handler.TokenAccessDeniedHandler
-import com.kotlin.boardproject.repository.RedisRepository
+import com.kotlin.boardproject.repository.common.RedisRepository
 import com.kotlin.boardproject.repository.UserRepository
 import com.kotlin.boardproject.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
 import com.kotlin.boardproject.service.CustomOAuth2UserService

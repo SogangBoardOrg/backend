@@ -15,7 +15,7 @@ import com.kotlin.boardproject.dto.UserInfoDto
 import com.kotlin.boardproject.dto.UserLoginRequestDto
 import com.kotlin.boardproject.dto.UserSignUpDto
 import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.RedisRepository
+import com.kotlin.boardproject.repository.common.RedisRepository
 import com.kotlin.boardproject.repository.UserRepository
 import com.kotlin.boardproject.repository.common.REFRESH_TOKEN
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
