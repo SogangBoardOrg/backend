@@ -9,7 +9,6 @@ import com.kotlin.boardproject.common.exception.InternalServiceException
 import com.kotlin.boardproject.common.exception.OAuthProviderMissMatchException
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.UserRepository
-import io.sentry.Sentry
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -27,7 +26,6 @@ class CustomOAuth2UserService(
         return runCatching {
             process(userRequest!!, user)
         }.onFailure {
-            Sentry.captureException(it)
             if (it is OAuthProviderMissMatchException) {
                 throw it
             }

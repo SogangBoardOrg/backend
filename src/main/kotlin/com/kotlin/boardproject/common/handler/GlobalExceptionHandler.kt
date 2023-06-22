@@ -5,7 +5,6 @@ import com.kotlin.boardproject.common.exception.BizException
 import com.kotlin.boardproject.common.exception.InternalServiceException
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.common.ApiResponse
-import io.sentry.Sentry
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -37,7 +36,6 @@ class GlobalExceptionHandler {
     @ExceptionHandler(value = [InternalServiceException::class])
     fun handlingInternalServiceException(internalServiceException: InternalServiceException):
         ResponseEntity<ApiResponse<String>> {
-        Sentry.captureException(internalServiceException)
         log.error(internalServiceException.log)
 
         return ResponseEntity.status(internalServiceException.errorCode.code)
@@ -46,7 +44,6 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(value = [Exception::class])
     fun handlingException(exception: Exception): ResponseEntity<ApiResponse<String>> {
-        Sentry.captureException(exception)
         log.error(exception.message)
 
         if (exception is AccessDeniedException) {
