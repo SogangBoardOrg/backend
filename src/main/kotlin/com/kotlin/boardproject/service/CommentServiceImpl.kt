@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.service
 
+import com.kotlin.boardproject.common.annotation.Timer
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
@@ -30,7 +31,7 @@ class CommentServiceImpl(
         createCommentRequestDto: CreateCommentRequestDto,
         parentCommentId: Long?,
     ): CreateCommentResponseDto {
-        log.info("crate Comment")
+        log.info("create Comment")
         // user
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
@@ -71,7 +72,8 @@ class CommentServiceImpl(
 
         comment.addComment(post)
         comment.joinAncestor(ancestorComment)
-
+        log.info("create comment end!")
+        // TODO: 여기서 문제가 생기는거 같음
         return CreateCommentResponseDto(
             commentRepository.save(comment).id!!,
         )
@@ -102,7 +104,7 @@ class CommentServiceImpl(
         val comment = commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
 
-        // 주인과 일치하는지 확인
+        // 주인과 일치하는지 확인 -> 질문게시판은 댓글도 수정 못하게?
 
         if (user == comment.writer) {
             comment.content = updateCommentRequestDto.content
@@ -145,6 +147,8 @@ class CommentServiceImpl(
         username: String,
         commentId: Long,
     ): LikeCommentResponseDto {
+        log.info("like comment start")
+
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
@@ -162,6 +166,7 @@ class CommentServiceImpl(
         )
         likeCommentRepository.save(likeComment)
         comment.likeComment(likeComment)
+        log.info("like comment end")
 
         return LikeCommentResponseDto(
             comment.id!!,
@@ -173,6 +178,7 @@ class CommentServiceImpl(
         username: String,
         commentId: Long,
     ): CancelLikeCommentResponseDto {
+        log.info("cancel like comment start")
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
 
@@ -184,7 +190,7 @@ class CommentServiceImpl(
             comment.cancelLikeComment(it)
             likeCommentRepository.delete(it)
         }
-
+        log.info("cancel like comment end")
         return CancelLikeCommentResponseDto(comment.id!!)
     }
 
@@ -194,6 +200,7 @@ class CommentServiceImpl(
         commentId: Long,
         blackCommentRequestDto: BlackCommentRequestDto,
     ): BlackCommentResponseDto {
+        log.info("black comment start")
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
 
@@ -211,7 +218,7 @@ class CommentServiceImpl(
             blackReason = blackCommentRequestDto.blackReason,
         )
         blackCommentRepository.save(blackComment)
-
+        log.info("black comment end")
         return BlackCommentResponseDto(comment.id!!)
     }
 }

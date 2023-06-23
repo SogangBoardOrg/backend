@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 class ScrapPost(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "scrap_post_id")
     var id: Long? = null,
 

@@ -17,8 +17,8 @@ import javax.persistence.*
 @DiscriminatorColumn(name = "postType")
 open class BasePost(
     @Id
-    @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     var id: Long? = null,
 
     var title: String,

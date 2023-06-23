@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
+import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.FindMyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
@@ -38,6 +39,8 @@ class CommentController(
             createCommentRequestDto,
             parentCommentId,
         )
+        log.info(data.toString())
+        log.info("data to string")
         // TODO: 여기에 댓글 생성 시 알림 기능 추가
         // 1. 댓글을 파악한다 -> 댓글에 쿼리를 보내서 parentId가 null이면 일반댓글 아니면 대댓글
         // parentCommentId가 null이면 해당 comment의 글의 주인에게 nofitication을 보낸다.

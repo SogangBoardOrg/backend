@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 class LikeComment(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_post_id")
     var id: Long? = null,
 
