@@ -106,18 +106,16 @@ class PostServiceImpl(
         createNormalPostRequestDto: CreateNormalPostRequestDto,
     ): CreateNormalPostResponseDto {
         // 유저 확인
-        log.info(username)
+        log.info("create normal post start")
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
-
-        // TODO: newbie이면 글 쓰기가 안됨 -> security config
 
         // 포스트 생성 지금은 그냥 진행 -> 태그 null 값이면 다른 post로 취급?
         val post = createNormalPostRequestDto.toPost(user)
 
         // user post list에 추가
         post.addPost(user)
-
+        log.info("create normal post end")
         return CreateNormalPostResponseDto(normalPostRepository.save(post).id!!)
     }
 

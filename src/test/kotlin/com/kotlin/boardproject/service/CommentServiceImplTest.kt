@@ -44,7 +44,7 @@ import javax.transaction.Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Transactional
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommentServiceImplTest {
 
