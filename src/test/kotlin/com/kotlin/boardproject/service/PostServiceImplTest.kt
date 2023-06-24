@@ -6,9 +6,7 @@ import com.kotlin.boardproject.auth.AuthTokenProvider
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
-import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
@@ -47,7 +45,7 @@ import java.util.*
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Transactional
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PostServiceImplTest {
 
@@ -314,6 +312,7 @@ class PostServiceImplTest {
     @Test
     @Rollback(true)
     fun 게시물_신고() {
+        // TODO: 쿼리 작성
         val urlPoint = "/black/{postId}"
         val finalUrl = "$statsEndPoint$urlPoint"
 
@@ -373,6 +372,7 @@ class PostServiceImplTest {
     @Test
     @Rollback(true)
     fun 글_추천_등록() {
+        // TODO: 쿼리 작성
         // given
         val urlPoint = "/like/{postId}"
         val finalUrl = "$statsEndPoint$urlPoint"
@@ -424,6 +424,7 @@ class PostServiceImplTest {
     @Test
     @Rollback(true)
     fun 글_추천_취소() {
+        // TODO: 쿼리 작성
         // given
         val urlPoint = "/like/{postId}"
         val finalUrl = "$statsEndPoint$urlPoint"
@@ -480,6 +481,7 @@ class PostServiceImplTest {
     @Test
     @Rollback(true)
     fun 글_스크랩() {
+        // TODO: 쿼리 작성
         // given
         val urlPoint = "/scrap/{postId}"
         val finalUrl = "$statsEndPoint$urlPoint"
@@ -546,6 +548,7 @@ class PostServiceImplTest {
     @Test
     @Rollback(true)
     fun 글_스크랩_취소() {
+        // TODO: 쿼리 작성
         // given
         val urlPoint = "/scrap/{postId}"
         val finalUrl = "$statsEndPoint$urlPoint"

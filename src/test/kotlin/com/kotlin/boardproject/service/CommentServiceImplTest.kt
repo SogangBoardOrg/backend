@@ -8,6 +8,7 @@ import com.kotlin.boardproject.common.enums.BlackReason
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.enums.Role
+import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
@@ -43,7 +44,7 @@ import javax.transaction.Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Transactional
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommentServiceImplTest {
 
@@ -142,8 +143,6 @@ class CommentServiceImplTest {
 
         val content = "comment_test"
 
-        // log.info(post.id!!.toString())
-
         val createCommentRequestDto = CreateCommentRequestDto(
             content = content,
             isAnon = true,
@@ -153,14 +152,17 @@ class CommentServiceImplTest {
         val createCommentRequestDtoString = objectMapper.writeValueAsString(createCommentRequestDto)
 
         // when
+        // 예상 쿼리 1. 유저 찾는 쿼리. 2. 포스트 찾는 쿼리, 3. comment만드는 쿼리
+        log.info("create comment start")
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.post(finalUrl).contentType(MediaType.APPLICATION_JSON)
                 .content(createCommentRequestDtoString)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
-
+        log.info("create comment end")
         // then
+
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
@@ -565,6 +567,7 @@ class CommentServiceImplTest {
     @Test
     @Rollback(true)
     fun 댓글_신고() {
+        // TODO: 테스트 추가
         val urlPoint = "/black/{commentId}"
         val finalUrl = "$statsEndPoint$urlPoint"
 
@@ -624,6 +627,7 @@ class CommentServiceImplTest {
     @Test
     @Rollback(true)
     fun 작성_댓글_조회() {
+        // TODO: 테스트 추가 여기는 mydata init하자...
         val urlPoint = "/mycomment"
         val finalUrl = "$statsEndPoint$urlPoint"
 

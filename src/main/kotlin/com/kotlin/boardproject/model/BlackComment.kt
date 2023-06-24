@@ -6,7 +6,7 @@ import javax.persistence.*
 @Entity
 class BlackComment(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "black_post_id")
     var id: Long? = null,
 

@@ -2,13 +2,10 @@ package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.config.properties.AppProperties
-import com.kotlin.boardproject.dto.UserSignUpDto
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
-import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*

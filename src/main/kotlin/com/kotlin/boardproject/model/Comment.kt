@@ -9,8 +9,8 @@ class Comment(
     // TODO: 좋아요 양방향 연관관계 구축하기
 
     @Id
-    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     var id: Long? = null,
 
     var content: String,

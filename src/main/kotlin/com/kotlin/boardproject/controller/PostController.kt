@@ -59,6 +59,7 @@ class PostController(
     }
 
     @PostMapping("")
+    // TODO: newbie이면 글 쓰기가 안됨 -> security config
     fun createNormalPost(
         @LoginUser loginUser: User,
         @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
