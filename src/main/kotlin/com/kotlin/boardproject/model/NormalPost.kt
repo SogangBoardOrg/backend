@@ -5,7 +5,7 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.dto.comment.CommentDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.OneNormalPostResponseDto
-import com.kotlin.boardproject.dto.post.normalpost.QueryOneNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryElementDto
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -118,12 +118,12 @@ class NormalPost(
 
     fun toQueryOneNormalPostResponseDto(
         user: User? = null,
-    ): QueryOneNormalPostResponseDto {
+    ): FindNormalPostByQueryElementDto {
         val isWriter = user?.let { this.writer == user } ?: false
         val isLiked = user?.let { this.likeList.find { it.user == user }?.let { true } ?: false } ?: false
         val isScrapped = user?.let { this.scrapList.find { it.user == user }?.let { true } ?: false } ?: false
 
-        return QueryOneNormalPostResponseDto(
+        return FindNormalPostByQueryElementDto(
             id = this.id!!,
             commentOn = this.commentOn,
             title = this.title,

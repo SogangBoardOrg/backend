@@ -7,7 +7,7 @@ import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.MyScarpPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
-import com.kotlin.boardproject.dto.PostSearchDto
+import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.model.BlackPost
@@ -33,31 +33,32 @@ class PostServiceImpl(
     override fun findNormalPostByQuery(
         username: String?,
         pageable: Pageable,
-        postSearchDto: PostSearchDto,
-    ): QueryNormalPostSearchResponseDto {
-        log.info(postSearchDto.writerName)
+        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
+    ): FindNormalPostByQueryResponseDto {
+        log.info("find normal post by query start")
         val user = username?.let {
             userRepository.findByEmail(it)
         }
 
-        val writer = postSearchDto.writerName
+        val writer = findNormalPostByQueryRequestDto.writerName
             ?.takeIf { it.isNotEmpty() }
             ?.run {
                 userRepository.findUserByNickname(this)
             }
 
         val result = normalPostRepository.findByQuery(
-            title = postSearchDto.title,
-            content = postSearchDto.content,
+            title = findNormalPostByQueryRequestDto.title,
+            content = findNormalPostByQueryRequestDto.content,
             writer = writer,
-            normalType = postSearchDto.normalType,
+            normalType = findNormalPostByQueryRequestDto.normalType,
             pageable = pageable,
         )
-        return QueryNormalPostSearchResponseDto.createDtoFromPageable(result, user)
+        log.info("find normal post by query start")
+        return FindNormalPostByQueryResponseDto.createDtoFromPageable(result, user)
     }
 
     @Transactional(readOnly = true)
-    override fun findOneNormalPostById(
+    override fun findOneNormalPost(
         username: String?,
         postId: Long,
     ): OneNormalPostResponseDto {
@@ -157,6 +158,7 @@ class PostServiceImpl(
         username: String,
         postId: Long,
     ): LikePostResponseDto {
+        log.info("like post start")
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 않는 유저 입니다.")
 
@@ -174,7 +176,7 @@ class PostServiceImpl(
         )
         likePostRepository.save(likePost)
         post.addLikePost(likePost)
-
+        log.info("like post end")
         return LikePostResponseDto(post.id!!)
     }
 
@@ -204,6 +206,8 @@ class PostServiceImpl(
         postId: Long,
         blackPostRequestDto: BlackPostRequestDto,
     ): BlackPostResponseDto {
+        log.info("black post start")
+
         // TODO: 뉴비는 신고 못함 -> security config 로 설정
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("${username}은 존재하지 않는 유저 입니다.")
@@ -218,7 +222,7 @@ class PostServiceImpl(
 
         val blackPost = BlackPost(user = user, post = post, blackReason = blackPostRequestDto.blackReason)
         blackPostRepository.save(blackPost)
-
+        log.info("black post end")
         return BlackPostResponseDto(post.id!!)
     }
 

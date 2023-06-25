@@ -2,7 +2,7 @@ package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.MyScarpPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
-import com.kotlin.boardproject.dto.PostSearchDto
+import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import org.springframework.data.domain.Pageable
@@ -16,7 +16,7 @@ interface PostService {
     ): CreateNormalPostResponseDto
 
     // TODO: 게시물 하나 읽기
-    fun findOneNormalPostById(
+    fun findOneNormalPost(
         username: String?,
         postId: Long,
     ): OneNormalPostResponseDto
@@ -61,8 +61,8 @@ interface PostService {
     fun findNormalPostByQuery(
         username: String?,
         pageable: Pageable,
-        postSearchDto: PostSearchDto,
-    ): QueryNormalPostSearchResponseDto
+        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
+    ): FindNormalPostByQueryResponseDto
 
     fun findMyWrittenPost(
         username: String,
