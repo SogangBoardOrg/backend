@@ -10,14 +10,14 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
-interface NormalPostRepository : JpaRepository<NormalPost, Long> {
+interface NormalPostRepository : JpaRepository<NormalPost, Long>, NormalPostRepositoryCustom {
 
     // 작성자 여부
     // 좋아요 여부
     // 스크랩 여부
 
     fun findByIdAndStatus(id: Long, status: PostStatus): NormalPost?
-
+    //
     @Query(
         value = "SELECT np " +
             "FROM NormalPost AS np " +

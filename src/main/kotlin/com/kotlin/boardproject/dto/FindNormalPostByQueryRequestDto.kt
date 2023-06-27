@@ -4,7 +4,7 @@ import com.kotlin.boardproject.common.enums.NormalType
 
 // title, content, writerName, normalType
 
-class PostSearchDto(
+class FindNormalPostByQueryRequestDto(
     val title: String?,
     val content: String?,
     val writerName: String?,

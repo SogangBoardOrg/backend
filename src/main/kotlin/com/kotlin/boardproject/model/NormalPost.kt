@@ -5,7 +5,6 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.dto.comment.CommentDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.OneNormalPostResponseDto
-import com.kotlin.boardproject.dto.post.normalpost.QueryOneNormalPostResponseDto
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -113,32 +112,6 @@ class NormalPost(
             lastModifiedTime = this.updatedAt,
             commentList = if (!commentOn) mutableListOf() else ancestorList,
             photoList = this.photoList,
-        )
-    }
-
-    fun toQueryOneNormalPostResponseDto(
-        user: User? = null,
-    ): QueryOneNormalPostResponseDto {
-        val isWriter = user?.let { this.writer == user } ?: false
-        val isLiked = user?.let { this.likeList.find { it.user == user }?.let { true } ?: false } ?: false
-        val isScrapped = user?.let { this.scrapList.find { it.user == user }?.let { true } ?: false } ?: false
-
-        return QueryOneNormalPostResponseDto(
-            id = this.id!!,
-            commentOn = this.commentOn,
-            title = this.title,
-            isAnon = this.isAnon,
-            content = this.title,
-            isLiked = isLiked,
-            isWriter = isWriter,
-            isScrapped = isScrapped,
-            writerName = if (this.isAnon) "Anon" else this.writer.nickname,
-            createdTime = this.createdAt!!,
-            lastModifiedTime = this.updatedAt,
-            commentCnt = this.commentList.size,
-            likeCnt = this.likeList.size,
-            scrapCnt = this.scrapList.size,
-            photoCnt = this.photoList.size,
         )
     }
 }

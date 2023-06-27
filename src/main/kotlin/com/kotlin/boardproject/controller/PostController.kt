@@ -3,9 +3,9 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.MyScarpPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
-import com.kotlin.boardproject.dto.PostSearchDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -23,18 +23,21 @@ class PostController(
 
     // TODO: 로그인을 요구하자 / 그렇게해서 자기가 쓴글은 자기가 썻다고 표시가 가능하게
     @GetMapping("/query")
-    fun testPagination(
+    fun findNormalPostByQuery(
         @RequestParam("title", required = false) title: String?,
         @RequestParam("content", required = false) content: String?,
         @RequestParam("writer-name", required = false) writerName: String?,
         @RequestParam("normal-type", required = true) normalType: NormalType,
         pageable: Pageable,
         principal: Principal?,
-    ): ApiResponse<QueryNormalPostSearchResponseDto> {
-        val postSearchDto = PostSearchDto(title, content, writerName, normalType)
+    ): ApiResponse<FindNormalPostByQueryResponseDto> {
         log.info("username: ${principal?.name}")
 
-        val data = postService.findNormalPostByQuery(principal?.name, pageable, postSearchDto)
+        val data = postService.findNormalPostByQuery(
+            principal?.name,
+            pageable,
+            FindNormalPostByQueryRequestDto(title, content, writerName, normalType),
+        )
         return ApiResponse.success(data)
     }
 
@@ -58,8 +61,8 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("")
     // TODO: newbie이면 글 쓰기가 안됨 -> security config
+    @PostMapping("")
     fun createNormalPost(
         @LoginUser loginUser: User,
         @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
@@ -69,13 +72,13 @@ class PostController(
     }
 
     @GetMapping("/{postId}")
-    fun findOneNormalPostById(
+    fun findOneNormalPost(
         @PathVariable("postId") postId: Long,
         principal: Principal?,
     ): ApiResponse<OneNormalPostResponseDto> {
         log.info("username: ${principal?.name}")
 
-        val data = postService.findOneNormalPostById(principal?.name, postId) // post 객체 반환
+        val data = postService.findOneNormalPost(principal?.name, postId) // post 객체 반환
         return ApiResponse.success(data)
     }
 
