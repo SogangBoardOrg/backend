@@ -814,7 +814,7 @@ class PostServiceImplTest {
 
         val title = ""
         val content = ""
-        val writerName = "a"
+        val writerName = "test"
         val normalType = "FREE"
         val page = 0
         val size = 7
@@ -826,7 +826,7 @@ class PostServiceImplTest {
                 NormalPost(
                     title = "title_$i",
                     content = "content_$i",
-                    isAnon = true,
+                    isAnon = false,
                     commentOn = true,
                     writer = writer,
                     normalType = NormalType.FREE,
