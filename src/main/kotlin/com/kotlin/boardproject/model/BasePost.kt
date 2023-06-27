@@ -52,20 +52,24 @@ open class BasePost(
         user.postList.add(this)
     }
 
-    fun addLikePost(likePost: LikePost) {
+    fun addLikePost(likePost: LikePost, user: User) {
         this.likeList.add(likePost)
+        user.likeList.add(likePost)
     }
 
-    fun cancelLikePost(likePost: LikePost) {
+    fun cancelLikePost(likePost: LikePost, user: User) {
         this.likeList.remove(likePost)
+        user.likeList.remove(likePost)
     }
 
-    fun addScrapPost(scrapPost: ScrapPost) {
+    fun addScrapPost(scrapPost: ScrapPost, user: User) {
         this.scrapList.add(scrapPost)
+        user.scrapList.add(scrapPost)
     }
 
-    fun cancelScrapPost(scrapPost: ScrapPost) {
+    fun cancelScrapPost(scrapPost: ScrapPost, user: User) {
         this.scrapList.remove(scrapPost)
+        user.scrapList.remove(scrapPost)
     }
 
     fun checkWriter(user: User) {

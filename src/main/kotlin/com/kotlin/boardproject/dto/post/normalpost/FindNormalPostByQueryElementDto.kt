@@ -1,43 +1,57 @@
 package com.kotlin.boardproject.dto.post.normalpost
 
+import com.kotlin.boardproject.model.NormalPost
+import com.kotlin.boardproject.model.User
+import com.querydsl.core.annotations.QueryProjection
 import java.time.LocalDateTime
 
-data class FindNormalPostByQueryElementDto(
+// writer fetch join
+// scrapList,
+// photoList -> cnt,
+// commentList -> cnt
+// likeList,
+// fetch join
+// post 가져오기
+// select 에 scrapList, photoList가져오기, likeList 가져오기
+data class FindNormalPostByQueryElementDto @QueryProjection constructor(
     val id: Long,
     val title: String,
     val content: String,
     val writerName: String,
     val isAnon: Boolean,
-    val isLiked: Boolean?,
-    val isScrapped: Boolean?,
-    val isWriter: Boolean?,
+    val isLiked: Boolean,
+    val isScrapped: Boolean,
+    val isWriter: Boolean,
     val commentOn: Boolean,
     val createdTime: LocalDateTime,
-    val lastModifiedTime: LocalDateTime?,
+    val lastModifiedTime: LocalDateTime,
     val commentCnt: Int,
     val likeCnt: Int,
     val scrapCnt: Int,
     val photoCnt: Int,
 ) {
     companion object {
-//        fun fromNormalPostToQueryOneNormalPostResponseDto(normalPost: NormalPost, user: User?): QueryOneNormalPostResponseDto {
-//            return QueryOneNormalPostResponseDto(
-//                id = normalPost.id!!,
-//                title = normalPost.title,
-//                content = normalPost.content,
-//                writerName = normalPost.writer.nickname,
-//                isAnon = normalPost.isAnon,
-//                //isLiked = normalPost.isLiked(user),
-//                //isScrapped = normalPost.isScrapped(user),
-//                //isWriter = normalPost.isWriter(user),
-//                commentOn = normalPost.commentOn,
-//                //createdTime = normalPost.createdTime,
-//                //lastModifiedTime = normalPost.lastModifiedTime,
-//                //commentCnt = normalPost.commentCnt,
-//                //likeCnt = normalPost.likeCnt,
-//                //scrapCnt = normalPost.scrapCnt,
-//                //photoCnt = normalPost.photoCnt,
-//            ) //
-        // }
+        fun fromNormalPostToQueryOneNormalPostResponseDto(
+            post: NormalPost,
+            user: User?,
+        ): FindNormalPostByQueryElementDto {
+            return FindNormalPostByQueryElementDto(
+                id = post.id!!,
+                title = post.title,
+                content = post.content,
+                writerName = if (post.isAnon) "Anon" else post.writer.nickname,
+                isAnon = post.isAnon,
+                isLiked = (user?.likeList?.map { it.post }?.contains(post) ?: false),
+                isScrapped = (user?.scrapList?.map { it.post }?.contains(post) ?: false),
+                isWriter = (user == post.writer),
+                commentOn = post.commentOn,
+                createdTime = post.createdAt!!,
+                lastModifiedTime = post.updatedAt!!,
+                commentCnt = post.commentList.size,
+                likeCnt = post.likeList.size,
+                scrapCnt = post.scrapList.size,
+                photoCnt = post.photoList.size,
+            )
+        }
     }
 }

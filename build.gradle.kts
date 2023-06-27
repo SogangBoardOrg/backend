@@ -104,6 +104,7 @@ tasks {
     bootRun {
         dependsOn(getByName("copyYml"))
     }
+
     bootJar { // 5
         dependsOn(asciidoctor)
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
