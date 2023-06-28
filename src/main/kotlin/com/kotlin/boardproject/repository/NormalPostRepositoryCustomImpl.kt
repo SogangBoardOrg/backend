@@ -46,6 +46,23 @@ class NormalPostRepositoryCustomImpl(
             .orderBy(normalPost.id.desc())
             .fetch()
 
+        val totalCnt = queryFactory
+            .select(normalPost.id)
+            .from(normalPost)
+            .distinct()
+            .leftJoin(normalPost.writer).fetchJoin()
+            .leftJoin(normalPost.photoList)
+            .leftJoin(normalPost.commentList)
+            .where(
+                writerNoAnonEq(findNormalPostByQueryRequestDto.writerName),
+                titleEq(findNormalPostByQueryRequestDto.title),
+                contentEq(findNormalPostByQueryRequestDto.content),
+                normalTypeEq(findNormalPostByQueryRequestDto.normalType),
+                postStatus(PostStatus.NORMAL),
+            )
+            .fetch()
+            .size.toLong()
+
         val data = queryFactory
             .selectFrom(normalPost)
             .leftJoin(normalPost.writer).fetchJoin()
@@ -55,7 +72,7 @@ class NormalPostRepositoryCustomImpl(
             .orderBy(normalPost.id.desc())
             .fetch()
 
-        return PageImpl(data.toList(), pageable, dataIds.size.toLong())
+        return PageImpl(data.toList(), pageable, totalCnt)
     }
 
     override fun findNormalPostByQueryV2(
@@ -88,6 +105,25 @@ class NormalPostRepositoryCustomImpl(
             .limit(pageable.pageSize.toLong())
             .orderBy(normalPost.id.desc())
             .fetch()
+
+        val totalCnt = queryFactory
+            .select(normalPost.id)
+            .from(normalPost)
+            .distinct()
+            .where(
+                writerNoAnonEq(findNormalPostByQueryRequestDto.writerName),
+                titleEq(findNormalPostByQueryRequestDto.title),
+                contentEq(findNormalPostByQueryRequestDto.content),
+                normalTypeEq(findNormalPostByQueryRequestDto.normalType),
+                postStatus(PostStatus.NORMAL),
+            )
+            .leftJoin(normalPost.writer)
+            .leftJoin(normalPost.photoList)
+            .leftJoin(normalPost.commentList)
+            .leftJoin(normalPost.likeList)
+            .leftJoin(normalPost.scrapList)
+            .fetch()
+            .size.toLong()
 
         val data = queryFactory
             .select(
@@ -126,7 +162,8 @@ class NormalPostRepositoryCustomImpl(
             .where(normalPost.id.`in`(dataIds))
             .orderBy(normalPost.id.desc())
             .fetch()
-        return PageImpl(data.toList(), pageable, dataIds.size.toLong())
+
+        return PageImpl(data.toList(), pageable, totalCnt)
     }
 
     private fun findUserByEmail(userEmail: String) =
