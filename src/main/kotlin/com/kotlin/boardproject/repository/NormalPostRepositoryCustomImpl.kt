@@ -156,6 +156,7 @@ class NormalPostRepositoryCustomImpl(
                     normalPost.photoList.size(),
                 ),
             )
+            .distinct()
             .from(normalPost)
             .leftJoin(normalPost.writer)
             .leftJoin(normalPost.photoList)

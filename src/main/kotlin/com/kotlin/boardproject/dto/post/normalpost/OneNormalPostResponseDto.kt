@@ -37,7 +37,7 @@ data class OneNormalPostResponseDto(
             // ancestorlist를 만들 때도 commentlist내부의 순서를 따른다.
 
             // commentList는 id순으로 정렬 되어있다.
-            val writerMap: Map<User, Int> = writerMapGenerator(post, commentList)
+            val writerMap: Map<User, Int> = generateWriterMap(post, commentList)
             val commentDtoList: List<CommentDto> = convertToCommentDtoList(post, searchUser, commentList, writerMap)
             val ancestorList: List<CommentDto> = generateAncestorList(commentDtoList)
             val returnCommentList: List<CommentDto> = generateReturnCommentList(commentDtoList, ancestorList)
@@ -52,10 +52,10 @@ data class OneNormalPostResponseDto(
                 isWriter = isWriter(post, searchUser),
                 isScrapped = isScrapped(post, searchUser),
                 writerName = postWriterNameGenerator(post),
-                commentCnt = if (!(post.commentOn)) 0 else commentList.size,
+                commentCnt = if (!post.commentOn) 0 else commentList.size,
                 createdAt = post.createdAt!!,
                 updatedAt = post.updatedAt!!,
-                commentList = if (!(post.commentOn)) listOf() else returnCommentList,
+                commentList = if (!post.commentOn) emptyList() else returnCommentList,
                 photoList = post.photoList,
             )
         }
@@ -88,7 +88,7 @@ data class OneNormalPostResponseDto(
             }
         }
 
-        private fun writerMapGenerator(
+        private fun generateWriterMap(
             post: NormalPost,
             commentList: List<Comment>,
         ): Map<User, Int> {
@@ -114,7 +114,7 @@ data class OneNormalPostResponseDto(
             post.scrapList.map { it.user }.contains(searchUser)
 
         private fun isWriter(post: NormalPost, searchUser: User?): Boolean =
-            searchUser?.let { post.writer == searchUser } ?: false
+            post.writer == searchUser
 
         private fun postWriterNameGenerator(post: NormalPost): String =
             if (post.isAnon) "ANON" else post.writer.nickname

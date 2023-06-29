@@ -1,6 +1,8 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
+import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.dto.OneCommentResponseDto
 import javax.persistence.*
 
@@ -15,7 +17,7 @@ class Comment(
 
     var content: String,
 
-    val isAnon: Boolean,
+    var isAnon: Boolean,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -68,5 +70,11 @@ class Comment(
             createdAt = this.createdAt!!,
             updatedAt = this.updatedAt!!,
         )
+    }
+
+    fun checkWriter(user: User) {
+        require(user.id == this.writer.id) {
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 유저가 아닙니다!")
+        }
     }
 }

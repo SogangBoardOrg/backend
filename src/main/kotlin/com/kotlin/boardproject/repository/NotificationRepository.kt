@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface NotificationRepository : JpaRepository<Notification, Long> {
     fun findByToAndIsRead(to: User, isRead: Boolean): List<Notification>
 
-    fun findByToAndIdAndIsRead(to: User, id: Long, isRead: Boolean): Notification
+    fun findByToAndIdAndIsRead(to: User, id: Long, isRead: Boolean): Notification?
 }

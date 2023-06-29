@@ -419,6 +419,8 @@ class CommentServiceImplTest {
 
         val updateCommentRequestDto = UpdateCommentRequestDto(
             updateComment,
+            isAnon = true,
+            postId = post.id!!,
         )
 
         val updateCommentRequestDtoString = objectMapper.writeValueAsString(updateCommentRequestDto)

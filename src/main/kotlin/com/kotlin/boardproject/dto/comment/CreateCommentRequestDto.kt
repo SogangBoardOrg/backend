@@ -1,8 +1,14 @@
 package com.kotlin.boardproject.dto.comment
 
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Positive
+
 data class CreateCommentRequestDto(
+    @field:NotBlank
     val content: String,
+    @field:NotNull
     val isAnon: Boolean,
+    @field:Positive
     val postId: Long,
-    // TODO: 대댓글 기능을 위해서 선조 댓글과 직속 부모 댓글을 추가 예정
 )
