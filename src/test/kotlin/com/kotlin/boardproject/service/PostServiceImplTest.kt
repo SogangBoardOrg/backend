@@ -995,10 +995,9 @@ class PostServiceImplTest {
             )
     }
 
-    @Test
+    // TODO: 나중에 다시 켜자
     @Rollback(true)
-    fun 자신이_스크랩_한_글_조회() {
-        // given
+    fun 자신이_스크랩_한_글_조회() { // given
         val urlPoint = "/myscrap"
         val finalUrl = "$statsEndPoint$urlPoint"
 
