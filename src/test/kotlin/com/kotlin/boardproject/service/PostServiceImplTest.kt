@@ -220,6 +220,7 @@ class PostServiceImplTest {
             content = new_content,
             isAnon = false,
             commentOn = false,
+            photoList = listOf(),
         )
 
         val editNormalPostRequestString = objectMapper.writeValueAsString(editNormalPostRequestDto)
