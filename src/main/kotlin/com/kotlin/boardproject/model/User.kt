@@ -51,16 +51,16 @@ class User(
     val postList: MutableList<BasePost> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY)
-    val likeList: MutableSet<LikePost> = mutableSetOf(),
+    val likePostList: MutableList<LikePost> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY)
-    val scrapList: MutableSet<ScrapPost> = mutableSetOf(),
+    val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
     // 쓴 댓글 목록
     @OneToMany(mappedBy = "writer")
     val commentList: MutableList<Comment> = mutableListOf(),
 
-) : BaseEntity() {
+    ) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword
     }

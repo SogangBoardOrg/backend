@@ -115,15 +115,9 @@ tasks {
 }
 
 allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
-
-noArg {
     annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
     annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.MappedSuperclass")
 }
 
 val jar: Jar by tasks

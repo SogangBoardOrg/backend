@@ -41,7 +41,7 @@ data class FindNormalPostByQueryElementDto @QueryProjection constructor(
                 content = post.content,
                 writerName = if (post.isAnon) "Anon" else post.writer.nickname,
                 isAnon = post.isAnon,
-                isLiked = (user?.likeList?.map { it.post }?.contains(post) ?: false),
+                isLiked = (user?.likePostList?.map { it.post }?.contains(post) ?: false),
                 isScrapped = (user?.scrapList?.map { it.post }?.contains(post) ?: false),
                 isWriter = (user == post.writer),
                 commentOn = post.commentOn,

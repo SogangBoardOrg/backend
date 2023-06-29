@@ -1,6 +1,5 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.common.annotation.Timer
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
@@ -103,14 +102,12 @@ class CommentServiceImpl(
 
         val comment = commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
-
+        // TODO: 글과 comment가 일치하는지 확인하고 일치하지 않는다면 에러를 던져야함
         // 주인과 일치하는지 확인 -> 질문게시판은 댓글도 수정 못하게?
 
-        if (user == comment.writer) {
-            comment.content = updateCommentRequestDto.content
-        } else {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 유저가 아닙니다!")
-        }
+        comment.checkWriter(user)
+        comment.content = updateCommentRequestDto.content
+        comment.isAnon = updateCommentRequestDto.isAnon
 
         return UpdateCommentResponseDto(
             comment.id!!,
@@ -184,7 +181,7 @@ class CommentServiceImpl(
 
         val comment =
             commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
-                ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+                ?: throw EntityNotFoundException("존재하지 글 입니다.")
 
         likeCommentRepository.findByUserAndComment(user, comment)?.let {
             comment.cancelLikeComment(it)

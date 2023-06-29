@@ -12,16 +12,52 @@ import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.service.PostService
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
+import javax.validation.Valid
+import javax.validation.constraints.Positive
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/post")
 class PostController(
     private val postService: PostService,
 ) {
 
-    // TODO: 로그인을 요구하자 / 그렇게해서 자기가 쓴글은 자기가 썻다고 표시가 가능하게
+    // TODO: my controller로 옮기기
+    @GetMapping("/mywritten")
+    fun myPost(
+        @LoginUser loginUser: User,
+        pageable: Pageable,
+    ): ApiResponse<MyWrittenPostResponseDto> {
+        val data = postService.findMyWrittenPost(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
+    // TODO my controller로 옮기기
+    @GetMapping("/myscrap")
+    fun myScrapped(
+        @LoginUser loginUser: User,
+        pageable: Pageable,
+    ): ApiResponse<MyScarpPostResponseDto> {
+        val data = postService.findMyScrapPost(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
+    // TODO: newbie이면 글 쓰기가 안됨 -> security config
+    @PostMapping("")
+    fun createNormalPost(
+        @LoginUser loginUser: User,
+        @RequestBody @Valid
+        createNormalPostRequestDto: CreateNormalPostRequestDto,
+    ): ApiResponse<CreateNormalPostResponseDto> {
+        val responseDto = postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
+        return ApiResponse.success(responseDto)
+    }
+
     @GetMapping("/query")
     fun findNormalPostByQuery(
         @RequestParam("title", required = false) title: String?,
@@ -41,39 +77,10 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @GetMapping("/mywritten")
-    fun myPost(
-        @LoginUser loginUser: User,
-        pageable: Pageable,
-    ): ApiResponse<MyWrittenPostResponseDto> {
-        val data = postService.findMyWrittenPost(loginUser.username, pageable)
-
-        return ApiResponse.success(data)
-    }
-
-    @GetMapping("/myscrap")
-    fun myScrapped(
-        @LoginUser loginUser: User,
-        pageable: Pageable,
-    ): ApiResponse<MyScarpPostResponseDto> {
-        val data = postService.findMyScrapPost(loginUser.username, pageable)
-
-        return ApiResponse.success(data)
-    }
-
-    // TODO: newbie이면 글 쓰기가 안됨 -> security config
-    @PostMapping("")
-    fun createNormalPost(
-        @LoginUser loginUser: User,
-        @RequestBody createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): ApiResponse<CreateNormalPostResponseDto> {
-        val responseDto = postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
-        return ApiResponse.success(responseDto)
-    }
-
     @GetMapping("/{postId}")
     fun findOneNormalPost(
-        @PathVariable("postId") postId: Long,
+        @PathVariable @Positive
+        postId: Long,
         principal: Principal?,
     ): ApiResponse<OneNormalPostResponseDto> {
         log.info("username: ${principal?.name}")
@@ -85,8 +92,10 @@ class PostController(
     @PutMapping("/{postId}")
     fun editNormalPost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
-        @RequestBody editNormalPostRequestDto: EditNormalPostRequestDto,
+        @PathVariable @Positive
+        postId: Long,
+        @RequestBody @Valid
+        editNormalPostRequestDto: EditNormalPostRequestDto,
     ): ApiResponse<EditNormalPostResponseDto> {
         val data = postService.editNormalPost(loginUser.username, postId, editNormalPostRequestDto) // post 객체 반환
         return ApiResponse.success(data)
@@ -95,7 +104,8 @@ class PostController(
     @DeleteMapping("/{postId}")
     fun deleteNormalPost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
+        @PathVariable @Positive
+        postId: Long,
     ): ApiResponse<DeleteNormalPostResponseDto> {
         val data = postService.deleteNormalPost(loginUser.username, postId) // post 객체 반환
         return ApiResponse.success(data)
@@ -104,8 +114,10 @@ class PostController(
     @PostMapping("/black/{postId}")
     fun blackPost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
-        @RequestBody blackPostRequestDto: BlackPostRequestDto,
+        @PathVariable @Positive
+        postId: Long,
+        @RequestBody @Valid
+        blackPostRequestDto: BlackPostRequestDto,
     ): ApiResponse<BlackPostResponseDto> {
         val data = postService.blackPost(loginUser.username, postId, blackPostRequestDto)
         return ApiResponse.success(data)
@@ -114,7 +126,8 @@ class PostController(
     @PostMapping("/like/{postId}")
     fun likePost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
+        @PathVariable @Positive
+        postId: Long,
     ): ApiResponse<LikePostResponseDto> {
         val data = postService.likePost(loginUser.username, postId)
         return ApiResponse.success(data)
@@ -123,25 +136,28 @@ class PostController(
     @DeleteMapping("/like/{postId}")
     fun cancelLikePost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
+        @PathVariable @Positive
+        postId: Long,
     ): ApiResponse<CancelLikePostResponseDto> {
         val data = postService.cancelLikePost(loginUser.username, postId)
         return ApiResponse.success(data)
     }
 
     @PostMapping("/scrap/{postId}")
-    fun scrapePost(
+    fun scrapPost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
+        @PathVariable @Positive
+        postId: Long,
     ): ApiResponse<ScrapPostResponseDto> {
         val data = postService.scrapPost(loginUser.username, postId)
         return ApiResponse.success(data)
     }
 
     @DeleteMapping("/scrap/{postId}")
-    fun cancelScrapePost(
+    fun cancelScrapPost(
         @LoginUser loginUser: User,
-        @PathVariable("postId") postId: Long,
+        @PathVariable @Positive
+        postId: Long,
     ): ApiResponse<CancelScrapPostResponseDto> {
         val data = postService.cancelScrapPost(loginUser.username, postId)
         return ApiResponse.success(data)

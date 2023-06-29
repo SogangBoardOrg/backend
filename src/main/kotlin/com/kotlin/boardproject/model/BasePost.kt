@@ -40,10 +40,10 @@ open class BasePost(
     val commentList: MutableList<Comment> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY)
-    val likeList: MutableSet<LikePost> = mutableSetOf(),
+    val likeList: MutableList<LikePost> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY)
-    val scrapList: MutableSet<ScrapPost> = mutableSetOf(),
+    val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
     @ElementCollection
     var photoList: List<String> = emptyList(),
@@ -54,12 +54,12 @@ open class BasePost(
 
     fun addLikePost(likePost: LikePost, user: User) {
         this.likeList.add(likePost)
-        user.likeList.add(likePost)
+        user.likePostList.add(likePost)
     }
 
     fun cancelLikePost(likePost: LikePost, user: User) {
         this.likeList.remove(likePost)
-        user.likeList.remove(likePost)
+        user.likePostList.remove(likePost)
     }
 
     fun addScrapPost(scrapPost: ScrapPost, user: User) {

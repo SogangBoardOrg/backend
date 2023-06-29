@@ -5,8 +5,11 @@ import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.notification.GetNotificationsResponseDto
 import com.kotlin.boardproject.service.NotificationService
 import org.springframework.security.core.userdetails.User
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import javax.validation.constraints.Positive
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/notifications")
 class NotificationController(
@@ -35,7 +38,8 @@ class NotificationController(
 
     @DeleteMapping("/{notificationId}")
     fun readNotification(
-        @PathVariable notificationId: Long,
+        @PathVariable @Positive
+        notificationId: Long,
         @LoginUser loginUser: User,
     ): ApiResponse<String> {
         notificationService.deleteNotificationByEmailAndNotificationId(loginUser.username, notificationId)

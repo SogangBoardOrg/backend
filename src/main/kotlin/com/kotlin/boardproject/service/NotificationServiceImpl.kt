@@ -72,7 +72,8 @@ class NotificationServiceImpl(
         val user = userRepository.findByEmail(email)
             ?: throw EntityNotFoundException("사용자가 존재하지 않습니다.")
 
-        notificationRepository.findByToAndIdAndIsRead(user, notificationId, false).read()
+        notificationRepository.findByToAndIdAndIsRead(user, notificationId, false)?.read()
+            ?: throw EntityNotFoundException("해당 알림이 존재하지 않습니다.")
     }
 
     @Transactional
