@@ -36,39 +36,13 @@ class PostServiceImpl(
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
     ): FindNormalPostByQueryResponseDto {
         log.info("find normal post by query start")
-        // likelist fetch, scraplist 2개 발생
-//        val user = userEmail?.let {
-//            userRepository.findByEmailFetchLikeList(it)
-//            userRepository.findByEmailFetchScrapList(it)
-//        }
-
-//        val writer = findNormalPostByQueryRequestDto.writerName
-//            ?.takeIf { it.isNotEmpty() }
-//            ?.run {
-//                userRepository.findUserByNickname(this)
-//            }
-//
-//        val result = normalPostRepository.findByQuery(
-//            title = findNormalPostByQueryRequestDto.title,
-//            content = findNormalPostByQueryRequestDto.content,
-//            writer = writer,
-//            normalType = findNormalPostByQueryRequestDto.normalType,
-//            pageable = pageable,
-//        )
-        log.info("find normal post by query start")
-//        val result2 = normalPostRepository.findNormalPostByQuery(
-//            findNormalPostByQueryRequestDto = findNormalPostByQueryRequestDto,
-//            pageable = pageable,
-//        )
-//
-        val result3 = normalPostRepository.findNormalPostByQueryV2(
+        val data = normalPostRepository.findNormalPostByQueryV2(
             findNormalPostByQueryRequestDto = findNormalPostByQueryRequestDto,
             userEmail = userEmail,
             pageable = pageable,
         )
         log.info("find normal post by query end")
-        // return FindNormalPostByQueryResponseDto.createDtoFromPageable(result2, user)
-        return FindNormalPostByQueryResponseDto.createDtoFromPageable(result3)
+        return FindNormalPostByQueryResponseDto.createDtoFromPageable(data)
     }
 
     @Transactional(readOnly = true)
@@ -76,21 +50,34 @@ class PostServiceImpl(
         userEmail: String?,
         postId: Long,
     ): OneNormalPostResponseDto {
-        // TODO: 리펙토링
         val user = userEmail?.let {
             userRepository.findByEmail(it)
         }
 
-        val post =
-            normalPostRepository.findPostCustom(postId, PostStatus.NORMAL)
-                ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
-        val commentList =
-            commentRepository.findByPost(post)
+        val post = normalPostRepository.findByIdAndStatusFetchPhotoListAndUser(postId, PostStatus.NORMAL)
+            ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
+        normalPostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
+            ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
+        normalPostRepository.findByIdAndStatusFetchScrapList(postId, PostStatus.NORMAL)
+            ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
 
-        // 댓글 목록 추가,
-        log.info(post.toString())
-        log.info(post.commentList.toString())
-        return post.toOneNormalPostResponseDto(user, commentList)
+        // user에서 fetch join은 ㄴㄴ
+
+        // post에서는
+        // likeList를 가져오고 그 안에서 user를 다시한번 가져온다.
+        // scrapList를 가져오고 그 안에서 user를 다시한번 가져온다.
+        // photoList는 그냥 가져온다.
+        // commentlist는 가져오지 않는다. -> multiple bag fetch exception 발생하므로 comment가 post를 가지고 있는 것으로 해결한다.
+
+        // comment에서 likelist를 가져오고 거기 안에서 user를 다시한번 가져온다.
+        // 댓글애 좋아요 여러개 넣어서 테스트 해보자
+        val comments = commentRepository.findByPostFetchLikeListOrderById(post)
+
+        return OneNormalPostResponseDto.fromNormalPost(
+            post = post,
+            searchUser = user,
+            commentList = comments,
+        )
     }
 
     @Transactional(readOnly = true)
@@ -111,12 +98,13 @@ class PostServiceImpl(
         userEmail: String,
         pageable: Pageable,
     ): MyScarpPostResponseDto {
-        val user = userRepository.findByEmail(userEmail)
-            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
-
-        val postList = scrapPostRepository.findByUser(user, pageable)
-
-        return MyScarpPostResponseDto.createDtoFromPageable(postList)
+        TODO()
+//        val user = userRepository.findByEmail(userEmail)
+//            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+//
+//        val postList = scrapPostRepository.findByUserFetchPost(user, pageable)
+//
+//        return MyScarpPostResponseDto.createDtoFromPageable(postList)
     }
 
     @Transactional
@@ -145,10 +133,9 @@ class PostServiceImpl(
         editNormalPostRequestDto: EditNormalPostRequestDto,
     ): EditNormalPostResponseDto {
         val user = userRepository.findByEmail(userEmail)
-            ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
+            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
-            ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
-        // TODO: 메시지 어떻게 할지 고민
+            ?: throw throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
         post.checkWriter(user)
         post.editPost(editNormalPostRequestDto)
@@ -158,6 +145,8 @@ class PostServiceImpl(
 
     @Transactional
     override fun deleteNormalPost(userEmail: String, postId: Long): DeleteNormalPostResponseDto {
+        // todo fetch join user postlist
+
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
@@ -178,11 +167,11 @@ class PostServiceImpl(
     ): LikePostResponseDto {
         log.info("like post start")
         // TODO: fetch join
-        val user = userRepository.findByEmail(userEmail)
+        val user = userRepository.findByEmailFetchLikeList(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
+            basePostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         likePostRepository.findByUserAndPost(user, post)?.let {

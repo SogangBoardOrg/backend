@@ -45,7 +45,6 @@ class MyDataInit(
         // 블랙 넣을까?
         // 어캐하지?
         // 아직 ㄴㄴ
-
     }
 
     private fun commentCreate(post: NormalPost, user_a: User, user_b: User) {
@@ -123,6 +122,8 @@ class MyDataInit(
         comment6.addComment(post)
         comment6.joinAncestor(comment4)
         commentRepository.saveAndFlush(comment6)
+
+        normalPostRepository.save(post)
     }
 
     private fun postCreate(user: User, start: Int): List<NormalPost> {

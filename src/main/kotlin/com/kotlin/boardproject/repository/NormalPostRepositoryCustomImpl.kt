@@ -131,7 +131,10 @@ class NormalPostRepositoryCustomImpl(
                     normalPost.id,
                     normalPost.title,
                     normalPost.content,
-                    normalPost.writer.nickname,
+                    CaseBuilder()
+                        .`when`(normalPost.isAnon.eq(false))
+                        .then(normalPost.writer.nickname)
+                        .otherwise("ANON"),
                     normalPost.isAnon,
                     CaseBuilder()
                         .`when`(normalPost.id.`in`(likedIds))

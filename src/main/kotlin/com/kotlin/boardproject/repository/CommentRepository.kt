@@ -13,11 +13,17 @@ interface CommentRepository : JpaRepository<Comment, Long> {
     fun findByIdAndStatus(id: Long, status: PostStatus): Comment?
     fun findByWriterAndStatus(writer: User, status: PostStatus, pageable: Pageable): Page<Comment>
 
+    // todo fetch join distinct vs count query
     @Query(
-        "SELECT c " +
-            "FROM Comment c " +
-            "LEFT JOIN FETCH c.likeList " +
-            "WHERE c.post = :post",
+        """SELECT DISTINCT c
+            FROM Comment c 
+            LEFT JOIN FETCH c.likeList cl
+            LEFT JOIN FETCH cl.user 
+            LEFT JOIN FETCH c.writer 
+            LEFT JOIN FETCH c.parent 
+            LEFT JOIN FETCH c.ancestor 
+            WHERE c.post = :post 
+            ORDER BY c.id ASC """,
     )
-    fun findByPost(post: BasePost): List<Comment>
+    fun findByPostFetchLikeListOrderById(post: BasePost): List<Comment>
 }

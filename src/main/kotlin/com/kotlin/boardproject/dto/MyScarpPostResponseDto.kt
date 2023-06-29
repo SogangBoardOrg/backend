@@ -16,12 +16,8 @@ data class MyScarpPostResponseDto(
     companion object {
         fun createDtoFromPageable(scrapList: Page<ScrapPost>): MyScarpPostResponseDto {
             // 각각 scarplist의 원소의 post가 Normal인지 확인해서 map 연산 수행
-            val postList = scrapList.content
-                .filter { it.post.status == PostStatus.NORMAL }
-                .map { it.post.toOneBasePostResponseDto() }
-
             return MyScarpPostResponseDto(
-                contents = postList,
+                contents = generatePostDtoList(scrapList),
                 currentPage = scrapList.pageable.pageNumber,
                 totalPages = scrapList.totalPages,
                 totalElements = scrapList.totalElements,
@@ -29,5 +25,10 @@ data class MyScarpPostResponseDto(
                 size = scrapList.size,
             )
         }
+
+        private fun generatePostDtoList(scrapList: Page<ScrapPost>): List<OneBasePostResponseDto> =
+            scrapList.content
+                .filter { it.post.status == PostStatus.NORMAL }
+                .map { OneBasePostResponseDto.fromBasePostToDto(it.post) }
     }
 }

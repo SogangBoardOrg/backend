@@ -37,7 +37,7 @@ open class BasePost(
     var status: PostStatus = PostStatus.NORMAL,
 
     @OneToMany(fetch = FetchType.LAZY)
-    val commentList: MutableSet<Comment> = mutableSetOf(),
+    val commentList: MutableList<Comment> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY)
     val likeList: MutableSet<LikePost> = mutableSetOf(),
@@ -88,8 +88,8 @@ open class BasePost(
             id = this.id!!,
             title = this.title,
             content = this.title,
-            createdTime = this.createdAt!!,
-            lastModifiedTime = this.updatedAt,
+            createdAt = this.createdAt!!,
+            updatedAt = this.updatedAt!!,
         )
     }
 }
