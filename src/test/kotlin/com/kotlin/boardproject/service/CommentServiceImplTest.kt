@@ -446,6 +446,8 @@ class CommentServiceImplTest {
                     ),
                     PayloadDocumentation.requestFields(
                         fieldWithPath("content").description("수정할 댓글 내용"),
+                        fieldWithPath("isAnon").description("익명 여부"),
+                        fieldWithPath("postId").description("수정하는 글의 번호"),
                     ),
                     responseFields(
                         fieldWithPath("status").description("성공 여부"),
