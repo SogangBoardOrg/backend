@@ -4,7 +4,7 @@ import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.MyScarpPostResponseDto
+import com.kotlin.boardproject.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
@@ -41,7 +41,7 @@ class PostController(
     fun myScrapped(
         @LoginUser loginUser: User,
         pageable: Pageable,
-    ): ApiResponse<MyScarpPostResponseDto> {
+    ): ApiResponse<MyScrapPostResponseDto> {
         val data = postService.findMyScrapPost(loginUser.username, pageable)
 
         return ApiResponse.success(data)

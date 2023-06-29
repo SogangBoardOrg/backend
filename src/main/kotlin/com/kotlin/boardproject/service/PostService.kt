@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.MyScarpPostResponseDto
+import com.kotlin.boardproject.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -70,5 +70,5 @@ interface PostService {
     fun findMyScrapPost(
         userEmail: String,
         pageable: Pageable,
-    ): MyScarpPostResponseDto
+    ): MyScrapPostResponseDto
 }

@@ -3,7 +3,7 @@ package com.kotlin.boardproject.dto.post
 import com.kotlin.boardproject.model.BasePost
 import java.time.LocalDateTime
 
-data class OneBasePostResponseDto(
+data class FindMyOneBasePostResponseDto(
     val id: Long,
     val title: String,
     val content: String,
@@ -11,8 +11,8 @@ data class OneBasePostResponseDto(
     val updatedAt: LocalDateTime,
 ) {
     companion object {
-        fun fromBasePostToDto(post: BasePost): OneBasePostResponseDto {
-            return OneBasePostResponseDto(
+        fun fromBasePostToDto(post: BasePost): FindMyOneBasePostResponseDto {
+            return FindMyOneBasePostResponseDto(
                 id = post.id!!,
                 title = post.title,
                 content = post.title,

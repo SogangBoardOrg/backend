@@ -6,7 +6,7 @@ import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.MyScarpPostResponseDto
+import com.kotlin.boardproject.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -97,7 +97,7 @@ class PostServiceImpl(
     override fun findMyScrapPost(
         userEmail: String,
         pageable: Pageable,
-    ): MyScarpPostResponseDto {
+    ): MyScrapPostResponseDto {
         TODO()
 //        val user = userRepository.findByEmail(userEmail)
 //            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")

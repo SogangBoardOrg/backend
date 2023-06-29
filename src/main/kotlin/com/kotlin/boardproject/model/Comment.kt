@@ -3,7 +3,7 @@ package com.kotlin.boardproject.model
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
-import com.kotlin.boardproject.dto.OneCommentResponseDto
+import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
 import javax.persistence.*
 
 @Entity
@@ -62,19 +62,14 @@ class Comment(
         this.likeList.remove(likeComment)
     }
 
-    fun toOneCommentResponseDto(): OneCommentResponseDto {
-        return OneCommentResponseDto(
-            id = this.id!!,
-            postId = this.post.id!!,
-            content = this.content,
-            createdAt = this.createdAt!!,
-            updatedAt = this.updatedAt!!,
-        )
-    }
-
     fun checkWriter(user: User) {
         require(user.id == this.writer.id) {
             throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 유저가 아닙니다!")
         }
+    }
+
+    fun editComment(updateCommentRequestDto: UpdateCommentRequestDto) {
+        this.content = updateCommentRequestDto.content
+        this.isAnon = updateCommentRequestDto.isAnon
     }
 }
