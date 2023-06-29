@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page
 
 // 댓글 내용, 글 id, 생성, 삭제일시
 data class FindMyCommentResponseDto(
-    val contents: List<OneCommentResponseDto>? = mutableListOf(),
+    val contents: List<FindMyCommentResponseElementDto>? = mutableListOf(),
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -22,7 +22,7 @@ data class FindMyCommentResponseDto(
             val comments = commentList.content.filter {
                 it.post.status == PostStatus.NORMAL
             }.map {
-                it.toOneCommentResponseDto()
+                FindMyCommentResponseElementDto.fromComment(it)
             }
 
             return FindMyCommentResponseDto(

@@ -1,6 +1,5 @@
 package com.kotlin.boardproject.model
 
-
 import org.hibernate.annotations.GenericGenerator
 import java.util.*
 import javax.persistence.Column

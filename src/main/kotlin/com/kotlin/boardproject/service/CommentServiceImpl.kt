@@ -106,8 +106,7 @@ class CommentServiceImpl(
         // 주인과 일치하는지 확인 -> 질문게시판은 댓글도 수정 못하게?
 
         comment.checkWriter(user)
-        comment.content = updateCommentRequestDto.content
-        comment.isAnon = updateCommentRequestDto.isAnon
+        comment.editComment(updateCommentRequestDto)
 
         return UpdateCommentResponseDto(
             comment.id!!,
@@ -128,11 +127,8 @@ class CommentServiceImpl(
 
         // 주인과 일치하는지 확인
 
-        if (user == comment.writer) {
-            comment.status = PostStatus.DELETED
-        } else {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 유저가 아닙니다!")
-        }
+        comment.checkWriter(user)
+        comment.status = PostStatus.DELETED
 
         return DeleteCommentResponseDto(
             comment.id!!,

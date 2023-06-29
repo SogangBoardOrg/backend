@@ -1,11 +1,11 @@
 package com.kotlin.boardproject.dto
 
-import com.kotlin.boardproject.dto.post.OneBasePostResponseDto
+import com.kotlin.boardproject.dto.post.FindMyOneBasePostResponseDto
 import com.kotlin.boardproject.model.BasePost
 import org.springframework.data.domain.Page
 
 data class MyWrittenPostResponseDto(
-    val contents: List<OneBasePostResponseDto>? = mutableListOf(),
+    val contents: List<FindMyOneBasePostResponseDto>,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -16,7 +16,7 @@ data class MyWrittenPostResponseDto(
         fun createDtoFromPageable(postList: Page<BasePost>): MyWrittenPostResponseDto {
             return MyWrittenPostResponseDto(
                 contents = postList.content.map {
-                    it.toOneBasePostResponseDto()
+                    FindMyOneBasePostResponseDto.fromBasePostToDto(it)
                 },
                 currentPage = postList.pageable.pageNumber,
                 totalPages = postList.totalPages,

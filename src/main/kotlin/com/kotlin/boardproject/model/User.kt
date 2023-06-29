@@ -60,7 +60,7 @@ class User(
     @OneToMany(mappedBy = "writer")
     val commentList: MutableList<Comment> = mutableListOf(),
 
-    ) : BaseEntity() {
+) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword
     }

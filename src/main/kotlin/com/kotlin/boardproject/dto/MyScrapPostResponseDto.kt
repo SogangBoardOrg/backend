@@ -1,12 +1,12 @@
 package com.kotlin.boardproject.dto
 
 import com.kotlin.boardproject.common.enums.PostStatus
-import com.kotlin.boardproject.dto.post.OneBasePostResponseDto
+import com.kotlin.boardproject.dto.post.FindMyOneBasePostResponseDto
 import com.kotlin.boardproject.model.ScrapPost
 import org.springframework.data.domain.Page
 
-data class MyScarpPostResponseDto(
-    val contents: List<OneBasePostResponseDto>? = null,
+data class MyScrapPostResponseDto(
+    val contents: List<FindMyOneBasePostResponseDto>? = null,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -14,9 +14,9 @@ data class MyScarpPostResponseDto(
     val size: Int,
 ) {
     companion object {
-        fun createDtoFromPageable(scrapList: Page<ScrapPost>): MyScarpPostResponseDto {
+        fun createDtoFromPageable(scrapList: Page<ScrapPost>): MyScrapPostResponseDto {
             // 각각 scarplist의 원소의 post가 Normal인지 확인해서 map 연산 수행
-            return MyScarpPostResponseDto(
+            return MyScrapPostResponseDto(
                 contents = generatePostDtoList(scrapList),
                 currentPage = scrapList.pageable.pageNumber,
                 totalPages = scrapList.totalPages,
@@ -26,9 +26,9 @@ data class MyScarpPostResponseDto(
             )
         }
 
-        private fun generatePostDtoList(scrapList: Page<ScrapPost>): List<OneBasePostResponseDto> =
+        private fun generatePostDtoList(scrapList: Page<ScrapPost>): List<FindMyOneBasePostResponseDto> =
             scrapList.content
                 .filter { it.post.status == PostStatus.NORMAL }
-                .map { OneBasePostResponseDto.fromBasePostToDto(it.post) }
+                .map { FindMyOneBasePostResponseDto.fromBasePostToDto(it.post) }
     }
 }
