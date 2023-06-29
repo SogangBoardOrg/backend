@@ -6,6 +6,6 @@ data class OneCommentResponseDto(
     val id: Long,
     val postId: Long,
     val content: String,
-    val createdTime: LocalDateTime,
-    val lastModifiedTime: LocalDateTime,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

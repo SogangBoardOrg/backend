@@ -38,7 +38,7 @@ class Comment(
     val descendentList: MutableList<Comment> = mutableListOf(),
 
     @OneToMany(mappedBy = "comment")
-    val likeList: MutableSet<LikeComment> = mutableSetOf(),
+    val likeList: MutableList<LikeComment> = mutableListOf(),
 
     @Enumerated(EnumType.STRING)
     var status: PostStatus = PostStatus.NORMAL,
@@ -65,8 +65,8 @@ class Comment(
             id = this.id!!,
             postId = this.post.id!!,
             content = this.content,
-            createdTime = this.createdAt!!,
-            lastModifiedTime = this.updatedAt!!,
+            createdAt = this.createdAt!!,
+            updatedAt = this.updatedAt!!,
         )
     }
 }

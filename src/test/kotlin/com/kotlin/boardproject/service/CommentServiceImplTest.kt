@@ -677,8 +677,8 @@ class CommentServiceImplTest {
                         fieldWithPath("data.contents.[].postId").type(JsonFieldType.NUMBER)
                             .description("댓글이 달려있는 글의 번호"),
                         fieldWithPath("data.contents.[].content").type(JsonFieldType.STRING).description("댓글 내용"),
-                        fieldWithPath("data.contents.[].createdTime").type(JsonFieldType.STRING).description("글 생성시간"),
-                        fieldWithPath("data.contents.[].lastModifiedTime").type(JsonFieldType.STRING)
+                        fieldWithPath("data.contents.[].createdAt").type(JsonFieldType.STRING).description("글 생성시간"),
+                        fieldWithPath("data.contents.[].updatedAt").type(JsonFieldType.STRING)
                             .description("글 수정시간"),
                         fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지"),

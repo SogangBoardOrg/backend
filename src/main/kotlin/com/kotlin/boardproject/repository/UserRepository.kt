@@ -22,10 +22,10 @@ interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmailFetchLikeList(email: String): User?
 
     @Query(
-        """ SELECT u 
+        """ SELECT DISTINCT u  
             FROM User AS u 
             LEFT JOIN FETCH u.scrapList s
-             LEFT JOIN FETCH s.post
+            LEFT JOIN FETCH s.post
             WHERE u.email = :email
             """,
     )

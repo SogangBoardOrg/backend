@@ -7,8 +7,8 @@ data class OneBasePostResponseDto(
     val id: Long,
     val title: String,
     val content: String,
-    val createdTime: LocalDateTime,
-    val lastModifiedTime: LocalDateTime?,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 ) {
     companion object {
         fun fromBasePostToDto(post: BasePost): OneBasePostResponseDto {
@@ -16,8 +16,8 @@ data class OneBasePostResponseDto(
                 id = post.id!!,
                 title = post.title,
                 content = post.title,
-                createdTime = post.createdAt!!,
-                lastModifiedTime = post.updatedAt,
+                createdAt = post.createdAt!!,
+                updatedAt = post.updatedAt!!,
             )
         }
     }
