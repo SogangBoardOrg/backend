@@ -40,7 +40,7 @@ interface BasePostRepository : JpaRepository<BasePost, Long> {
     )
     fun findByIdAndStatusFetchScrapList(id: Long, status: PostStatus): BasePost?
 
-
     fun findByIdAndStatus(id: Long, status: PostStatus): BasePost?
-    fun findByWriterAndStatus(user: User, status: PostStatus, pageable: Pageable): Page<BasePost>
+
+    fun findByWriterAndStatusOrderByIdDesc(user: User, status: PostStatus, pageable: Pageable): Page<BasePost>
 }

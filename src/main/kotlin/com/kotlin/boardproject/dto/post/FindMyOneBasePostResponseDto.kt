@@ -15,7 +15,7 @@ data class FindMyOneBasePostResponseDto(
             return FindMyOneBasePostResponseDto(
                 id = post.id!!,
                 title = post.title,
-                content = post.title,
+                content = post.content,
                 createdAt = post.createdAt!!,
                 updatedAt = post.updatedAt!!,
             )

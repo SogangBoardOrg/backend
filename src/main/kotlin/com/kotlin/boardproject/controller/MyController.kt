@@ -2,6 +2,7 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.MyCommentResponseDto
+import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.PostService
@@ -25,6 +26,16 @@ class MyController(
         pageable: Pageable,
     ): ApiResponse<MyCommentResponseDto> {
         val data = commentService.findMyComment(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("/post")
+    fun myPost(
+        @LoginUser loginUser: User,
+        pageable: Pageable,
+    ): ApiResponse<MyWrittenPostResponseDto> {
+        val data = postService.findMyWrittenPost(loginUser.username, pageable)
 
         return ApiResponse.success(data)
     }

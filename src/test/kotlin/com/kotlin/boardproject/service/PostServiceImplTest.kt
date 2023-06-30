@@ -916,12 +916,11 @@ class PostServiceImplTest {
     @Rollback(true)
     fun 자신이_쓴_글_조회() {
         // given
-        val urlPoint = "/mywritten"
-        val finalUrl = "$statsEndPoint$urlPoint"
+        val finalUrl = "/api/v1/my/post"
         val postNumber = 30
 
         val page = 0
-        val size = 7
+        val size = 4
         val sort = ""
 
         // 글 postNumber 만큼 등록
