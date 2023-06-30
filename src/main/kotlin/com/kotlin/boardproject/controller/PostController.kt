@@ -54,6 +54,7 @@ class PostController(
         @RequestBody @Valid
         createNormalPostRequestDto: CreateNormalPostRequestDto,
     ): ApiResponse<CreateNormalPostResponseDto> {
+        // TODO: list에 빈 문자열 들어오면 validation이 안된다.
         val responseDto = postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
         return ApiResponse.success(responseDto)
     }

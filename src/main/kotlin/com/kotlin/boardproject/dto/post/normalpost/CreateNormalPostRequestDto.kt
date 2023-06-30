@@ -3,6 +3,7 @@ package com.kotlin.boardproject.dto.post.normalpost
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
+import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -17,7 +18,8 @@ data class CreateNormalPostRequestDto(
     val commentOn: Boolean,
     @field: NotNull
     val normalType: NormalType,
-    val photoList: List<String>,
+    @field: Valid
+    val photoList: List<@NotBlank String>,
 ) {
     fun toPost(user: User): NormalPost {
         return NormalPost(
