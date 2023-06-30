@@ -32,20 +32,15 @@ class BasePost(
 
     var commentOn: Boolean,
 
-    @Enumerated(EnumType.STRING)
-    var status: PostStatus = PostStatus.NORMAL,
+    @Enumerated(EnumType.STRING) var status: PostStatus = PostStatus.NORMAL,
 
-    @OneToMany(mappedBy = "post")
-    val commentList: MutableList<Comment> = mutableListOf(),
+    @OneToMany(mappedBy = "post") val commentList: MutableList<Comment> = mutableListOf(),
 
-    @OneToMany
-    val likeList: MutableList<LikePost> = mutableListOf(),
+    @OneToMany val likeList: MutableList<LikePost> = mutableListOf(),
 
-    @OneToMany
-    val scrapList: MutableList<ScrapPost> = mutableListOf(),
+    @OneToMany val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
-    @ElementCollection
-    var photoList: List<String> = emptyList(),
+    @ElementCollection var photoList: List<String> = emptyList(),
 ) : BaseEntity() {
     fun addPost(user: User) {
         user.postList.add(this)
@@ -72,9 +67,7 @@ class BasePost(
     }
 
     fun checkWriter(user: User) {
-        if (this.writer != user) {
-            throw UnAuthorizedException(ErrorCode.FORBIDDEN, "해당 글의 주인이 아닙니다.")
-        }
+        require(this.writer == user) { throw UnAuthorizedException(ErrorCode.FORBIDDEN, "해당 글의 주인이 아닙니다.") }
     }
 
     fun deletePost(user: User) {

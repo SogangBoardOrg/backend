@@ -30,6 +30,17 @@ interface BasePostRepository : JpaRepository<BasePost, Long> {
     )
     fun findByIdAndStatusFetchCommentList(id: Long, status: PostStatus): BasePost?
 
+    @Query(
+        """
+            SELECT DISTINCT p
+            FROM BasePost AS p
+            LEFT JOIN FETCH p.scrapList 
+            WHERE p.id = :id AND p.status = :status
+        """,
+    )
+    fun findByIdAndStatusFetchScrapList(id: Long, status: PostStatus): BasePost?
+
+
     fun findByIdAndStatus(id: Long, status: PostStatus): BasePost?
     fun findByWriterAndStatus(user: User, status: PostStatus, pageable: Pageable): Page<BasePost>
 }
