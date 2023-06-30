@@ -100,12 +100,12 @@ class CommentServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comment = commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
+        val comment = commentRepository.findByIdAndStatusFetchPost(commentId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
-        // TODO: 글과 comment가 일치하는지 확인하고 일치하지 않는다면 에러를 던져야함
         // 주인과 일치하는지 확인 -> 질문게시판은 댓글도 수정 못하게?
 
         comment.checkWriter(user)
+        comment.checkPost(updateCommentRequestDto.postId)
         comment.editComment(updateCommentRequestDto)
 
         return UpdateCommentResponseDto(
@@ -118,16 +118,17 @@ class CommentServiceImpl(
     override fun deleteComment(
         username: String,
         commentId: Long,
+        deleteCommentRequestDto: DeleteCommentRequestDto,
     ): DeleteCommentResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comment = commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
+        val comment = commentRepository.findByIdAndStatusFetchPost(commentId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("$commentId 에 해당하는 댓글이 존재하지 않습니다.")
-
         // 주인과 일치하는지 확인
 
         comment.checkWriter(user)
+        comment.checkPost(deleteCommentRequestDto.postId)
         comment.status = PostStatus.DELETED
 
         return DeleteCommentResponseDto(

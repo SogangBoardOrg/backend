@@ -11,6 +11,7 @@ import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
+import com.kotlin.boardproject.dto.comment.DeleteCommentRequestDto
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
 import com.kotlin.boardproject.model.*
 import com.kotlin.boardproject.repository.*
@@ -29,10 +30,11 @@ import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
@@ -323,7 +325,7 @@ class CommentServiceImplTest {
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
-                    PayloadDocumentation.requestFields(
+                    requestFields(
                         fieldWithPath("content").description("글 내용"),
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("postId").description("글 번호"),
@@ -353,7 +355,11 @@ class CommentServiceImplTest {
 
         val content = "comment_test"
 
-        // log.info(post.id!!.toString())
+        val deleteCommentRequestDto = DeleteCommentRequestDto(
+            postId = post.id!!,
+        )
+
+        val deleteCommentRequestDtoString = objectMapper.writeValueAsString(deleteCommentRequestDto)
 
         val comment = Comment(
             content = content,
@@ -367,6 +373,7 @@ class CommentServiceImplTest {
         // when
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.delete(finalUrl, comment.id!!).contentType(MediaType.APPLICATION_JSON)
+                .content(deleteCommentRequestDtoString)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
@@ -376,11 +383,14 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "delete-single-comment",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
+                    ),
+                    requestFields(
+                        fieldWithPath("postId").description("지우려는 글 번호"),
                     ),
                     responseFields(
                         fieldWithPath("status").description("성공 여부"),

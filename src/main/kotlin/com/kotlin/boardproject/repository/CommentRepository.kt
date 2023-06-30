@@ -32,6 +32,16 @@ interface CommentRepository : JpaRepository<Comment, Long> {
     )
     fun findByIdAndStatusFetchLikeList(id: Long, status: PostStatus): Comment?
 
+    @Query(
+        """
+            SELECT c
+            FROM Comment c
+            LEFT JOIN FETCH c.post
+            WHERE c.id = :id AND c.status = :status
+        """,
+    )
+    fun findByIdAndStatusFetchPost(id: Long, status: PostStatus): Comment?
+
     fun findByIdAndStatus(id: Long, status: PostStatus): Comment?
     fun findByWriterAndStatus(writer: User, status: PostStatus, pageable: Pageable): Page<Comment>
 
