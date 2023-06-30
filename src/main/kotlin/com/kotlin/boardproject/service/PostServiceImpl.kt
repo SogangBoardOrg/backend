@@ -236,7 +236,6 @@ class PostServiceImpl(
         userEmail: String,
         postId: Long,
     ): ScrapPostResponseDto {
-        // TODO: fetch join
         val user = userRepository.findByEmailFetchScrapList(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
@@ -264,7 +263,6 @@ class PostServiceImpl(
         userEmail: String,
         postId: Long,
     ): CancelScrapPostResponseDto {
-        // TODO: fetch join
         val user = userRepository.findByEmailFetchScrapList(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
