@@ -3,6 +3,7 @@ package com.kotlin.boardproject.model
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
+import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
 import javax.persistence.*
 

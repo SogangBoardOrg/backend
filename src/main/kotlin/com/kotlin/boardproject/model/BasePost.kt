@@ -14,7 +14,7 @@ import javax.persistence.*
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "postType")
-open class BasePost(
+class BasePost(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -35,13 +35,13 @@ open class BasePost(
     @Enumerated(EnumType.STRING)
     var status: PostStatus = PostStatus.NORMAL,
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post")
     val commentList: MutableList<Comment> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     val likeList: MutableList<LikePost> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
     @ElementCollection

@@ -10,6 +10,28 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface CommentRepository : JpaRepository<Comment, Long> {
+
+    @Query(
+        """
+            SELECT DISTINCT c
+            FROM Comment c
+            LEFT JOIN FETCH c.ancestor
+            LEFT JOIN FETCH c.post 
+            WHERE c.id = :id AND c.status = :status
+        """,
+    )
+    fun findByIdAndStatusFetchAncestorAndPost(id: Long, status: PostStatus): Comment?
+
+    @Query(
+        """
+            SELECT DISTINCT c
+            FROM Comment c
+            LEFT JOIN FETCH c.likeList
+            WHERE c.id = :id AND c.status = :status
+        """,
+    )
+    fun findByIdAndStatusFetchLikeList(id: Long, status: PostStatus): Comment?
+
     fun findByIdAndStatus(id: Long, status: PostStatus): Comment?
     fun findByWriterAndStatus(writer: User, status: PostStatus, pageable: Pageable): Page<Comment>
 

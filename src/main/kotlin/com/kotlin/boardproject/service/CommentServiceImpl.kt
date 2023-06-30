@@ -36,15 +36,15 @@ class CommentServiceImpl(
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
         // post
-        val post = postRepository.findByIdAndStatus(createCommentRequestDto.postId, PostStatus.NORMAL)
+        val post = postRepository.findByIdAndStatusFetchCommentList(createCommentRequestDto.postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${createCommentRequestDto.postId} 에 해당하는 글이 존재하지 않습니다.")
 
         // 부모 댓글
         val parentComment = parentCommentId?.let {
-            commentRepository.findByIdAndStatus(parentCommentId, PostStatus.NORMAL)
+            commentRepository.findByIdAndStatusFetchAncestorAndPost(parentCommentId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException("$parentCommentId 에 해당하는 댓글이 존재하지 않습니다.")
         }
-
+        // 대댓글에서 부모글을 찾는 쿼리가 나가면 test 실패
         // 1. 부모의 댓글이 없으면 자신이 선조
         // 2. 부모가 있으면 부모의 선조가 있는지 찾음 -> 없으면 자신의 선조를 부모로 지정.
         // 3. 부모가 있고, 선조가 있다면 해당 선조를 자신의 선조로 만든다.
@@ -71,7 +71,7 @@ class CommentServiceImpl(
 
         comment.addComment(post)
         comment.joinAncestor(ancestorComment)
-        log.info("create comment end!")
+
         // TODO: 여기서 문제가 생기는거 같음
         return CreateCommentResponseDto(
             commentRepository.save(comment).id!!,
@@ -159,7 +159,6 @@ class CommentServiceImpl(
         )
         likeCommentRepository.save(likeComment)
         comment.likeComment(likeComment)
-        log.info("like comment end")
 
         return LikeCommentResponseDto(
             comment.id!!,
@@ -176,7 +175,7 @@ class CommentServiceImpl(
             ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
 
         val comment =
-            commentRepository.findByIdAndStatus(commentId, PostStatus.NORMAL)
+            commentRepository.findByIdAndStatusFetchLikeList(commentId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException("존재하지 글 입니다.")
 
         likeCommentRepository.findByUserAndComment(user, comment)?.let {
