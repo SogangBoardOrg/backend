@@ -65,12 +65,14 @@ interface CommentRepository : JpaRepository<Comment, Long> {
             FROM Comment c
             LEFT JOIN FETCH c.post
             WHERE c.writer = :user AND c.status = :status
+            ORDER BY c.id DESC 
         """,
         countQuery = """
             SELECT COUNT(c)
             FROM Comment c
             WHERE c.writer = :user AND c.status = :status
-        """
+            ORDER BY c.id DESC 
+        """,
     )
     fun findByWriterAndStatusFetchPost(user: User, status: PostStatus, pageable: Pageable): Page<Comment>
 }
