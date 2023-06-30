@@ -4,7 +4,6 @@ import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -23,17 +22,6 @@ import javax.validation.constraints.Positive
 class PostController(
     private val postService: PostService,
 ) {
-    // TODO my controller로 옮기기
-    @GetMapping("/myscrap")
-    fun myScrapped(
-        @LoginUser loginUser: User,
-        pageable: Pageable,
-    ): ApiResponse<MyScrapPostResponseDto> {
-        val data = postService.findMyScrapPost(loginUser.username, pageable)
-
-        return ApiResponse.success(data)
-    }
-
     // TODO: newbie이면 글 쓰기가 안됨 -> security config
     @PostMapping("")
     fun createNormalPost(

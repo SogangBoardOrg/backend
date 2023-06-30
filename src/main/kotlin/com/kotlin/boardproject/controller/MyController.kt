@@ -2,6 +2,7 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.MyCommentResponseDto
+import com.kotlin.boardproject.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
@@ -36,6 +37,16 @@ class MyController(
         pageable: Pageable,
     ): ApiResponse<MyWrittenPostResponseDto> {
         val data = postService.findMyWrittenPost(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("/scrap")
+    fun myScrapped(
+        @LoginUser loginUser: User,
+        pageable: Pageable,
+    ): ApiResponse<MyScrapPostResponseDto> {
+        val data = postService.findMyScrapPost(loginUser.username, pageable)
 
         return ApiResponse.success(data)
     }
