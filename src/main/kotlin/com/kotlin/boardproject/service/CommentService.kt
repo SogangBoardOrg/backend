@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.FindMyCommentResponseDto
+import com.kotlin.boardproject.dto.MyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import org.springframework.data.domain.Pageable
 
@@ -42,5 +42,5 @@ interface CommentService {
     fun findMyComment(
         username: String,
         pageable: Pageable,
-    ): FindMyCommentResponseDto
+    ): MyCommentResponseDto
 }

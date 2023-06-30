@@ -4,7 +4,7 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.FindMyCommentResponseDto
+import com.kotlin.boardproject.dto.MyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.model.BlackComment
 import com.kotlin.boardproject.model.Comment
@@ -82,13 +82,13 @@ class CommentServiceImpl(
     override fun findMyComment(
         username: String,
         pageable: Pageable,
-    ): FindMyCommentResponseDto {
+    ): MyCommentResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comments = commentRepository.findByWriterAndStatus(user, PostStatus.NORMAL, pageable)
+        val comments = commentRepository.findByWriterAndStatusFetchPost(user, PostStatus.NORMAL, pageable)
 
-        return FindMyCommentResponseDto.createDtoFromPageable(comments)
+        return MyCommentResponseDto.createDtoFromPageable(comments)
     }
 
     @Transactional

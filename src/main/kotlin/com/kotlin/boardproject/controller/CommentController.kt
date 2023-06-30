@@ -2,12 +2,10 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.FindMyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.NotificationService
-import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -21,17 +19,6 @@ class CommentController(
     private val commentService: CommentService,
     private val notificationService: NotificationService,
 ) {
-
-    @GetMapping("/mycomment")
-    fun myComment(
-        @LoginUser loginUser: User,
-        pageable: Pageable,
-    ): ApiResponse<FindMyCommentResponseDto> {
-        val data = commentService.findMyComment(loginUser.username, pageable)
-
-        return ApiResponse.success(data)
-    }
-
     // TODO: requestDto에 isAnon 안들어와도 작동이 되는 오류 있음
     @PostMapping("", "/{parentCommentId}")
     fun createComment(

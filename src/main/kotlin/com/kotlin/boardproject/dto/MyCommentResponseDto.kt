@@ -1,11 +1,10 @@
 package com.kotlin.boardproject.dto
 
-import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.model.Comment
 import org.springframework.data.domain.Page
 
 // 댓글 내용, 글 id, 생성, 삭제일시
-data class FindMyCommentResponseDto(
+data class MyCommentResponseDto(
     val contents: List<FindMyCommentResponseElementDto>? = mutableListOf(),
     val currentPage: Int,
     val totalPages: Int,
@@ -16,16 +15,13 @@ data class FindMyCommentResponseDto(
     companion object {
         fun createDtoFromPageable(
             commentList: Page<Comment>,
-        ): FindMyCommentResponseDto {
+        ): MyCommentResponseDto {
             // 주인 글이 삭제된 댓글은 보여주지 않는다.
-
-            val comments = commentList.content.filter {
-                it.post.status == PostStatus.NORMAL
-            }.map {
+            val comments = commentList.content.map {
                 FindMyCommentResponseElementDto.fromComment(it)
             }
 
-            return FindMyCommentResponseDto(
+            return MyCommentResponseDto(
                 contents = comments,
                 currentPage = commentList.pageable.pageNumber,
                 totalPages = commentList.totalPages,

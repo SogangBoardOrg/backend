@@ -641,9 +641,7 @@ class CommentServiceImplTest {
     @Test
     @Rollback(true)
     fun 작성_댓글_조회() {
-        // TODO: 테스트 추가 여기는 mydata init하자...
-        val urlPoint = "/mycomment"
-        val finalUrl = "$statsEndPoint$urlPoint"
+        val urlPoint = "/api/v1/my/comment"
 
         val content = "comment_test"
 
@@ -669,7 +667,7 @@ class CommentServiceImplTest {
 
         // when
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.get(finalUrl).contentType(MediaType.APPLICATION_JSON)
+            RestDocumentationRequestBuilders.get(urlPoint).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
