@@ -3,7 +3,6 @@ package com.kotlin.boardproject.model
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
-import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
 import javax.persistence.*
 
@@ -72,5 +71,11 @@ class Comment(
     fun editComment(updateCommentRequestDto: UpdateCommentRequestDto) {
         this.content = updateCommentRequestDto.content
         this.isAnon = updateCommentRequestDto.isAnon
+    }
+
+    fun checkPost(postId: Long) {
+        require(this.post.id == postId) {
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글의 게시글이 아닙니다!")
+        }
     }
 }

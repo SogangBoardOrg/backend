@@ -77,8 +77,10 @@ class CommentController(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         commentId: Long,
+        @RequestBody @Valid
+        deleteCommentRequestDto: DeleteCommentRequestDto,
     ): ApiResponse<DeleteCommentResponseDto> {
-        val data = commentService.deleteComment(loginUser.username, commentId)
+        val data = commentService.deleteComment(loginUser.username, commentId, deleteCommentRequestDto)
 
         return ApiResponse.success(data)
     }

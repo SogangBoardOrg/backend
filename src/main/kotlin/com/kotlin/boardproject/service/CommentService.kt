@@ -14,6 +14,7 @@ interface CommentService {
     fun deleteComment(
         username: String,
         commentId: Long,
+        deleteCommentRequestDto: DeleteCommentRequestDto
     ): DeleteCommentResponseDto
 
     fun updateComment(
