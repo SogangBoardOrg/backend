@@ -98,13 +98,12 @@ class PostServiceImpl(
         userEmail: String,
         pageable: Pageable,
     ): MyScrapPostResponseDto {
-        TODO()
-//        val user = userRepository.findByEmail(userEmail)
-//            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
-//
-//        val postList = scrapPostRepository.findByUserFetchPost(user, pageable)
-//
-//        return MyScarpPostResponseDto.createDtoFromPageable(postList)
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+
+        val postList = scrapPostRepository.findByWriterAndStatusOrderByIdDesc(user, PostStatus.NORMAL ,pageable)
+
+        return MyScrapPostResponseDto.createDtoFromPageable(postList)
     }
 
     @Transactional
