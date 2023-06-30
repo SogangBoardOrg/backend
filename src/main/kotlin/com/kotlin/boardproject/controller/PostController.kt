@@ -5,7 +5,6 @@ import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.MyScrapPostResponseDto
-import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
@@ -24,18 +23,6 @@ import javax.validation.constraints.Positive
 class PostController(
     private val postService: PostService,
 ) {
-
-    // TODO: my controller로 옮기기
-    @GetMapping("/mywritten")
-    fun myPost(
-        @LoginUser loginUser: User,
-        pageable: Pageable,
-    ): ApiResponse<MyWrittenPostResponseDto> {
-        val data = postService.findMyWrittenPost(loginUser.username, pageable)
-
-        return ApiResponse.success(data)
-    }
-
     // TODO my controller로 옮기기
     @GetMapping("/myscrap")
     fun myScrapped(

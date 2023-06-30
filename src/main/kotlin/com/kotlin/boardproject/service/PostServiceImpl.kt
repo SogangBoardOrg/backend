@@ -88,7 +88,7 @@ class PostServiceImpl(
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
-        val postList = basePostRepository.findByWriterAndStatus(user, PostStatus.NORMAL, pageable)
+        val postList = basePostRepository.findByWriterAndStatusOrderByIdDesc(user, PostStatus.NORMAL, pageable)
 
         return MyWrittenPostResponseDto.createDtoFromPageable(postList)
     }
