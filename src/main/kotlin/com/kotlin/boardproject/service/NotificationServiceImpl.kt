@@ -58,7 +58,7 @@ class NotificationServiceImpl(
 
         val notification = Notification(
             to = user,
-            message = "message is being set.",
+            message = "한글 테스트.",
             url = "/post/${post.id}",
         )
         notificationRepository.save(notification)
