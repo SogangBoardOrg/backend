@@ -12,16 +12,26 @@ jobs:
         with:
           token: ${{ secrets.PRIVATE_TOKEN }}
           submodules: true
+        run: ls
 
-      - name: Build and deploy
-        run: |
-          echo "$SSH_PEM_KEY" >> $HOME/key.pem
-          chmod 400 $HOME/key.pem
-          ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS} '~/script.sh'
-        env:
-          SSH_USER: ${{secrets.SSH_USER}}
-          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
-          SSH_PEM_KEY: ${{secrets.SSH_PEM_KEY}}
+      - name: create remote directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PEM_KEY }}
+          script: mkdir -p /home/ubuntu/backend
+      #git submodule 설정해줘야할꺼 같은데?
+
+      - name: copy source via ssh key
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          remote_path: /home/ubuntu/backend
+          remote_host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          remote_user: ubuntu
+          remote_key: ${{ secrets.SSH_PEM_KEY }}
+
 
       - name: slack-notification
         uses: 8398a7/action-slack@v3
