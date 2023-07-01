@@ -12,7 +12,6 @@ jobs:
         with:
           token: ${{ secrets.PRIVATE_TOKEN }}
           submodules: true
-        run: ls
 
       - name: create remote directory
         uses: appleboy/ssh-action@master
