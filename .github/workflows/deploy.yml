@@ -20,7 +20,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PEM_KEY }}
           script: mkdir -p /home/ubuntu/backend
-      #git submodule 설정해줘야할꺼 같은데?
 
       - name: copy source via ssh key
         uses: burnett01/rsync-deployments@4.1
@@ -30,6 +29,15 @@ jobs:
           remote_host: ${{ secrets.SSH_KNOWN_HOSTS }}
           remote_user: ubuntu
           remote_key: ${{ secrets.SSH_PEM_KEY }}
+
+      - name: trigger script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PEM_KEY }}
+          #script: sh  /home/ubuntu/backend/deploy.sh
+          script: echo "hello world"
 
 
       - name: slack-notification
