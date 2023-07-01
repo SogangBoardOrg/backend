@@ -74,6 +74,13 @@ tasks.register("copyHTML", Copy::class) { // 3
     }
 }
 
+tasks.register("copyYmlTest", Copy::class) {
+    from("./backend-config/")
+    include("*.yml")
+    into("src/test/resources")
+}
+
+
 tasks {
     withType<Test> {
         useJUnitPlatform()
@@ -98,6 +105,7 @@ tasks {
 
     build {
         dependsOn(getByName("copyYml"))
+        dependsOn(getByName("copyYmlTest"))
         dependsOn(getByName("copyHTML"))
     }
 
