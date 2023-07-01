@@ -9,7 +9,7 @@ interface FileService {
         file: MultipartFile,
     ): String
 
-    suspend fun presingedUrl(
-        // fileName: String,
+    suspend fun preSingedUrl(
+        userEmail: String,
     ): String
 }
