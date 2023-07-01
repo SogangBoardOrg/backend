@@ -37,7 +37,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PEM_KEY }}
           #script: sh  /home/ubuntu/backend/deploy.sh
-          script: echo "hello world"
+          script: sh /home/ubuntu/backend/deploy.sh
 
 
       - name: slack-notification
