@@ -50,10 +50,10 @@ class User(
     @OneToMany(mappedBy = "writer")
     val postList: MutableList<BasePost> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     val likePostList: MutableList<LikePost> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
     // 쓴 댓글 목록

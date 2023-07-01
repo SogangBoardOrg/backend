@@ -36,9 +36,9 @@ class BasePost(
 
     @OneToMany(mappedBy = "post") val commentList: MutableList<Comment> = mutableListOf(),
 
-    @OneToMany val likeList: MutableList<LikePost> = mutableListOf(),
+    @OneToMany(mappedBy = "post") val likeList: MutableList<LikePost> = mutableListOf(),
 
-    @OneToMany val scrapList: MutableList<ScrapPost> = mutableListOf(),
+    @OneToMany(mappedBy = "post") val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
     @ElementCollection var photoList: List<String> = emptyList(),
 ) : BaseEntity() {
