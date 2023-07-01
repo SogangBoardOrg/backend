@@ -8,4 +8,8 @@ interface FileService {
     fun uploadFile(
         file: MultipartFile,
     ): String
+
+    suspend fun preSingedUrl(
+        userEmail: String,
+    ): String
 }
