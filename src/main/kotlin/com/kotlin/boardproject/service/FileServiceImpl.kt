@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.service
 
+import com.amazonaws.HttpMethod
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
@@ -31,7 +32,7 @@ class FileServiceImpl(
     override fun uploadFile(
         file: MultipartFile,
     ): String {
-        val fileName = "static/${UUID.randomUUID()}-${file.originalFilename}"
+        val fileName = "static/lenna.png"
 
         log.info("fileName: $fileName")
 
@@ -48,5 +49,23 @@ class FileServiceImpl(
         )
 
         return s3Client.getUrl(bucketName, fileName).toString()
+    }
+
+    override suspend fun presingedUrl(
+        // fileName: String,
+    ): String {
+        val fileName = "static/${UUID.randomUUID()}"
+
+        val req = PutObjectRequest()
+            .withCannedAcl(CannedAccessControlList.PublicRead)
+
+        val data = s3Client.generatePresignedUrl(
+            bucketName,
+            fileName,
+            Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7),
+            HttpMethod.PUT,
+        )
+
+        return data.toString()
     }
 }
