@@ -391,7 +391,7 @@ include::{snippets}/scrap-post-cancel/response-fields.adoc[]
 자신이 스크랩한 글의 목록을 조회하기 위한 API입니다.
 
 HTTP Method : GET
-End-Point : /api/v1/post/myscrap
+End-Point : /api/v1/my/scrap
 ----
 
 .Sample Request
@@ -410,13 +410,14 @@ include::{snippets}/view-my-scrap-post/response-body.adoc[]
 include::{snippets}/view-my-scrap-post/response-fields.adoc[]
 
 ==== 자신이 작성한 글 조회
+
 .description
 [source]
 ----
 자신이 작성한 글을 조회하기 위한 API입니다.
 
 HTTP Method : GET
-End-Point : /api/v1/post/mywritten
+End-Point : /api/v1/my/post
 ----
 
 .Sample Request
@@ -433,7 +434,6 @@ include::{snippets}/view-my-written-post/request-headers.adoc[]
 .Response Body
 include::{snippets}/view-my-written-post/response-body.adoc[]
 include::{snippets}/view-my-written-post/response-fields.adoc[]
-
 
 === COMMENT API ( /api/v1/comment )
 
@@ -498,13 +498,14 @@ include::{snippets}/add-single-parent-comment/response-body.adoc[]
 include::{snippets}/add-single-parent-comment/response-fields.adoc[]
 
 ==== 자신이 작성한 댓글 조회
+
 .description
 [source]
 ----
 자신이 작성한 댓글을 조회하기 위한 API입니다.
 
 HTTP Method : GET
-End-Point : /api/v1/comment/mycomment
+End-Point : /api/v1/my/comment
 ----
 
 .Sample Request

@@ -952,12 +952,14 @@ class PostServiceImplTest {
 
         // when
         val result = mockMvc.perform(
-            RestDocumentationRequestBuilders.get(
-                "$finalUrl?" +
-                    "page=$page&" +
-                    "size=$size&" +
-                    "sort=$sort ",
-            ).contentType(MediaType.APPLICATION_JSON)
+            RestDocumentationRequestBuilders
+                .get(
+                    "$finalUrl?" +
+                        "page=$page&" +
+                        "size=$size&" +
+                        "sort=$sort ",
+                )
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
