@@ -383,58 +383,6 @@ include::{snippets}/scrap-post-cancel/request-headers.adoc[]
 include::{snippets}/scrap-post-cancel/response-body.adoc[]
 include::{snippets}/scrap-post-cancel/response-fields.adoc[]
 
-==== 자신이 스크랩한 글 조회
-
-.description
-[source]
-----
-자신이 스크랩한 글의 목록을 조회하기 위한 API입니다.
-
-HTTP Method : GET
-End-Point : /api/v1/my/scrap
-----
-
-.Sample Request
-include::{snippets}/view-my-scrap-post/http-request.adoc[]
-
-.Sample Response
-include::{snippets}/view-my-scrap-post/http-response.adoc[]
-
-.Request Header
-request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-
-include::{snippets}/view-my-scrap-post/request-headers.adoc[]
-
-.Response Body
-include::{snippets}/view-my-scrap-post/response-body.adoc[]
-include::{snippets}/view-my-scrap-post/response-fields.adoc[]
-
-==== 자신이 작성한 글 조회
-
-.description
-[source]
-----
-자신이 작성한 글을 조회하기 위한 API입니다.
-
-HTTP Method : GET
-End-Point : /api/v1/my/post
-----
-
-.Sample Request
-include::{snippets}/view-my-written-post/http-request.adoc[]
-
-.Sample Response
-include::{snippets}/view-my-written-post/http-response.adoc[]
-
-.Request Header
-request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-
-include::{snippets}/view-my-written-post/request-headers.adoc[]
-
-.Response Body
-include::{snippets}/view-my-written-post/response-body.adoc[]
-include::{snippets}/view-my-written-post/response-fields.adoc[]
-
 === COMMENT API ( /api/v1/comment )
 
 ==== 댓글 등록
@@ -496,32 +444,6 @@ include::{snippets}/add-single-parent-comment/request-fields.adoc[]
 .Response Body
 include::{snippets}/add-single-parent-comment/response-body.adoc[]
 include::{snippets}/add-single-parent-comment/response-fields.adoc[]
-
-==== 자신이 작성한 댓글 조회
-
-.description
-[source]
-----
-자신이 작성한 댓글을 조회하기 위한 API입니다.
-
-HTTP Method : GET
-End-Point : /api/v1/my/comment
-----
-
-.Sample Request
-include::{snippets}/view-my-comment/http-request.adoc[]
-
-.Sample Response
-include::{snippets}/view-my-comment/http-response.adoc[]
-
-.Request Header
-request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-
-include::{snippets}/view-my-comment/request-headers.adoc[]
-
-.Response Body
-include::{snippets}/view-my-comment/response-body.adoc[]
-include::{snippets}/view-my-comment/response-fields.adoc[]
 
 ==== 댓글 수정
 
@@ -741,3 +663,110 @@ include::{snippets}/read-all-notification/request-headers.adoc[]
 .Response Body
 include::{snippets}/read-all-notification/response-body.adoc[]
 include::{snippets}/read-all-notification/response-fields.adoc[]
+
+=== MY API ( /api/v1/my )
+
+==== 개인정보 조회
+
+.description
+[source]
+----
+자신이 정보를 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/my/info
+----
+
+.Sample Request
+include::{snippets}/view-my-info/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-info/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-info/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-info/response-body.adoc[]
+include::{snippets}/view-my-info/response-fields.adoc[]
+
+==== 자신이 스크랩한 글 조회
+
+.description
+[source]
+----
+자신이 스크랩한 글의 목록을 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/my/scrap
+----
+
+.Sample Request
+include::{snippets}/view-my-scrap-post/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-scrap-post/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-scrap-post/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-scrap-post/response-body.adoc[]
+include::{snippets}/view-my-scrap-post/response-fields.adoc[]
+
+==== 자신이 작성한 글 조회
+
+.description
+[source]
+----
+자신이 작성한 글을 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/my/post
+----
+
+.Sample Request
+include::{snippets}/view-my-written-post/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-written-post/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-written-post/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-written-post/response-body.adoc[]
+include::{snippets}/view-my-written-post/response-fields.adoc[]
+
+==== 자신이 작성한 댓글 조회
+
+.description
+[source]
+----
+자신이 작성한 댓글을 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/my/comment
+----
+
+.Sample Request
+include::{snippets}/view-my-comment/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-comment/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-comment/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-comment/response-body.adoc[]
+include::{snippets}/view-my-comment/response-fields.adoc[]
+

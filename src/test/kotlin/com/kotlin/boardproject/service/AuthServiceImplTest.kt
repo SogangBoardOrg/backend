@@ -91,7 +91,7 @@ class AuthServiceImplTest {
         result.andExpect(status().isOk)
             .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
-                    "user-info-get",
+                    "view-my-info",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(
