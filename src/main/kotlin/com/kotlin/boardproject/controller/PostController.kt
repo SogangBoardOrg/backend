@@ -3,7 +3,7 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*

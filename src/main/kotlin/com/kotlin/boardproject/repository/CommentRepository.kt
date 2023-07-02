@@ -43,9 +43,7 @@ interface CommentRepository : JpaRepository<Comment, Long> {
     fun findByIdAndStatusFetchPost(id: Long, status: PostStatus): Comment?
 
     fun findByIdAndStatus(id: Long, status: PostStatus): Comment?
-    fun findByWriterAndStatus(writer: User, status: PostStatus, pageable: Pageable): Page<Comment>
 
-    // todo fetch join distinct vs count query
     @Query(
         """SELECT DISTINCT c
             FROM Comment c 

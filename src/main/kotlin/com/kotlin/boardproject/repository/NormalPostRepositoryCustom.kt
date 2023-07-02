@@ -1,13 +1,13 @@
 package com.kotlin.boardproject.repository
 
-import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryElementDto
+import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.model.NormalPost
-import com.kotlin.boardproject.model.User
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface NormalPostRepositoryCustom {
+    // 문제가 생길시 Page<NormalPost>로 변경
     fun findNormalPostByQuery(
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
         pageable: Pageable,

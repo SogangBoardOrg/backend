@@ -2,8 +2,8 @@ package com.kotlin.boardproject.repository
 
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStatus
-import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryElementDto
+import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.QFindNormalPostByQueryElementDto
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.QLikePost.likePost

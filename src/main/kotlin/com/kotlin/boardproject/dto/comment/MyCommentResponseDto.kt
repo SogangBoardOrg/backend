@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.dto
+package com.kotlin.boardproject.dto.comment
 
 import com.kotlin.boardproject.model.Comment
 import org.springframework.data.domain.Page

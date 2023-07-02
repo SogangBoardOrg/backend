@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.MyCommentResponseDto
+import com.kotlin.boardproject.dto.comment.MyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import org.springframework.data.domain.Pageable
 

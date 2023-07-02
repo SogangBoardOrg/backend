@@ -1,9 +1,9 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
-import com.kotlin.boardproject.dto.MyCommentResponseDto
-import com.kotlin.boardproject.dto.MyScrapPostResponseDto
-import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
+import com.kotlin.boardproject.dto.comment.MyCommentResponseDto
+import com.kotlin.boardproject.dto.post.MyScrapPostResponseDto
+import com.kotlin.boardproject.dto.post.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.PostService

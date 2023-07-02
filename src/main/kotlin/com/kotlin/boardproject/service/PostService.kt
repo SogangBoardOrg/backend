@@ -1,23 +1,36 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.MyScrapPostResponseDto
-import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import org.springframework.data.domain.Pageable
 
 interface PostService {
 
-    fun createNormalPost(
-        userEmail: String,
-        createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): CreateNormalPostResponseDto
+    fun findNormalPostByQuery(
+        userEmail: String?,
+        pageable: Pageable,
+        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
+    ): FindNormalPostByQueryResponseDto
 
     fun findOneNormalPost(
         userEmail: String?,
         postId: Long,
     ): OneNormalPostResponseDto
+
+    fun findMyWrittenPost(
+        userEmail: String,
+        pageable: Pageable,
+    ): MyWrittenPostResponseDto
+
+    fun findMyScrapPost(
+        userEmail: String,
+        pageable: Pageable,
+    ): MyScrapPostResponseDto
+
+    fun createNormalPost(
+        userEmail: String,
+        createNormalPostRequestDto: CreateNormalPostRequestDto,
+    ): CreateNormalPostResponseDto
 
     fun editNormalPost(
         userEmail: String,
@@ -55,20 +68,4 @@ interface PostService {
         userEmail: String,
         postId: Long,
     ): CancelScrapPostResponseDto
-
-    fun findNormalPostByQuery(
-        userEmail: String?,
-        pageable: Pageable,
-        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
-    ): FindNormalPostByQueryResponseDto
-
-    fun findMyWrittenPost(
-        userEmail: String,
-        pageable: Pageable,
-    ): MyWrittenPostResponseDto
-
-    fun findMyScrapPost(
-        userEmail: String,
-        pageable: Pageable,
-    ): MyScrapPostResponseDto
 }

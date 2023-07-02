@@ -4,7 +4,6 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.MyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.model.BlackComment
 import com.kotlin.boardproject.model.Comment

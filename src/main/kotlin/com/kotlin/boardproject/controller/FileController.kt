@@ -16,13 +16,12 @@ class FileController(
 ) {
 
     @GetMapping("/presign")
-    fun test(
+    fun preSignUrl(
         @LoginUser loginUser: User,
     ): ApiResponse<String> {
         return runBlocking {
-            val fileUrl = fileService.preSingedUrl(loginUser.username)
-            // url 리턴하기
-            ApiResponse.success(fileUrl)
+            val preSingedUrl = fileService.geneatePreSingedUrl(loginUser.username)
+            ApiResponse.success(preSingedUrl)
         }
     }
 }

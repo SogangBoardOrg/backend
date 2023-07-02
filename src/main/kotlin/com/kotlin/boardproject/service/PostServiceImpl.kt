@@ -5,9 +5,6 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.MyScrapPostResponseDto
-import com.kotlin.boardproject.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.model.BlackPost
@@ -101,7 +98,7 @@ class PostServiceImpl(
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
-        val postList = scrapPostRepository.findByWriterAndStatusOrderByIdDesc(user, PostStatus.NORMAL ,pageable)
+        val postList = scrapPostRepository.findByWriterAndStatusOrderByIdDesc(user, PostStatus.NORMAL, pageable)
 
         return MyScrapPostResponseDto.createDtoFromPageable(postList)
     }
@@ -143,7 +140,10 @@ class PostServiceImpl(
     }
 
     @Transactional
-    override fun deleteNormalPost(userEmail: String, postId: Long): DeleteNormalPostResponseDto {
+    override fun deleteNormalPost(
+        userEmail: String,
+        postId: Long,
+    ): DeleteNormalPostResponseDto {
         val user = userRepository.findByEmailFetchPostList(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)

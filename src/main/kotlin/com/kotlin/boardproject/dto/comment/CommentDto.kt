@@ -1,11 +1,13 @@
 package com.kotlin.boardproject.dto.comment
 
 import com.kotlin.boardproject.common.enums.PostStatus
-import com.kotlin.boardproject.model.*
+import com.kotlin.boardproject.model.BasePost
+import com.kotlin.boardproject.model.Comment
+import com.kotlin.boardproject.model.LikeComment
+import com.kotlin.boardproject.model.User
 import java.time.LocalDateTime
 
 data class CommentDto(
-    // TODO: 좋아요 여부와 좋아요 개수는 어떻게 처리할까?
     val id: Long,
     val parentId: Long?,
     val ancestorId: Long?,

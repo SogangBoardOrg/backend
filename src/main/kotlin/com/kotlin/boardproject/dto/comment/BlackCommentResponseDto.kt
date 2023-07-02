@@ -1,5 +1,5 @@
 package com.kotlin.boardproject.dto.comment
 
-class BlackCommentResponseDto (
+class BlackCommentResponseDto(
     val id: Long,
 )

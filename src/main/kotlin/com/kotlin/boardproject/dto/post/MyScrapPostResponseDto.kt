@@ -1,7 +1,6 @@
-package com.kotlin.boardproject.dto
+package com.kotlin.boardproject.dto.post
 
 import com.kotlin.boardproject.common.enums.PostStatus
-import com.kotlin.boardproject.dto.post.FindMyOneBasePostResponseDto
 import com.kotlin.boardproject.model.ScrapPost
 import org.springframework.data.domain.Page
 
