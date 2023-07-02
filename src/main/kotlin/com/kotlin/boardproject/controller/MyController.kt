@@ -1,10 +1,12 @@
 package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
+import com.kotlin.boardproject.dto.UserInfoDto
 import com.kotlin.boardproject.dto.comment.MyCommentResponseDto
+import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.dto.post.MyScrapPostResponseDto
 import com.kotlin.boardproject.dto.post.MyWrittenPostResponseDto
-import com.kotlin.boardproject.dto.common.ApiResponse
+import com.kotlin.boardproject.service.AuthService
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.PostService
 import org.springframework.data.domain.Pageable
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 class MyController(
     private val postService: PostService,
     private val commentService: CommentService,
+    private val authService: AuthService,
 ) {
     @GetMapping("/comment")
     fun myComment(
@@ -47,6 +50,15 @@ class MyController(
         pageable: Pageable,
     ): ApiResponse<MyScrapPostResponseDto> {
         val data = postService.findMyScrapPost(loginUser.username, pageable)
+
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("/info")
+    fun myInfo(
+        @LoginUser loginUser: User,
+    ): ApiResponse<UserInfoDto> {
+        val data = authService.getUserInfo(loginUser.username)
 
         return ApiResponse.success(data)
     }
