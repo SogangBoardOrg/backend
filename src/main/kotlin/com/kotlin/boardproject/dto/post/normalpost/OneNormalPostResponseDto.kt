@@ -28,8 +28,6 @@ data class OneNormalPostResponseDto(
             searchUser: User?,
             commentList: List<Comment>,
         ): OneNormalPostResponseDto {
-            val returnCommentDtos: List<CommentDto> = commentDtos(post, commentList, searchUser)
-
             return OneNormalPostResponseDto(
                 id = post.id!!,
                 commentOn = post.commentOn,
@@ -43,7 +41,7 @@ data class OneNormalPostResponseDto(
                 commentCnt = if (!post.commentOn) 0 else commentList.size,
                 createdAt = post.createdAt!!,
                 updatedAt = post.updatedAt!!,
-                commentList = if (!post.commentOn) emptyList() else returnCommentDtos,
+                commentList = if (!post.commentOn) emptyList() else commentDtos(post, commentList, searchUser),
                 photoList = post.photoList,
             )
         }
