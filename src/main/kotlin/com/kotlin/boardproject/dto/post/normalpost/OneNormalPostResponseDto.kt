@@ -101,8 +101,13 @@ data class OneNormalPostResponseDto(
         ): Map<User, Int> {
             // 2. 글쓴이는 리스트의 1번째에 넣어준다.
             // 3. 새로운 댓글 작성자일 때 마다 리스트에 넣어준다. -> N
-            val writerMap = commentList.filter { it.writer != post.writer }.map { it.writer }.distinct().withIndex()
-                .associate { (index, writer) -> writer to index + 1 }.toMutableMap()
+            val writerMap = commentList
+                .filter { it.writer != post.writer }
+                .map { it.writer }
+                .distinct()
+                .withIndex()
+                .associate { (index, writer) -> writer to index + 1 }
+                .toMutableMap()
 
             writerMap[post.writer] = 0
 
