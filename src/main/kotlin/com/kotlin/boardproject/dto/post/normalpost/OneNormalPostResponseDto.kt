@@ -28,19 +28,7 @@ data class OneNormalPostResponseDto(
             searchUser: User?,
             commentList: List<Comment>,
         ): OneNormalPostResponseDto {
-            // 1. 댓글 전체 수색
-            // 2. 글쓴이는 리스트의 1번째에 넣어준다.
-            // 3. 새로운 댓글 작성자일 때 마다 리스트에 넣어준다. -> N
-            // 4. 댓글을 순회하면서 parent와 ancestor가 null인 댓글은 ancestor list로 배치한다.
-            // 5. 댓글을 순회하면서 parent와 ancestor가 null이 아닌 댓글은 ancestor를 찾아서 해당 리스트 안에 투입
-            // ** 모든 과정에서 이 함수로 들어온 모든 commentlist의 순서는 보존이 되어야한다. **
-            // ancestorlist를 만들 때도 commentlist내부의 순서를 따른다.
-
-            // commentList는 id순으로 정렬 되어있다.
-            val writerMap: Map<User, Int> = generateWriterMap(post, commentList)
-            val commentDtoList: List<CommentDto> = convertToCommentDtoList(post, searchUser, commentList, writerMap)
-            val ancestorList: List<CommentDto> = generateAncestorList(commentDtoList)
-            val returnCommentList: List<CommentDto> = generateReturnCommentList(commentDtoList, ancestorList)
+            val returnCommentDtos: List<CommentDto> = commentDtos(post, commentList, searchUser)
 
             return OneNormalPostResponseDto(
                 id = post.id!!,
@@ -55,27 +43,46 @@ data class OneNormalPostResponseDto(
                 commentCnt = if (!post.commentOn) 0 else commentList.size,
                 createdAt = post.createdAt!!,
                 updatedAt = post.updatedAt!!,
-                commentList = if (!post.commentOn) emptyList() else returnCommentList,
+                commentList = if (!post.commentOn) emptyList() else returnCommentDtos,
                 photoList = post.photoList,
             )
         }
 
-        private fun generateReturnCommentList(
-            commentDtoList: List<CommentDto>,
-            ancestorList: List<CommentDto>,
+        private fun commentDtos(
+            post: NormalPost,
+            commentList: List<Comment>,
+            searchUser: User?,
         ): List<CommentDto> {
-            val filteredCommentList = commentDtoList.filterNot { it in ancestorList }
-            return ancestorList.map { ancestor ->
+            // 1. 댓글 전체 수색
+            // 2. 글쓴이는 리스트의 1번째에 넣어준다.
+            // 3. 새로운 댓글 작성자일 때 마다 리스트에 넣어준다. -> N
+            // 4. 댓글을 순회하면서 parent와 ancestor가 null인 댓글은 ancestor list로 배치한다.
+            // 5. 댓글을 순회하면서 parent와 ancestor가 null이 아닌 댓글은 ancestor를 찾아서 해당 ancestor의 child 리스트 안에 넣어줌
+            // ** 모든 과정에서 이 함수로 들어온 모든 commentlist의 순서는 보존이 되어야한다. **
+            // ancestorlist를 만들 때도 commentlist내부의 순서를 따른다.
+
+            // commentList는 id순으로 정렬 되어있다.
+
+            val writerMap: Map<User, Int> = generateWriterMap(post, commentList)
+            val commentDtoList: List<CommentDto> = convertToCommentDtoList(post, searchUser, commentList, writerMap)
+            return returnList(commentDtoList)
+        }
+
+        private fun returnList(
+            commentDtoList: List<CommentDto>,
+        ): List<CommentDto> {
+            // 4. 댓글을 순회하면서 parent와 ancestor가 null인 댓글은 ancestor list로 배치한다.
+            // 5. 댓글을 순회하면서 parent와 ancestor가 null이 아닌 댓글은 ancestor를 찾아서 해당 ancestor의 child 리스트 안에 넣어줌
+            val (ancestors, children) = commentDtoList.partition { it.parentId == null && it.ancestorId == null }
+
+            return ancestors.map { ancestor ->
                 ancestor.copy(
-                    child = filteredCommentList.filter {
+                    child = children.filter {
                         it.ancestorId == ancestor.id
                     },
                 )
             }
         }
-
-        private fun generateAncestorList(commentDtoList: List<CommentDto>): List<CommentDto> =
-            commentDtoList.filter { it.ancestorId == null && it.parentId == null }
 
         private fun convertToCommentDtoList(
             post: NormalPost,
@@ -92,13 +99,10 @@ data class OneNormalPostResponseDto(
             post: NormalPost,
             commentList: List<Comment>,
         ): Map<User, Int> {
-            val writerMap = commentList
-                .filter { it.writer != post.writer }
-                .map { it.writer }
-                .distinct()
-                .withIndex()
-                .associate { (index, writer) -> writer to index + 1 }
-                .toMutableMap()
+            // 2. 글쓴이는 리스트의 1번째에 넣어준다.
+            // 3. 새로운 댓글 작성자일 때 마다 리스트에 넣어준다. -> N
+            val writerMap = commentList.filter { it.writer != post.writer }.map { it.writer }.distinct().withIndex()
+                .associate { (index, writer) -> writer to index + 1 }.toMutableMap()
 
             writerMap[post.writer] = 0
 
@@ -107,14 +111,12 @@ data class OneNormalPostResponseDto(
             return writerMap.toMap()
         }
 
-        private fun isLiked(userList: List<User>, searchUser: User?): Boolean =
-            userList.contains(searchUser)
+        private fun isLiked(userList: List<User>, searchUser: User?): Boolean = userList.contains(searchUser)
 
         private fun isScrapped(post: NormalPost, searchUser: User?): Boolean =
             post.scrapList.map { it.user }.contains(searchUser)
 
-        private fun isWriter(post: NormalPost, searchUser: User?): Boolean =
-            post.writer == searchUser
+        private fun isWriter(post: NormalPost, searchUser: User?): Boolean = post.writer == searchUser
 
         private fun postWriterNameGenerator(post: NormalPost): String =
             if (post.isAnon) "ANON" else post.writer.nickname
