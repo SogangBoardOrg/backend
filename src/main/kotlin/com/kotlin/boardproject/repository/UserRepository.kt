@@ -11,14 +11,6 @@ interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmailOrProviderId(email: String, id: String): User?
     fun findUserByNickname(nickname: String): User?
 
-    @Query(
-        """ SELECT u
-            FROM User AS u
-            LEFT JOIN FETCH u.postList as pl
-            WHERE u.email = :email
-            """,
-    )
-    fun findByEmailFetchPostList(email: String): User?
 
     @Query(
         """ SELECT u

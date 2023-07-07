@@ -47,18 +47,12 @@ class User(
     var profileImageUrl: String? = null,
 
     // 쓴 글 목록
-    @OneToMany(mappedBy = "writer")
-    val postList: MutableList<BasePost> = mutableListOf(),
 
     @OneToMany(mappedBy = "user")
     val likePostList: MutableList<LikePost> = mutableListOf(),
 
     @OneToMany(mappedBy = "user")
     val scrapList: MutableList<ScrapPost> = mutableListOf(),
-
-    // 쓴 댓글 목록
-    @OneToMany(mappedBy = "writer")
-    val commentList: MutableList<Comment> = mutableListOf(),
 
 ) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {

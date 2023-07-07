@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.repository
 
-import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryElementDto
+import com.kotlin.boardproject.dto.post.normalpost.NormalPostByQueryElementDto
 import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.model.NormalPost
 import org.springframework.data.domain.Page
@@ -17,5 +17,5 @@ interface NormalPostRepositoryCustom {
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
         userEmail: String?,
         pageable: Pageable,
-    ): Page<FindNormalPostByQueryElementDto>
+    ): Page<NormalPostByQueryElementDto>
 }

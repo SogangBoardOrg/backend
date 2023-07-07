@@ -59,7 +59,7 @@ class MyDataInit(
             isAnon = true,
         )
         comment1.addComment(post)
-        comment1.joinAncestor(null)
+        // comment1.joinAncestor(null)
         commentRepository.saveAndFlush(comment1)
 
         // 2
@@ -71,7 +71,7 @@ class MyDataInit(
             isAnon = false,
         )
         comment2.addComment(post)
-        comment2.joinAncestor(null)
+        // comment2.joinAncestor(null)
         commentRepository.saveAndFlush(comment2)
 
         val comment3 = Comment(
@@ -83,7 +83,7 @@ class MyDataInit(
             ancestor = comment2,
         )
         comment3.addComment(post)
-        comment3.joinAncestor(comment2)
+        // comment3.joinAncestor(comment2)
         commentRepository.saveAndFlush(comment3)
 
         // 4
@@ -96,7 +96,7 @@ class MyDataInit(
             isAnon = true,
         )
         comment4.addComment(post)
-        comment4.joinAncestor(null)
+        // comment4.joinAncestor(null)
         commentRepository.saveAndFlush(comment4)
 
         val comment5 = Comment(
@@ -108,7 +108,7 @@ class MyDataInit(
             ancestor = comment4,
         )
         comment5.addComment(post)
-        comment5.joinAncestor(comment4)
+        // comment5.joinAncestor(comment4)
         commentRepository.saveAndFlush(comment5)
 
         val comment6 = Comment(
@@ -120,7 +120,7 @@ class MyDataInit(
             ancestor = comment4,
         )
         comment6.addComment(post)
-        comment6.joinAncestor(comment4)
+        // comment6.joinAncestor(comment4)
         commentRepository.saveAndFlush(comment6)
 
         normalPostRepository.save(post)

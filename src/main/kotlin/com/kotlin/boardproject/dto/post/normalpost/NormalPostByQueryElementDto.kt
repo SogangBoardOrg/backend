@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 // fetch join
 // post 가져오기
 // select 에 scrapList, photoList가져오기, likeList 가져오기
-data class FindNormalPostByQueryElementDto @QueryProjection constructor(
+data class NormalPostByQueryElementDto @QueryProjection constructor(
     val id: Long,
     val title: String,
     val content: String,
@@ -34,8 +34,8 @@ data class FindNormalPostByQueryElementDto @QueryProjection constructor(
         fun fromNormalPostToQueryOneNormalPostResponseDto(
             post: NormalPost,
             user: User?,
-        ): FindNormalPostByQueryElementDto {
-            return FindNormalPostByQueryElementDto(
+        ): NormalPostByQueryElementDto {
+            return NormalPostByQueryElementDto(
                 id = post.id!!,
                 title = post.title,
                 content = post.content,

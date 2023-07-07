@@ -1,12 +1,12 @@
 package com.kotlin.boardproject.dto.post.normalpost
 
-import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryElementDto.Companion.fromNormalPostToQueryOneNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.NormalPostByQueryElementDto.Companion.fromNormalPostToQueryOneNormalPostResponseDto
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.User
 import org.springframework.data.domain.Page
 
-data class FindNormalPostByQueryResponseDto(
-    val contents: List<FindNormalPostByQueryElementDto>? = null,
+data class NormalPostByQueryResponseDto(
+    val contents: List<NormalPostByQueryElementDto>? = null,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -14,11 +14,11 @@ data class FindNormalPostByQueryResponseDto(
     val size: Int,
 ) {
     companion object {
-        fun createDtoFromPageable(pageData: Page<NormalPost>, user: User?): FindNormalPostByQueryResponseDto {
+        fun createDtoFromPageable(pageData: Page<NormalPost>, user: User?): NormalPostByQueryResponseDto {
             val content = pageData.content.map {
                 fromNormalPostToQueryOneNormalPostResponseDto(it, user)
             }
-            return FindNormalPostByQueryResponseDto(
+            return NormalPostByQueryResponseDto(
                 contents = content,
                 currentPage = pageData.pageable.pageNumber,
                 totalPages = pageData.totalPages,
@@ -28,8 +28,8 @@ data class FindNormalPostByQueryResponseDto(
             )
         }
 
-        fun createDtoFromPageable(pageData: Page<FindNormalPostByQueryElementDto>): FindNormalPostByQueryResponseDto {
-            return FindNormalPostByQueryResponseDto(
+        fun createDtoFromPageable(pageData: Page<NormalPostByQueryElementDto>): NormalPostByQueryResponseDto {
+            return NormalPostByQueryResponseDto(
                 contents = pageData.content,
                 currentPage = pageData.pageable.pageNumber,
                 totalPages = pageData.totalPages,

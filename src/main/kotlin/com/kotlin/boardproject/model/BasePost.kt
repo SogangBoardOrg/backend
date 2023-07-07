@@ -43,7 +43,7 @@ class BasePost(
     @ElementCollection var photoList: List<String> = emptyList(),
 ) : BaseEntity() {
     fun addPost(user: User) {
-        user.postList.add(this)
+        // user.postList.add(this)
     }
 
     fun addLikePost(likePost: LikePost, user: User) {
@@ -72,6 +72,6 @@ class BasePost(
 
     fun deletePost(user: User) {
         this.status = PostStatus.DELETED
-        user.postList.remove(this)
+        // user.postList.remove(this)
     }
 }

@@ -42,7 +42,7 @@ class PostController(
         @RequestParam("normal-type", required = true) normalType: NormalType,
         pageable: Pageable,
         principal: Principal?,
-    ): ApiResponse<FindNormalPostByQueryResponseDto> {
+    ): ApiResponse<NormalPostByQueryResponseDto> {
         log.info("username: ${principal?.name}")
 
         val data = postService.findNormalPostByQuery(

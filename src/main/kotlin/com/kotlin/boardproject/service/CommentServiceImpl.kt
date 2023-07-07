@@ -69,7 +69,7 @@ class CommentServiceImpl(
         )
 
         comment.addComment(post)
-        comment.joinAncestor(ancestorComment)
+        // comment.joinAncestor(ancestorComment)
 
         // TODO: 여기서 문제가 생기는거 같음
         return CreateCommentResponseDto(

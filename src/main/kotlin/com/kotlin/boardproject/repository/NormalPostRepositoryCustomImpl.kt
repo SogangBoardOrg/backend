@@ -2,9 +2,9 @@ package com.kotlin.boardproject.repository
 
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStatus
-import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryElementDto
 import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.dto.post.normalpost.QFindNormalPostByQueryElementDto
+import com.kotlin.boardproject.dto.post.normalpost.NormalPostByQueryElementDto
+import com.kotlin.boardproject.dto.post.normalpost.QNormalPostByQueryElementDto
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.QLikePost.likePost
 import com.kotlin.boardproject.model.QNormalPost.normalPost
@@ -79,7 +79,7 @@ class NormalPostRepositoryCustomImpl(
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
         userEmail: String?,
         pageable: Pageable,
-    ): Page<FindNormalPostByQueryElementDto> {
+    ): Page<NormalPostByQueryElementDto> {
         val searchUser = userEmail?.let { findUserByEmail(userEmail) }
 
         val scrappedIds = searchUser?.let { findScrappedIds(searchUser) } ?: listOf()
@@ -127,7 +127,7 @@ class NormalPostRepositoryCustomImpl(
 
         val data = queryFactory
             .select(
-                QFindNormalPostByQueryElementDto(
+                QNormalPostByQueryElementDto(
                     normalPost.id,
                     normalPost.title,
                     normalPost.content,

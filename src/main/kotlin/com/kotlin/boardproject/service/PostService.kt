@@ -10,7 +10,7 @@ interface PostService {
         userEmail: String?,
         pageable: Pageable,
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
-    ): FindNormalPostByQueryResponseDto
+    ): NormalPostByQueryResponseDto
 
     fun findOneNormalPost(
         userEmail: String?,

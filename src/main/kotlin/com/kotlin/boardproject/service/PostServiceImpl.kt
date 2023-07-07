@@ -31,7 +31,7 @@ class PostServiceImpl(
         userEmail: String?,
         pageable: Pageable,
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
-    ): FindNormalPostByQueryResponseDto {
+    ): NormalPostByQueryResponseDto {
         log.info("find normal post by query start")
         val data = normalPostRepository.findNormalPostByQueryV2(
             findNormalPostByQueryRequestDto = findNormalPostByQueryRequestDto,
@@ -39,7 +39,7 @@ class PostServiceImpl(
             pageable = pageable,
         )
         log.info("find normal post by query end")
-        return FindNormalPostByQueryResponseDto.createDtoFromPageable(data)
+        return NormalPostByQueryResponseDto.createDtoFromPageable(data)
     }
 
     @Transactional(readOnly = true)
@@ -117,7 +117,7 @@ class PostServiceImpl(
         val post = createNormalPostRequestDto.toPost(user)
 
         // user post list에 추가
-        post.addPost(user)
+        // post.addPost(user)
         log.info("create normal post end")
         return CreateNormalPostResponseDto(normalPostRepository.save(post).id!!)
     }
@@ -144,7 +144,7 @@ class PostServiceImpl(
         userEmail: String,
         postId: Long,
     ): DeleteNormalPostResponseDto {
-        val user = userRepository.findByEmailFetchPostList(userEmail)
+        val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")

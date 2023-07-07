@@ -34,8 +34,6 @@ class Comment(
     val writer: User,
 
 // == 부모 댓글을 삭제해도 후손 댓글은 남아있음 ==//
-    @OneToMany(mappedBy = "ancestor")
-    val descendentList: MutableList<Comment> = mutableListOf(),
 
     @OneToMany(mappedBy = "comment")
     val likeList: MutableList<LikeComment> = mutableListOf(),
@@ -46,10 +44,6 @@ class Comment(
 
     fun addComment(post: BasePost) {
         post.commentList.add(this)
-    }
-
-    fun joinAncestor(ancestor: Comment?) {
-        ancestor?.descendentList?.add(this)
     }
 
     fun likeComment(likeComment: LikeComment) {
