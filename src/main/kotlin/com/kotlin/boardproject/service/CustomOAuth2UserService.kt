@@ -50,8 +50,8 @@ class CustomOAuth2UserService(
     ): User {
         val userInfo = OAuth2UserInfoFactory.getOauth2UserInfo(providerType, attributes)
 
-        val savedUser = userRepository.findByEmail(userInfo.getEmail())
-            ?: userRepository.findUserByProviderId(userInfo.getId())
+        val savedUser = userRepository.findByEmail(userInfo.email)
+            ?: userRepository.findUserByProviderId(userInfo.id)
 
         return savedUser ?: createUser(userInfo, providerType)
     }
@@ -67,17 +67,17 @@ class CustomOAuth2UserService(
         }
 
         val user = User(
-            email = userInfo.getEmail(),
+            email = userInfo.email,
             nickname = nickname,
             providerType = providerType,
-            profileImageUrl = userInfo.getImageUrl(),
-            providerId = userInfo.getId(),
+            profileImageUrl = userInfo.imageUrl,
+            providerId = userInfo.id,
         )
         println("user : $user")
-        println("user info: " + userInfo.getId())
+        println("user info: " + userInfo.id)
         println("user name: $nickname")
         println("provider type: $providerType")
-        println("user email: " + userInfo.getEmail())
+        println("user email: " + userInfo.email)
 
         return userRepository.saveAndFlush(user)
     }
