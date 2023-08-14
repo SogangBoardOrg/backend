@@ -117,7 +117,6 @@ class OAuth2AuthenticationSuccessHandler(
             findUser.email,
             Date(now.time + refreshTokenExpiry),
         )
-        // TODO: redis 추가하기
         redisRepository.setRefreshTokenByEmail(findUser.email, refreshToken.token)
 
         return accessToken to refreshToken

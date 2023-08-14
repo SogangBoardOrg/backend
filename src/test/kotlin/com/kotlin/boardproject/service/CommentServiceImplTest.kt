@@ -182,6 +182,8 @@ class CommentServiceImplTest {
                     ),
                     responseFields(
                         fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.postId").description("글 번호"),
+                        fieldWithPath("data.content").description("글 내용"),
                         fieldWithPath("data.id").description("댓글 번호"),
                     ),
                 ),
@@ -250,6 +252,8 @@ class CommentServiceImplTest {
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("data.postId").description("글 번호"),
+                        fieldWithPath("data.content").description("글 내용"),
                         fieldWithPath("status").description("성공 여부"),
                     ),
                 ),
@@ -332,6 +336,8 @@ class CommentServiceImplTest {
                     ),
                     responseFields(
                         fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.postId").description("글 번호"),
+                        fieldWithPath("data.content").description("글 내용"),
                         fieldWithPath("data.id").description("댓글 번호"),
                     ),
                 ),
