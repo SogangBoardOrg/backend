@@ -1,9 +1,8 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
-import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.comment.CreateCommentResponseDto
 import com.kotlin.boardproject.dto.notification.GetNotificationsResponseDto
+import com.kotlin.boardproject.dto.notification.NotificationDto
 import com.kotlin.boardproject.dto.notification.NotificationResponseDto
 import com.kotlin.boardproject.model.Notification
 import com.kotlin.boardproject.repository.CommentRepository
@@ -39,28 +38,18 @@ class NotificationServiceImpl(
 
     @Transactional
     override fun createNotification(
-        email: String,
-        createCommentResponseDto: CreateCommentResponseDto,
+        notificationDto: NotificationDto,
     ) {
-        val comment = commentRepository.findByIdOrNull(createCommentResponseDto.id)
-            ?: throw EntityNotFoundException("댓글이 존재하지 않습니다.")
-        val post = comment.post
-        log.info("post: $post")
-        // TODO: 대댓글 애러 고치기
-        log.info("post: $comment")
-
-        val toId = comment.parent?.writer?.id ?: comment.post.writer.id
-
-        val user = userRepository.findByIdOrNull(toId)
+        val user = userRepository.findByIdOrNull(notificationDto.toUserId)
             ?: throw EntityNotFoundException("사용자가 존재하지 않습니다.")
-        // TODO: 여기가 문제인거 같음
-        if (user.email == email) return
 
         val notification = Notification(
             to = user,
-            message = "한글 테스트.",
-            url = "/post/${post.id}",
+            message = notificationDto.message,
+            url = notificationDto.url,
+            notificationType = notificationDto.notificationType,
         )
+
         notificationRepository.save(notification)
     }
 
@@ -83,8 +72,7 @@ class NotificationServiceImpl(
         val user = userRepository.findByEmail(email)
             ?: throw EntityNotFoundException("사용자가 존재하지 않습니다.")
 
-        notificationRepository.findByToAndIsRead(user, false).map {
-            it.read()
-        }
+        notificationRepository.findByToAndIsRead(user, false)
+            .map { it.read() }
     }
 }

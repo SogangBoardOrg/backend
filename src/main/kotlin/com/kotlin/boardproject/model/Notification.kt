@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.NotificationType
 import javax.persistence.*
 
 @Entity
@@ -16,6 +17,8 @@ class Notification(
     val url: String,
 
     val message: String,
+
+    val notificationType: NotificationType = NotificationType.COMMENT,
 
     var isRead: Boolean = false,
 ) : BaseEntity() {

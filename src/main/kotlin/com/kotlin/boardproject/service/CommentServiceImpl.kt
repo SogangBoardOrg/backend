@@ -1,10 +1,12 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.common.enums.ErrorCode
+import com.kotlin.boardproject.common.enums.NotificationType
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.*
+import com.kotlin.boardproject.dto.notification.NotificationDto
 import com.kotlin.boardproject.model.BlackComment
 import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.model.LikeComment
@@ -28,7 +30,7 @@ class CommentServiceImpl(
         username: String,
         createCommentRequestDto: CreateCommentRequestDto,
         parentCommentId: Long?,
-    ): CreateCommentResponseDto {
+    ): Pair<CreateCommentResponseDto, NotificationDto> {
         log.info("create Comment")
         // user
         val user = userRepository.findByEmail(username)
@@ -69,11 +71,20 @@ class CommentServiceImpl(
         )
 
         comment.addComment(post)
-        // comment.joinAncestor(ancestorComment)
-
-        // TODO: 여기서 문제가 생기는거 같음
-        return CreateCommentResponseDto(
-            commentRepository.save(comment).id!!,
+        // 1. 그냥 댓글이면 post의 writer return
+        // 2. 대댓글이면 부모 댓글의 writer return
+        return Pair(
+            CreateCommentResponseDto(
+                commentRepository.save(comment).id!!,
+                post.id!!,
+                comment.content,
+            ),
+            NotificationDto(
+                parentComment?.writer?.id ?: post.writer.id!!,
+                "/post/${post.id}",
+                "$comment",
+                NotificationType.COMMENT,
+            ),
         )
     }
 
