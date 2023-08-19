@@ -6,6 +6,7 @@ import com.kotlin.boardproject.dto.comment.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.NotificationService
+import com.kotlin.boardproject.service.SseService
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -18,6 +19,7 @@ import javax.validation.constraints.Positive
 class CommentController(
     private val commentService: CommentService,
     private val notificationService: NotificationService,
+    private val sseService: SseService,
 ) {
     // TODO: requestDto에 isAnon 안들어와도 작동이 되는 오류 있음
     @PostMapping("", "/{parentCommentId}")
@@ -29,7 +31,7 @@ class CommentController(
     ): ApiResponse<CreateCommentResponseDto> {
         log.info(createCommentRequestDto.toString())
 
-        val (data, notificationDto) = commentService.createComment(
+        val (data, notificationCreateDto) = commentService.createComment(
             loginUser.username,
             createCommentRequestDto,
             parentCommentId,
@@ -39,8 +41,9 @@ class CommentController(
         // parentCommentId가 null이면 해당 comment의 글의 주인에게 nofitication을 보낸다.
         // parentCommentId가 null이 아니면 해당 comment의 주인에게 notification을 보낸다.
         // 자신이 작성한 글이나 댓글이면 알림을 보내지 아니한다.
-        notificationService.createNotification(notificationDto)
+        val notification = notificationService.createNotification(notificationCreateDto)
         // notification sse Emitter
+        sseService.sendEvent(loginUser.username, notification)
 
         return ApiResponse.success(data)
     }
