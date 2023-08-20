@@ -40,7 +40,7 @@ import javax.transaction.Transactional
 @Transactional
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class NotificationServiceImplTest {
+class NotificationServiceImplRDBTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -125,9 +125,10 @@ class NotificationServiceImplTest {
 
         notification = notificationRepository.saveAndFlush(
             Notification(
+                from = commentWriter,
                 to = postWriter,
                 url = "/post/${post.id}",
-                message = "message",
+                content = "message",
             ),
         )
     }
@@ -250,9 +251,10 @@ class NotificationServiceImplTest {
 
         notificationRepository.saveAndFlush(
             Notification(
+                from = commentWriter,
                 to = postWriter,
                 url = "/post/${post.id}",
-                message = "message",
+                content = "message",
             ),
         )
 

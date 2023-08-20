@@ -1,8 +1,7 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.comment.MyCommentResponseDto
 import com.kotlin.boardproject.dto.comment.*
-import com.kotlin.boardproject.dto.notification.NotificationDto
+import com.kotlin.boardproject.dto.notification.NotificationCreateDto
 import org.springframework.data.domain.Pageable
 
 interface CommentService {
@@ -10,7 +9,7 @@ interface CommentService {
         username: String,
         createCommentRequestDto: CreateCommentRequestDto,
         parentCommentId: Long?,
-    ): Pair<CreateCommentResponseDto, NotificationDto>
+    ): Pair<CreateCommentResponseDto, NotificationCreateDto>
 
     fun deleteComment(
         username: String,

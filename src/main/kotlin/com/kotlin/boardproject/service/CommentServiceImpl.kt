@@ -6,7 +6,7 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.*
-import com.kotlin.boardproject.dto.notification.NotificationDto
+import com.kotlin.boardproject.dto.notification.NotificationCreateDto
 import com.kotlin.boardproject.model.BlackComment
 import com.kotlin.boardproject.model.Comment
 import com.kotlin.boardproject.model.LikeComment
@@ -30,7 +30,7 @@ class CommentServiceImpl(
         username: String,
         createCommentRequestDto: CreateCommentRequestDto,
         parentCommentId: Long?,
-    ): Pair<CreateCommentResponseDto, NotificationDto> {
+    ): Pair<CreateCommentResponseDto, NotificationCreateDto> {
         log.info("create Comment")
         // user
         val user = userRepository.findByEmail(username)
@@ -73,17 +73,20 @@ class CommentServiceImpl(
         comment.addComment(post)
         // 1. 그냥 댓글이면 post의 writer return
         // 2. 대댓글이면 부모 댓글의 writer return
+        val returnComment = commentRepository.save(comment)
+
         return Pair(
             CreateCommentResponseDto(
-                commentRepository.save(comment).id!!,
+                returnComment.id!!,
                 post.id!!,
                 comment.content,
             ),
-            NotificationDto(
-                parentComment?.writer?.id ?: post.writer.id!!,
-                "/post/${post.id}",
-                "$comment",
-                NotificationType.COMMENT,
+            NotificationCreateDto(
+                fromUser = user,
+                toUser = parentComment?.writer ?: post.writer,
+                url = "/post/${post.id}",
+                message = comment.content,
+                notificationType = NotificationType.COMMENT,
             ),
         )
     }
