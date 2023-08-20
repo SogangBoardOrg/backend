@@ -144,6 +144,14 @@ class AuthServiceImpl(
         return accessToken to refreshToken
     }
 
+    override fun checkDuplicateEmail(email: String): Boolean {
+        return userRepository.findByEmail(email) != null
+    }
+
+    override fun checkDuplicateNickname(nickname: String): Boolean {
+        return userRepository.findByNickname(nickname) != null
+    }
+
     private fun checkEmailAndUserName(email: String, username: String) {
         userRepository.findByEmail(email)?.let {
             if (it.email == email) {

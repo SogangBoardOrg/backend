@@ -62,7 +62,7 @@ class CustomOAuth2UserService(
         // generate random nickname
         var nickname = UUID.randomUUID().toString().substring(0, 32)
 
-        while (userRepository.findUserByNickname(nickname) != null) {
+        while (userRepository.findByNickname(nickname) != null) {
             nickname = UUID.randomUUID().toString().substring(0, 32)
         }
 
