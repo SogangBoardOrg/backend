@@ -125,7 +125,7 @@ class NotificationServiceImplRDBTest {
 
         notification = notificationRepository.saveAndFlush(
             Notification(
-                from  = commentWriter,
+                from = commentWriter,
                 to = postWriter,
                 url = "/post/${post.id}",
                 content = "message",

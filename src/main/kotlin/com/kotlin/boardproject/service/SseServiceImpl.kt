@@ -1,6 +1,5 @@
 package com.kotlin.boardproject.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.notification.NotificationResponseDto
 import com.kotlin.boardproject.model.Notification
