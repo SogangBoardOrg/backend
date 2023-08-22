@@ -1,7 +1,12 @@
 package com.kotlin.boardproject.service
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
 import com.kotlin.boardproject.auth.AUTHORITIES_KEY
 import com.kotlin.boardproject.auth.AuthTokenProvider
+import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.config.properties.AppProperties
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.Role
@@ -10,14 +15,11 @@ import com.kotlin.boardproject.common.exception.UnAuthorizedException
 import com.kotlin.boardproject.common.util.getAccessToken
 import com.kotlin.boardproject.common.util.getCookie
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.TokenDto
-import com.kotlin.boardproject.dto.UserInfoDto
-import com.kotlin.boardproject.dto.UserLoginRequestDto
-import com.kotlin.boardproject.dto.UserSignUpDto
+import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.common.RedisRepository
 import com.kotlin.boardproject.repository.UserRepository
 import com.kotlin.boardproject.repository.common.REFRESH_TOKEN
+import com.kotlin.boardproject.repository.common.RedisRepository
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -115,10 +117,7 @@ class AuthServiceImpl(
         return UserInfoDto(findUser)
     }
 
-    private fun createTokens(
-        findUser: User,
-        email: String,
-    ): Pair<String, String> {
+    private fun createTokens(findUser: User, email: String): Pair<String, String> {
         val role = findUser.role
 
         val now = Date()
@@ -152,8 +151,56 @@ class AuthServiceImpl(
         return userRepository.findByNickname(nickname) != null
     }
 
+    override fun loginUserMobile(userLoginMobileRequestDto: UserLoginMobileRequestDto): UserInfoDto {
+        val token = verifyGoogleToken(
+            userLoginMobileRequestDto.tokenString,
+            userLoginMobileRequestDto.clientId,
+        )
+
+        token.email ?: throw UnAuthorizedException(ErrorCode.TOKEN_INVALID, "올바르지 않은 Google Token 입니다.")
+        val email = token.email!!
+
+        val findUser = userRepository.findByEmail(email)
+            ?: throw EntityNotFoundException("$email 을 가진 유저는 존재하지 않습니다.")
+
+        val (accessToken, refreshToken) = createTokens(findUser, email)
+        return UserInfoDto(findUser, accessToken, refreshToken)
+    }
+
+    override fun saveUserGoogleMobile(userSignUpMobileDto: UserSignUpMobileDto): UUID {
+        val token = verifyGoogleToken(
+            userSignUpMobileDto.tokenString,
+            userSignUpMobileDto.clientId,
+        )
+
+        token.email ?: throw UnAuthorizedException(ErrorCode.TOKEN_INVALID, "올바르지 않은 Google Token 입니다.")
+        checkEmailAndUserName(token.email!!, userSignUpMobileDto.nickname)
+        val user = convertGoogleTokenToUser(token, userSignUpMobileDto.nickname)
+
+        return userRepository.save(user).id!!
+    }
+
+    private fun convertGoogleTokenToUser(token: GoogleIdToken.Payload, nickname: String): User {
+        return User(
+            email = token.email,
+            nickname = nickname,
+            providerType = ProviderType.GOOGLE,
+            profileImageUrl = token.get("picture") as String?,
+            providerId = token.subject,
+        )
+    }
+
+    private fun verifyGoogleToken(token: String, clientId: String): GoogleIdToken.Payload {
+        return GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory())
+            .setAudience(listOf(clientId))
+            .build()
+            .verify(token)
+            .payload
+            ?: throw UnAuthorizedException(ErrorCode.TOKEN_INVALID, "올바르지 않은 Google Token 입니다.")
+    }
+
     private fun checkEmailAndUserName(email: String, username: String) {
-        userRepository.findByEmail(email)?.let {
+        userRepository.findByEmailOrUsername(email, username)?.let {
             if (it.email == email) {
                 throw ConditionConflictException(ErrorCode.EMAIL_DUPLICATED, "$email 은 중복 이메일입니다.")
             }

@@ -11,7 +11,6 @@ interface UserRepository : JpaRepository<User, UUID> {
     fun findUserByProviderId(id: String): User?
     fun findByEmailOrProviderId(email: String, id: String): User?
 
-
     @Query(
         """ SELECT u
             FROM User AS u
@@ -31,4 +30,6 @@ interface UserRepository : JpaRepository<User, UUID> {
             """,
     )
     fun findByEmailFetchScrapList(email: String): User?
+
+    fun findByEmailOrUsername(email: String, username: String): User?
 }

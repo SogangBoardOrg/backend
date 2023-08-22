@@ -1,9 +1,7 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.TokenDto
-import com.kotlin.boardproject.dto.UserInfoDto
-import com.kotlin.boardproject.dto.UserLoginRequestDto
-import com.kotlin.boardproject.dto.UserSignUpDto
+import com.kotlin.boardproject.dto.*
+import com.kotlin.boardproject.model.User
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -19,4 +17,8 @@ interface AuthService {
     fun checkDuplicateEmail(email: String): Boolean
 
     fun checkDuplicateNickname(nickname: String): Boolean
+
+    fun saveUserGoogleMobile(userSignUpMobileDto: UserSignUpMobileDto): UUID
+
+    fun loginUserMobile(userLoginMobileRequestDto: UserLoginMobileRequestDto): UserInfoDto
 }
