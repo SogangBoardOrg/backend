@@ -5,6 +5,7 @@ import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
 import com.kotlin.boardproject.common.util.log
+import com.kotlin.boardproject.dto.CommentsByPostIdResponseDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import com.kotlin.boardproject.model.BlackPost
@@ -50,16 +51,12 @@ class PostServiceImpl(
         val user = userEmail?.let {
             userRepository.findByEmail(it)
         }
-
         val post = normalPostRepository.findByIdAndStatusFetchPhotoListAndUser(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
         normalPostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
         normalPostRepository.findByIdAndStatusFetchScrapList(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
-
-        // user에서 fetch join은 ㄴㄴ
-
         // post에서는
         // likeList를 가져오고 그 안에서 user를 다시한번 가져온다.
         // scrapList를 가져오고 그 안에서 user를 다시한번 가져온다.
@@ -71,6 +68,26 @@ class PostServiceImpl(
         val comments = commentRepository.findByPostFetchLikeListOrderById(post)
 
         return OneNormalPostResponseDto.fromNormalPost(
+            post = post,
+            searchUser = user,
+            commentList = comments,
+        )
+    }
+
+    @Transactional(readOnly = true)
+    override fun findCommentsByPostId(
+        userEmail: String,
+        postId: Long,
+    ): CommentsByPostIdResponseDto {
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+
+        val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
+            ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
+
+        val comments = commentRepository.findByPostFetchLikeListOrderById(post)
+
+        return CommentsByPostIdResponseDto.fromCommentList(
             post = post,
             searchUser = user,
             commentList = comments,
