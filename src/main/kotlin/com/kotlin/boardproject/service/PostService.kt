@@ -71,7 +71,7 @@ interface PostService {
     ): CancelScrapPostResponseDto
 
     fun findCommentsByPostId(
-        userEmail: String,
+        userEmail: String?,
         postId: Long,
     ): CommentsByPostIdResponseDto
 }

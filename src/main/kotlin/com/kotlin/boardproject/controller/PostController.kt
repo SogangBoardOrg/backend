@@ -74,7 +74,7 @@ class PostController(
     ): ApiResponse<CommentsByPostIdResponseDto> {
         log.info("username: ${principal?.name}")
 
-        val data = postService.findCommentsByPostId(principal?.name, postId, pageable)
+        val data = postService.findCommentsByPostId(principal?.name, postId)
         return ApiResponse.success(data)
     }
 

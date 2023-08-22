@@ -76,7 +76,7 @@ class PostServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findCommentsByPostId(
-        userEmail: String,
+        userEmail: String?,
         postId: Long,
     ): CommentsByPostIdResponseDto {
         val user = userRepository.findByEmail(userEmail)
