@@ -7,6 +7,8 @@ import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.model.User
 import com.kotlin.boardproject.repository.UserRepository
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -72,6 +74,118 @@ class AuthServiceImplTest {
             expiry = Date(Date().time + 6000000),
             role = Role.ROLE_VERIFIED_USER.code,
         )
+    }
+
+    @Test
+    fun 중복_이메일_체크_중복_O() {
+        val finalUrl = "/api/v1/auth/duplicate-email?email=test@test.com"
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders
+                .get(finalUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(status().isOk)
+            .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "duplicate-email-is-duplicate",
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
+                    requestHeaders(),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data").description("중복 여부"),
+                    ),
+                ),
+            )
+        userRepository.findByEmail("test@test.com") shouldNotBe null
+    }
+
+    @Test
+    fun 중복_이메일_체크_중복_X() {
+        val finalUrl = "/api/v1/auth/duplicate-email?email=fail@test.com"
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders
+                .get(finalUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(status().isOk)
+            .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "duplicate-email-not-duplicate",
+
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
+                    requestHeaders(),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data").description("중복 여부"),
+                    ),
+                ),
+            )
+
+        userRepository.findByEmail("fail@test.com") shouldBe null
+    }
+
+    @Test
+    fun 중복_닉네임_체크_중복_O() {
+        val finalUrl = "/api/v1/auth/duplicate-nickname?nickname=test"
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders
+                .get(finalUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(status().isOk)
+            .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "duplicate-nickname-is-duplicate",
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
+                    requestHeaders(),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data").description("중복 여부"),
+                    ),
+                ),
+            )
+
+        userRepository.findByNickname("test") shouldNotBe null
+    }
+
+    @Test
+    fun 중복_닉네임_체크_중복_X() {
+        val finalUrl = "/api/v1/auth/duplicate-nickname?nickname=fail"
+
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders
+                .get(finalUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(status().isOk)
+            .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
+                MockMvcRestDocumentation.document(
+                    "duplicate-nickname-not-duplicate",
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
+                    requestHeaders(),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data").description("중복 여부"),
+                    ),
+                ),
+            )
+
+        userRepository.findByNickname("fail") shouldBe null
     }
 
     @Test

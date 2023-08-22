@@ -58,6 +58,9 @@ dependencies {
     kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // google
+    implementation("com.google.api-client:google-api-client:2.0.0")
 }
 
 tasks.register("copyYml", Copy::class) {
