@@ -200,7 +200,7 @@ class AuthServiceImpl(
     }
 
     private fun checkEmailAndUserName(email: String, username: String) {
-        userRepository.findByEmailOrUsername(email, username)?.let {
+        userRepository.findByEmailOrNickname(email, username)?.let {
             if (it.email == email) {
                 throw ConditionConflictException(ErrorCode.EMAIL_DUPLICATED, "$email 은 중복 이메일입니다.")
             }

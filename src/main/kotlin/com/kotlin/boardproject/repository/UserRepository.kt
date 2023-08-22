@@ -31,5 +31,5 @@ interface UserRepository : JpaRepository<User, UUID> {
     )
     fun findByEmailFetchScrapList(email: String): User?
 
-    fun findByEmailOrUsername(email: String, username: String): User?
+    fun findByEmailOrNickname(email: String, nickname: String): User?
 }

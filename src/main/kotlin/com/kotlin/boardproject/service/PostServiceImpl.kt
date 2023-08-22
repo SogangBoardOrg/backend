@@ -79,8 +79,9 @@ class PostServiceImpl(
         userEmail: String?,
         postId: Long,
     ): CommentsByPostIdResponseDto {
-        val user = userRepository.findByEmail(userEmail)
-            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+        val user = userEmail?.let {
+            userRepository.findByEmail(it)
+        }
 
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
