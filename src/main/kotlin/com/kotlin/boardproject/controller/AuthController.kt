@@ -3,10 +3,7 @@ package com.kotlin.boardproject.controller
 import com.kotlin.boardproject.common.config.properties.AppProperties
 import com.kotlin.boardproject.common.util.addCookie
 import com.kotlin.boardproject.common.util.deleteCookie
-import com.kotlin.boardproject.dto.TokenResponseDto
-import com.kotlin.boardproject.dto.UserInfoResponseDto
-import com.kotlin.boardproject.dto.UserLoginRequestDto
-import com.kotlin.boardproject.dto.UserSignUpDto
+import com.kotlin.boardproject.dto.*
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.repository.common.REFRESH_TOKEN
 import com.kotlin.boardproject.service.AuthService
@@ -30,6 +27,11 @@ class AuthController(
         return authService.saveUser(userSignUpDto)
     }
 
+    @PostMapping("/signup-mobile")
+    fun signUp(@RequestBody userSignUpMobileDto: UserSignUpMobileDto): UUID {
+        return authService.saveUserGoogleMobile(userSignUpMobileDto)
+    }
+
     @PostMapping("/login")
     fun login(
         request: HttpServletRequest,
@@ -37,6 +39,22 @@ class AuthController(
         @RequestBody userLoginRequestDto: UserLoginRequestDto,
     ): ApiResponse<UserInfoResponseDto> {
         val userInfoDto = authService.loginUser(userLoginRequestDto)
+
+        val cookieMaxAge = appProperties.auth.refreshTokenExpiry / 1000
+
+        deleteCookie(request, response, REFRESH_TOKEN)
+        addCookie(response, REFRESH_TOKEN, userInfoDto.refreshToken!!, cookieMaxAge)
+
+        return ApiResponse.success(UserInfoResponseDto(userInfoDto))
+    }
+
+    @PostMapping("/login-mobile")
+    fun login(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        @RequestBody userLoginMobileRequestDto: UserLoginMobileRequestDto,
+    ): ApiResponse<UserInfoResponseDto> {
+        val userInfoDto = authService.loginUserMobile(userLoginMobileRequestDto)
 
         val cookieMaxAge = appProperties.auth.refreshTokenExpiry / 1000
 
