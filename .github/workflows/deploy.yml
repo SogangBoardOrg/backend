@@ -43,6 +43,7 @@ jobs:
           key: ${{ secrets.SSH_PEM_KEY }}
           source: "build/libs/*.jar"
           target: "/home/ubuntu/temp"
+          strip_components: 2
 
       - name: stop nohup
         uses: appleboy/ssh-action@master
@@ -54,6 +55,7 @@ jobs:
             a=$(ps -ef | grep 'java -jar -Dspring.profiles.active' | grep -v grep | awk '{print $2}')
             kill -9 $a
 
+
       - name: restart nohup
         uses: appleboy/ssh-action@master
         with:
@@ -61,7 +63,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PEM_KEY }}
           script: | 
-            nohup java -jar -Dspring.profiles.active=dev ~/temp/build/libs/BoardProject-0.0.1-SNAPSHOT.jar > nohup.out 2> nohup.err < /dev/null &
+            nohup java -jar -Dspring.profiles.active=dev ~/backend/BoardProject-0.0.1-SNAPSHOT.jar > nohup.out 2> nohup.err < /dev/null &
+
 
 
       - name: slack-notification
