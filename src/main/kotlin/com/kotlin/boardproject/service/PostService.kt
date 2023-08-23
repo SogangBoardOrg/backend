@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.CommentsByPostIdResponseDto
+import com.kotlin.boardproject.dto.comment.CommentsByPostIdResponseDto
 import com.kotlin.boardproject.dto.post.*
 import com.kotlin.boardproject.dto.post.normalpost.*
 import org.springframework.data.domain.Pageable

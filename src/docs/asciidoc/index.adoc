@@ -71,6 +71,51 @@ endif::[]
 
 === 사용자가 사용하는 실 서비스에 이용되는 API입니다.
 
+=== AUTH API ( /api/v1/auth )
+
+==== 아이디 중복 확인
+
+.description
+[source]
+----
+해당 아이디로 가입한 유저가 있는지 확인하는 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/auth/duplicate-email
+----
+
+.Sample Request
+include::{snippets}/duplicate-email-is-duplicate/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/duplicate-email-is-duplicate/http-response.adoc[]
+
+.Response Body
+include::{snippets}/duplicate-email-is-duplicate/response-body.adoc[]
+include::{snippets}/duplicate-email-is-duplicate/response-fields.adoc[]
+
+==== 닉네임 중복 확인
+
+.description
+[source]
+----
+해당 닉네임으로 가입한 유저가 있는지 확인하는 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/auth/duplicate-nickname
+----
+
+.Sample Request
+include::{snippets}/duplicate-nickname-is-duplicate/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/duplicate-nickname-is-duplicate/http-response.adoc[]
+
+.Response Body
+include::{snippets}/duplicate-nickname-is-duplicate/response-body.adoc[]
+include::{snippets}/duplicate-nickname-is-duplicate/response-fields.adoc[]
+
+
 === POST API ( /api/v1/post )
 
 ==== 글 등록
