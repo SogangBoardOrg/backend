@@ -813,6 +813,89 @@ class PostServiceImplTest {
 
     @Test
     @Rollback(true)
+    fun 글_댓글_단독_조회() {
+        // given
+        val urlPoint = "/{postId}/comments"
+        val finalUrl = "$statsEndPoint$urlPoint"
+
+        val title = "title_test"
+        val content = "content_test"
+
+        val post = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = title,
+                content = content,
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+                photoList = listOf(),
+            ),
+        )
+
+        val post2 = normalPostRepository.saveAndFlush(
+            NormalPost(
+                title = "title_2",
+                content = "content_2",
+                isAnon = true,
+                commentOn = true,
+                writer = writer,
+                normalType = NormalType.FREE,
+                photoList = listOf(),
+            ),
+        )
+
+        val comment = commentRepository.saveAndFlush(
+            Comment(
+                content = "comment_content",
+                writer = writer,
+                post = post,
+                isAnon = true,
+            ),
+        )
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders.get(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                document(
+                    "view-comments-normal-post",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    responseFields(
+                        fieldWithPath("data.commentList").description("댓글 내용"),
+                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
+                            .description("댓글 작성자 익명 여부"),
+                        fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING)
+                            .description("댓글 작성인 이름"),
+                        fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글이 로그인 한 작성자가 작성했는지의 여부"),
+                        fieldWithPath("data.commentList.[].isPostWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글이 글 작성자에 의해서 쓰여졌는지 여부"),
+                        fieldWithPath("data.commentList.[].createdAt").type(JsonFieldType.STRING)
+                            .description("댓글 생성 시간"),
+                        fieldWithPath("data.commentList.[].updatedAt").type(JsonFieldType.STRING)
+                            .description("댓글 최종 수정 시간"),
+                        fieldWithPath("data.commentList.[].parentId").type(JsonFieldType.NUMBER).optional()
+                            .description("부모 댓글 번호"),
+                        fieldWithPath("data.commentList.[].ancestorId").type(JsonFieldType.NUMBER).optional()
+                            .description("조상 댓글 번호"),
+                        fieldWithPath("data.commentList.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                        fieldWithPath("data.commentList.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                        fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
+                        fieldWithPath("status").description("성공 여부"),
+                    ),
+                ),
+            )
+    }
+
+    @Test
+    @Rollback(true)
     fun 글_대량_조회() {
         // given
         val urlPoint = "/query"

@@ -30,6 +30,7 @@ import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
@@ -88,6 +89,7 @@ class AuthServiceImplTest {
         )
 
         result.andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data", true).exists())
             .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "duplicate-email-is-duplicate",
@@ -115,10 +117,10 @@ class AuthServiceImplTest {
         )
 
         result.andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data", false).exists())
             .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "duplicate-email-not-duplicate",
-
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(),
@@ -144,6 +146,7 @@ class AuthServiceImplTest {
         )
 
         result.andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data", true).exists())
             .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "duplicate-nickname-is-duplicate",
@@ -172,6 +175,7 @@ class AuthServiceImplTest {
         )
 
         result.andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data", false).exists())
             .andExpect(content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "duplicate-nickname-not-duplicate",
