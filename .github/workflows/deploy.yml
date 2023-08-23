@@ -56,7 +56,6 @@ jobs:
             kill -9 $a
 
 
-
       - name: restart nohup
         uses: appleboy/ssh-action@master
         with:
@@ -65,7 +64,6 @@ jobs:
           key: ${{ secrets.SSH_PEM_KEY }}
           script: | 
             nohup java -jar -Dspring.profiles.active=dev ~/backend/BoardProject-0.0.1-SNAPSHOT.jar > nohup.out 2> nohup.err < /dev/null &
-
 
 
 
