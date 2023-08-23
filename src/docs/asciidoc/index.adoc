@@ -6,7 +6,7 @@ endif::[]
 
 = SOGANGBOARD API
 
-== API 공통 사항
+== API 공통 사항1
 
 이 API는 https://github.com/omniti-labs/jsend[JSend] Format을 따르는 API로, 아래와 같은 공통된 응답을 줍니다.
 
