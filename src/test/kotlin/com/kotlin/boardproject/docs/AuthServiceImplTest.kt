@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.service
+package com.kotlin.boardproject.docs
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.auth.AuthToken

@@ -147,9 +147,9 @@ class PostServiceImpl(
         editNormalPostRequestDto: EditNormalPostRequestDto,
     ): EditNormalPostResponseDto {
         val user = userRepository.findByEmail(userEmail)
-            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$userEmail 는 없는 유저 이메일 입니다.")
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
-            ?: throw throw EntityNotFoundException("존재하지 않는 글 입니다.")
+            ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
         post.checkWriter(user)
         post.editPost(editNormalPostRequestDto)
@@ -182,7 +182,7 @@ class PostServiceImpl(
     ): LikePostResponseDto {
         log.info("like post start")
         val user = userRepository.findByEmailFetchLikeList(userEmail)
-            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$userEmail 는 없는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
