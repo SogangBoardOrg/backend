@@ -503,8 +503,7 @@ class PostServiceImplTest : BehaviorSpec({
         }
     }
 
-    given("글 스크랩 취소") {
-    }
+    given("글 스크랩 취소") {}
 
     /*
     @Test
@@ -528,7 +527,7 @@ class PostServiceImplTest : BehaviorSpec({
     }
 
     @Test
-    fun 자신이_스크랩_한_글_조회() { // given
+    fun 자신이_스크랩_한_글_조회()
     }*/
 })
 

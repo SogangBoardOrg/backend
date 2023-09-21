@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot") version "2.7.1"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("io.kotest") version "0.4.10"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
@@ -46,7 +47,11 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
     testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+    testImplementation("io.kotest:kotest-assertions-core-jvm")
+    testImplementation("io.kotest:kotest-framework-engine-jvm")
+
     testImplementation("io.mockk:mockk:1.13.4")
 
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
@@ -102,6 +107,7 @@ tasks {
         dependsOn(getByName("copyYml"))
         inputs.dir(snippetsDir)
         dependsOn(test)
+        dependsOn(kotest)
         doFirst { // 2
             delete("src/main/resources/static/docs")
             delete("BOOT-INF/classes/static/docs")
