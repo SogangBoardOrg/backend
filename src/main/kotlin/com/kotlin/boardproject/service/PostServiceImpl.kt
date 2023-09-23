@@ -254,7 +254,7 @@ class PostServiceImpl(
         postId: Long,
     ): ScrapPostResponseDto {
         val user = userRepository.findByEmailFetchScrapList(userEmail)
-            ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
+            ?: throw EntityNotFoundException("$userEmail 존재하지 않는 유저 입니다.")
 
         val post =
             basePostRepository.findByIdAndStatusFetchScrapList(postId, PostStatus.NORMAL)
