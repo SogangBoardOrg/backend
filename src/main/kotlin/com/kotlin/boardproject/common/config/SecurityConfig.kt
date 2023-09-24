@@ -33,7 +33,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
-class SpringSecurityConfig(
+class SecurityConfig(
     private val corsProperties: CorsProperties,
     private val appProperties: AppProperties,
     private val authTokenProvider: com.kotlin.boardproject.auth.AuthTokenProvider,
