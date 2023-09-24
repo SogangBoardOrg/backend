@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.model
 
 import org.hibernate.annotations.GenericGenerator
-import java.util.*
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.GeneratedValue
 import javax.persistence.Id

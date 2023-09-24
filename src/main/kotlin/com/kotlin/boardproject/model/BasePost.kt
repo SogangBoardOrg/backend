@@ -3,7 +3,21 @@ package com.kotlin.boardproject.model
 import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.UnAuthorizedException
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.DiscriminatorColumn
+import javax.persistence.ElementCollection
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 
 // 게시판 상관없이 모두 적용되는 속성을 넣는다.
 // 테이블 전략은 상속관계 매핑 중에서 조인 전략을 사용

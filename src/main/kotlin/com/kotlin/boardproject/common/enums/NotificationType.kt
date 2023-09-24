@@ -1,5 +1,5 @@
 package com.kotlin.boardproject.common.enums
 
-enum class NotificationType{
+enum class NotificationType {
     COMMENT,
 }

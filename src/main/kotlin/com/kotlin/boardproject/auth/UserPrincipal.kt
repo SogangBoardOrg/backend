@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.oauth2.core.user.OAuth2User
-import java.util.*
+import java.util.Collections
 
 class UserPrincipal(
     private val userId: String,

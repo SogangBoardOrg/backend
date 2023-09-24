@@ -13,8 +13,17 @@ import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
 import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
 import com.kotlin.boardproject.dto.comment.DeleteCommentRequestDto
 import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
-import com.kotlin.boardproject.model.*
-import com.kotlin.boardproject.repository.*
+import com.kotlin.boardproject.model.BasePost
+import com.kotlin.boardproject.model.Comment
+import com.kotlin.boardproject.model.LikeComment
+import com.kotlin.boardproject.model.NormalPost
+import com.kotlin.boardproject.model.User
+import com.kotlin.boardproject.repository.BlackCommentRepository
+import com.kotlin.boardproject.repository.CommentRepository
+import com.kotlin.boardproject.repository.LikeCommentRepository
+import com.kotlin.boardproject.repository.NormalPostRepository
+import com.kotlin.boardproject.repository.ScrapPostRepository
+import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.BeforeEach
@@ -34,12 +43,15 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors.preproces
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
-import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
+import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.util.*
+import java.util.Date
+import java.util.UUID
 import javax.transaction.Transactional
 
 @SpringBootTest

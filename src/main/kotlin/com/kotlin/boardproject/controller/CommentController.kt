@@ -2,14 +2,29 @@ package com.kotlin.boardproject.controller
 
 import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.common.util.log
-import com.kotlin.boardproject.dto.comment.*
+import com.kotlin.boardproject.dto.comment.BlackCommentRequestDto
+import com.kotlin.boardproject.dto.comment.BlackCommentResponseDto
+import com.kotlin.boardproject.dto.comment.CancelLikeCommentResponseDto
+import com.kotlin.boardproject.dto.comment.CreateCommentRequestDto
+import com.kotlin.boardproject.dto.comment.CreateCommentResponseDto
+import com.kotlin.boardproject.dto.comment.DeleteCommentRequestDto
+import com.kotlin.boardproject.dto.comment.DeleteCommentResponseDto
+import com.kotlin.boardproject.dto.comment.LikeCommentResponseDto
+import com.kotlin.boardproject.dto.comment.UpdateCommentRequestDto
+import com.kotlin.boardproject.dto.comment.UpdateCommentResponseDto
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.CommentService
 import com.kotlin.boardproject.service.NotificationService
 import com.kotlin.boardproject.service.SseService
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 import javax.validation.constraints.Positive
 

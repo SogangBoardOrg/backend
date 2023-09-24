@@ -1,8 +1,7 @@
 package com.kotlin.boardproject.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.kotlin.boardproject.common.enums.Role
-import java.util.*
+import java.util.UUID
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class UserInfoResponseDto(

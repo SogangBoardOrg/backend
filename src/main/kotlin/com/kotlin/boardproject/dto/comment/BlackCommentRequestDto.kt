@@ -5,5 +5,5 @@ import javax.validation.constraints.NotNull
 
 class BlackCommentRequestDto(
     @field: NotNull
-    val blackReason: BlackReason
+    val blackReason: BlackReason,
 )

@@ -6,4 +6,3 @@ class UnAuthorizedException(
     errorCode: ErrorCode,
     log: String,
 ) : BizException(errorCode, log)
-

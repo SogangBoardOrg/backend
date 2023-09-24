@@ -4,7 +4,11 @@ import com.kotlin.boardproject.auth.LoginUser
 import com.kotlin.boardproject.dto.common.ApiResponse
 import com.kotlin.boardproject.service.SseService
 import org.springframework.security.core.userdetails.User
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 
 @RestController

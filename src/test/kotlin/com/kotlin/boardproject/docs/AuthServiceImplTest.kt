@@ -34,7 +34,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 @SpringBootTest
 @AutoConfigureMockMvc

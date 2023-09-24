@@ -6,7 +6,11 @@ import com.kotlin.boardproject.dto.notification.GetNotificationsResponseDto
 import com.kotlin.boardproject.service.NotificationService
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.validation.constraints.Positive
 
 @Validated
