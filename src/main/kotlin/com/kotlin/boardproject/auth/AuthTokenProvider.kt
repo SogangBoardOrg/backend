@@ -8,25 +8,25 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import java.security.Key
-import java.util.*
+import java.util.Date
 
 class AuthTokenProvider(
     secret: String,
 ) {
     private val key: Key = Keys.hmacShaKeyFor(secret.toByteArray())
 
-    fun createAuthToken(email: String, expiry: Date, role: String? = null): com.kotlin.boardproject.auth.AuthToken {
-        return com.kotlin.boardproject.auth.AuthToken(email, expiry, key, role)
+    fun createAuthToken(email: String, expiry: Date, role: String? = null): AuthToken {
+        return AuthToken(email, expiry, key, role)
     }
 
-    fun convertAuthToken(token: String): com.kotlin.boardproject.auth.AuthToken {
-        return com.kotlin.boardproject.auth.AuthToken(token, key)
+    fun convertAuthToken(token: String): AuthToken {
+        return AuthToken(token, key)
     }
 
-    fun getAuthentication(authToken: com.kotlin.boardproject.auth.AuthToken): Authentication {
+    fun getAuthentication(authToken: AuthToken): Authentication {
         if (authToken.isValid) {
             val claims = authToken.tokenClaims
-            val authorities = arrayOf(claims!![com.kotlin.boardproject.auth.AUTHORITIES_KEY].toString())
+            val authorities = arrayOf(claims!![AUTHORITIES_KEY].toString())
                 .map(::SimpleGrantedAuthority)
                 .toList()
 

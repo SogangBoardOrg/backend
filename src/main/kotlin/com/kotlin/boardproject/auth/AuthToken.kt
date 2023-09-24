@@ -1,9 +1,15 @@
 package com.kotlin.boardproject.auth
 
 import com.kotlin.boardproject.common.util.log
-import io.jsonwebtoken.*
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.UnsupportedJwtException
+import io.jsonwebtoken.security.SignatureException
 import java.security.Key
-import java.util.*
+import java.util.Date
 
 const val AUTHORITIES_KEY: String = "ROLE"
 
@@ -82,7 +88,7 @@ class AuthToken(
     private fun createAuthToken(email: String, expiry: Date, role: String): String {
         return Jwts.builder()
             .setSubject(email)
-            .claim(com.kotlin.boardproject.auth.AUTHORITIES_KEY, role)
+            .claim(AUTHORITIES_KEY, role)
             .signWith(key, SignatureAlgorithm.HS256)
             .setExpiration(expiry)
             .compact()

@@ -11,7 +11,10 @@ import com.kotlin.boardproject.model.BasePost
 import com.kotlin.boardproject.model.NormalPost
 import com.kotlin.boardproject.model.Notification
 import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.*
+import com.kotlin.boardproject.repository.CommentRepository
+import com.kotlin.boardproject.repository.NormalPostRepository
+import com.kotlin.boardproject.repository.NotificationRepository
+import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.BeforeEach
@@ -31,7 +34,8 @@ import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.util.*
+import java.util.Date
+import java.util.UUID
 import javax.transaction.Transactional
 
 @SpringBootTest

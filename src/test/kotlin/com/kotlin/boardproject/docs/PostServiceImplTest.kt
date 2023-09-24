@@ -10,8 +10,18 @@ import com.kotlin.boardproject.common.enums.Role
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.model.*
-import com.kotlin.boardproject.repository.*
+import com.kotlin.boardproject.model.Comment
+import com.kotlin.boardproject.model.LikePost
+import com.kotlin.boardproject.model.NormalPost
+import com.kotlin.boardproject.model.ScrapPost
+import com.kotlin.boardproject.model.User
+import com.kotlin.boardproject.repository.BasePostRepository
+import com.kotlin.boardproject.repository.BlackPostRepository
+import com.kotlin.boardproject.repository.CommentRepository
+import com.kotlin.boardproject.repository.LikePostRepository
+import com.kotlin.boardproject.repository.NormalPostRepository
+import com.kotlin.boardproject.repository.ScrapPostRepository
+import com.kotlin.boardproject.repository.UserRepository
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.AfterEach
@@ -28,9 +38,13 @@ import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
-import org.springframework.restdocs.operation.preprocess.Preprocessors.*
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
+import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.requestParameters
 import org.springframework.test.annotation.Rollback
@@ -39,7 +53,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -164,7 +179,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     requestFields(
                         fieldWithPath("title").description("제목"),
@@ -238,7 +255,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     requestFields(
                         fieldWithPath("title").description("제목"),
@@ -294,7 +313,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -348,7 +369,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     requestFields(
                         fieldWithPath("blackReason").description("신고 사유"),
@@ -403,7 +426,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -461,7 +486,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -521,7 +548,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -599,7 +628,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 스크랩 하는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -668,7 +699,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 글을 보는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 글을 보는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("게시글 번호"),
@@ -1054,7 +1087,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 자신의 글을 찾는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 자신의 글을 찾는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     requestParameters(
                         parameterWithName("page").description("찾는 페이지 번호"),
@@ -1158,7 +1193,9 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증을 위한 Access 토큰, 자신이 스크랩한 글을 찾는 유저를 식별하기 위해서 반드시 필요함"),
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 자신이 스크랩한 글을 찾는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
                     ),
                     requestParameters(
                         parameterWithName("page").description("찾는 페이지 번호"),

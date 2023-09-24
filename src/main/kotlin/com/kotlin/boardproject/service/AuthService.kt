@@ -1,7 +1,6 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.*
-import com.kotlin.boardproject.model.User
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 

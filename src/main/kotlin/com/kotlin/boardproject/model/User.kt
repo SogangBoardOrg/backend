@@ -5,8 +5,14 @@ import com.kotlin.boardproject.common.enums.CurrentStatus
 import com.kotlin.boardproject.common.enums.Role
 import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
-import java.util.*
-import javax.persistence.*
+import java.util.UUID
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.OneToMany
 
 @Entity
 class User(

@@ -10,9 +10,11 @@ interface SseService {
         userEmail: String,
         lastEventId: String,
     ): SseEmitter
+
     fun sendEvent(
         userEmail: String,
         notification: Notification?,
     )
+
     fun testSend()
 }

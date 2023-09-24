@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.common.handler
 
+import com.kotlin.boardproject.auth.AuthToken
 import com.kotlin.boardproject.auth.OAuth2UserInfoFactory
 import com.kotlin.boardproject.auth.ProviderType
 import com.kotlin.boardproject.common.config.properties.AppProperties
@@ -22,7 +23,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import org.springframework.web.util.WebUtils.getCookie
 import java.net.URI
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -102,7 +104,7 @@ class OAuth2AuthenticationSuccessHandler(
         addCookie(response, REFRESH_TOKEN, refreshToken.token, cookieMaxAge)
     }
 
-    private fun createTokens(findUser: User): Pair<com.kotlin.boardproject.auth.AuthToken, com.kotlin.boardproject.auth.AuthToken> {
+    private fun createTokens(findUser: User): Pair<AuthToken, AuthToken> {
         val now = Date()
         val tokenExpiry = appProperties.auth.tokenExpiry
         val refreshTokenExpiry = appProperties.auth.refreshTokenExpiry

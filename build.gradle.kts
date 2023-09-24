@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     id("io.kotest") version "0.4.10"
+    id("org.jlleitschuh.gradle.ktlint") version "11.2.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
@@ -20,6 +21,15 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 val snippetsDir by extra { file("build/generated-snippets") }
 val querydslVersion = "5.0.0"
+
+buildscript {
+    repositories {
+        maven(url = "https://plugins.gradle.org/m2/")
+    }
+    dependencies {
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:11.2.0")
+    }
+}
 
 repositories {
     mavenCentral()
@@ -89,7 +99,6 @@ tasks.register("copyYmlTest", Copy::class) {
     include("*.yml")
     into("src/test/resources")
 }
-
 
 tasks {
     withType<Test> {
