@@ -12,13 +12,16 @@ import com.kotlin.boardproject.repository.UserRepository
 import com.kotlin.boardproject.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
 import com.kotlin.boardproject.repository.common.RedisRepository
 import com.kotlin.boardproject.service.CustomOAuth2UserService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -29,7 +32,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableMethodSecurity
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 class SpringSecurityConfig(
     private val corsProperties: CorsProperties,
     private val appProperties: AppProperties,
@@ -38,7 +41,14 @@ class SpringSecurityConfig(
     private val redisRepository: RedisRepository,
     private val tokenAccessDeniedHandler: TokenAccessDeniedHandler,
     private val userRepository: UserRepository,
+    @Value("\${spring.security.debug}")
+    private val debug: Boolean,
 ) {
+
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer {
+        return WebSecurityCustomizer { web: WebSecurity -> web.debug(debug) }
+    }
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
