@@ -2,5 +2,4 @@
 
 # ktlint
 
-cd ..
 ./gradlew ktlintMainSourceSetCheck
