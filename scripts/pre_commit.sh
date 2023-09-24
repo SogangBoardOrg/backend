@@ -3,4 +3,4 @@
 # ktlint
 
 cd ..
-./gradlew addKtlintCheckGitPreCommitHook
+./gradlew ktlintMainSourceSetCheck
