@@ -1,8 +1,22 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.dto.comment.CommentsByPostIdResponseDto
-import com.kotlin.boardproject.dto.post.*
-import com.kotlin.boardproject.dto.post.normalpost.*
+import com.kotlin.boardproject.dto.post.BlackPostRequestDto
+import com.kotlin.boardproject.dto.post.BlackPostResponseDto
+import com.kotlin.boardproject.dto.post.CancelLikePostResponseDto
+import com.kotlin.boardproject.dto.post.CancelScrapPostResponseDto
+import com.kotlin.boardproject.dto.post.LikePostResponseDto
+import com.kotlin.boardproject.dto.post.MyScrapPostResponseDto
+import com.kotlin.boardproject.dto.post.MyWrittenPostResponseDto
+import com.kotlin.boardproject.dto.post.ScrapPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.DeleteNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.FindNormalPostByQueryRequestDto
+import com.kotlin.boardproject.dto.post.normalpost.NormalPostByQueryResponseDto
+import com.kotlin.boardproject.dto.post.normalpost.OneNormalPostResponseDto
 import org.springframework.data.domain.Pageable
 
 interface PostService {
