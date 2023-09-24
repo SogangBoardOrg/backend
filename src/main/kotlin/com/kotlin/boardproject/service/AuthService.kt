@@ -1,7 +1,12 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.dto.*
-import java.util.*
+import com.kotlin.boardproject.dto.TokenDto
+import com.kotlin.boardproject.dto.UserInfoDto
+import com.kotlin.boardproject.dto.UserLoginMobileRequestDto
+import com.kotlin.boardproject.dto.UserLoginRequestDto
+import com.kotlin.boardproject.dto.UserSignUpDto
+import com.kotlin.boardproject.dto.UserSignUpMobileDto
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
 interface AuthService {
