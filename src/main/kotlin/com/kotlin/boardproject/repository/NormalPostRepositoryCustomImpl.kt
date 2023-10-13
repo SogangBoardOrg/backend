@@ -215,7 +215,6 @@ class NormalPostRepositoryCustomImpl(
 
     private fun searchUserIsWriter(searchUser: User?): BooleanExpression =
         if (searchUser == null) {
-            // TODO: 더 좋은 방법이 없는지 물어보기
             Expressions.FALSE.isTrue()
         } else {
             normalPost.writer.eq(searchUser)

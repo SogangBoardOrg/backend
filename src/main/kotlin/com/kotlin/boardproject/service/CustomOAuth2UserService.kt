@@ -57,8 +57,6 @@ class CustomOAuth2UserService(
     }
 
     private fun createUser(userInfo: OAuth2UserInfo, providerType: ProviderType): User {
-        // TODO: nickname 임의의 닉네임 생성, 임의의 문자열 생성후에 서버에서 중복검사를 해야함, 만약에 중복이면 다시 생성
-
         // generate random nickname
         var nickname = UUID.randomUUID().toString().substring(0, 32)
 

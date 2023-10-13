@@ -4,7 +4,6 @@ import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.PostStatus
 import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.common.exception.EntityNotFoundException
-import com.kotlin.boardproject.common.util.log
 import com.kotlin.boardproject.dto.comment.CommentsByPostIdResponseDto
 import com.kotlin.boardproject.dto.post.BlackPostRequestDto
 import com.kotlin.boardproject.dto.post.BlackPostResponseDto
@@ -53,13 +52,12 @@ class PostServiceImpl(
         pageable: Pageable,
         findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
     ): NormalPostByQueryResponseDto {
-        log.info("find normal post by query start")
         val data = normalPostRepository.findNormalPostByQueryV2(
             findNormalPostByQueryRequestDto = findNormalPostByQueryRequestDto,
             userEmail = userEmail,
             pageable = pageable,
         )
-        log.info("find normal post by query end")
+
         return NormalPostByQueryResponseDto.createDtoFromPageable(data)
     }
 
@@ -147,16 +145,13 @@ class PostServiceImpl(
         createNormalPostRequestDto: CreateNormalPostRequestDto,
     ): CreateNormalPostResponseDto {
         // 유저 확인
-        log.info("create normal post start")
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
         // 포스트 생성 지금은 그냥 진행 -> 태그 null 값이면 다른 post로 취급?
         val post = createNormalPostRequestDto.toPost(user)
 
-        // user post list에 추가
         // post.addPost(user)
-        log.info("create normal post end")
         return CreateNormalPostResponseDto(normalPostRepository.save(post).id!!)
     }
 
@@ -171,6 +166,7 @@ class PostServiceImpl(
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
+        post.checkQuestion()
         post.checkWriter(user)
         post.editPost(editNormalPostRequestDto)
 
@@ -187,8 +183,7 @@ class PostServiceImpl(
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
-        // TODO: 질문 게시글이면 삭제가 불가능하게 설정한다.
-
+        post.checkQuestion()
         post.checkWriter(user)
         post.deletePost(user)
 
@@ -200,7 +195,6 @@ class PostServiceImpl(
         userEmail: String,
         postId: Long,
     ): LikePostResponseDto {
-        log.info("like post start")
         val user = userRepository.findByEmailFetchLikeList(userEmail)
             ?: throw EntityNotFoundException("$userEmail 는 없는 유저 입니다.")
 
@@ -218,7 +212,6 @@ class PostServiceImpl(
         )
         likePostRepository.save(likePost)
         post.addLikePost(likePost, user)
-        log.info("like post end")
         return LikePostResponseDto(post.id!!)
     }
 
@@ -248,9 +241,6 @@ class PostServiceImpl(
         postId: Long,
         blackPostRequestDto: BlackPostRequestDto,
     ): BlackPostResponseDto {
-        log.info("black post start")
-
-        // TODO: 뉴비는 신고 못함 -> security config 로 설정
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("${userEmail}은 존재하지 않는 유저 입니다.")
 
@@ -264,7 +254,6 @@ class PostServiceImpl(
 
         val blackPost = BlackPost(user = user, post = post, blackReason = blackPostRequestDto.blackReason)
         blackPostRepository.save(blackPost)
-        log.info("black post end")
         return BlackPostResponseDto(post.id!!)
     }
 

@@ -21,7 +21,6 @@ interface NotificationService {
         email: String,
     )
 
-    // TODO: 댓글 알림을 생성하는 메서드
     fun createNotification(
         notificationCreateDto: NotificationCreateDto,
     ): Notification?

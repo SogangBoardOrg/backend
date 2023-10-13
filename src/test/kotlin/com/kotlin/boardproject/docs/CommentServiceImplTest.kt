@@ -599,7 +599,6 @@ class CommentServiceImplTest {
     @Test
     @Rollback(true)
     fun 댓글_신고() {
-        // TODO: 테스트 추가
         val urlPoint = "/black/{commentId}"
         val finalUrl = "$statsEndPoint$urlPoint"
 
