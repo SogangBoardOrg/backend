@@ -166,7 +166,7 @@ class PostServiceImpl(
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
-        post.checkQuestion()
+        post.notQuestion()
         post.checkWriter(user)
         post.editPost(editNormalPostRequestDto)
 
@@ -183,7 +183,7 @@ class PostServiceImpl(
         val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
-        post.checkQuestion()
+        post.notQuestion()
         post.checkWriter(user)
         post.deletePost(user)
 
