@@ -71,13 +71,12 @@ class UserPrincipal(
 
     companion object {
         fun create(user: User): UserPrincipal {
-            // TODO: 여기는 다음에 반드시 newbie로 전환하기
             return UserPrincipal(
                 user.id.toString(),
                 user.password,
                 user.providerType,
-                Role.ROLE_VERIFIED_USER,
-                Collections.singletonList(SimpleGrantedAuthority(Role.ROLE_VERIFIED_USER.name)),
+                Role.ROLE_NEWBIE,
+                Collections.singletonList(SimpleGrantedAuthority(Role.ROLE_NEWBIE.name)),
             )
         }
 

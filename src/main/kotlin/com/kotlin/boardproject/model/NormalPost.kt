@@ -1,7 +1,9 @@
 package com.kotlin.boardproject.model
 
+import com.kotlin.boardproject.common.enums.ErrorCode
 import com.kotlin.boardproject.common.enums.NormalType
 import com.kotlin.boardproject.common.enums.PostStatus
+import com.kotlin.boardproject.common.exception.ConditionConflictException
 import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -34,5 +36,11 @@ class NormalPost(
         this.commentOn = editNormalPostRequestDto.commentOn
         this.content = editNormalPostRequestDto.content
         this.photoList = editNormalPostRequestDto.photoList
+    }
+
+    fun checkQuestion() {
+        require(this.normalType == NormalType.QUESTION) {
+            throw ConditionConflictException(ErrorCode.FORBIDDEN, "질문 글은 삭제할 수 없습니다.")
+        }
     }
 }

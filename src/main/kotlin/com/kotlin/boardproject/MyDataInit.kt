@@ -22,12 +22,8 @@ class MyDataInit(
     private val normalPostRepository: NormalPostRepository,
     private val passwordEncoder: BCryptPasswordEncoder,
 ) {
-    // TODO: 게시글 초기화
-    // TODO: 댓글 초기화
-
     @PostConstruct
     fun init() {
-        // TODO: 배포시에는 제거하기
         val (user_a, user_b) = userCreate()
         // a 는 포스트를 쓰고,
         // post 4개 생성 1, 2는 a 가 작성했고, 3, 4는 b가 작성한 post다.
@@ -40,11 +36,6 @@ class MyDataInit(
         commentCreate(n_post_2, user_a, user_b)
         commentCreate(n_post_3, user_a, user_b)
         commentCreate(n_post_4, user_a, user_b)
-
-        // 좋아요 넣을까?
-        // 블랙 넣을까?
-        // 어캐하지?
-        // 아직 ㄴㄴ
     }
 
     private fun commentCreate(post: NormalPost, user_a: User, user_b: User) {
