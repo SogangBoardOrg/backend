@@ -22,7 +22,7 @@ bin/
 *.iws
 *.iml
 *.ipr
-*.yml
+application.yml
 *.log
 *.err
 *.out

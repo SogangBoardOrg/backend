@@ -38,8 +38,8 @@ class NormalPost(
         this.photoList = editNormalPostRequestDto.photoList
     }
 
-    fun checkQuestion() {
-        require(this.normalType == NormalType.QUESTION) {
+    fun notQuestion() {
+        require(this.normalType != NormalType.QUESTION) {
             throw ConditionConflictException(ErrorCode.FORBIDDEN, "질문 글은 삭제할 수 없습니다.")
         }
     }
