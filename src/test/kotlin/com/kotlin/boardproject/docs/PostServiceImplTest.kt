@@ -1,27 +1,27 @@
 package com.kotlin.boardproject.docs
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.kotlin.boardproject.auth.AuthToken
-import com.kotlin.boardproject.auth.AuthTokenProvider
-import com.kotlin.boardproject.auth.ProviderType
-import com.kotlin.boardproject.common.enums.BlackReason
-import com.kotlin.boardproject.common.enums.NormalType
-import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.dto.post.BlackPostRequestDto
-import com.kotlin.boardproject.dto.post.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.dto.post.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.model.Comment
-import com.kotlin.boardproject.model.LikePost
-import com.kotlin.boardproject.model.NormalPost
-import com.kotlin.boardproject.model.ScrapPost
-import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.BasePostRepository
-import com.kotlin.boardproject.repository.BlackPostRepository
-import com.kotlin.boardproject.repository.CommentRepository
-import com.kotlin.boardproject.repository.LikePostRepository
-import com.kotlin.boardproject.repository.NormalPostRepository
-import com.kotlin.boardproject.repository.ScrapPostRepository
-import com.kotlin.boardproject.repository.UserRepository
+import com.kotlin.boardproject.domain.comment.domain.Comment
+import com.kotlin.boardproject.domain.comment.repository.CommentRepository
+import com.kotlin.boardproject.domain.post.domain.LikePost
+import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.domain.ScrapPost
+import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.domain.post.repository.BasePostRepository
+import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
+import com.kotlin.boardproject.domain.post.repository.LikePostRepository
+import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
+import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
+import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.BlackReason
+import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
+import com.kotlin.boardproject.global.util.AuthToken
+import com.kotlin.boardproject.global.util.AuthTokenProvider
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.AfterEach
@@ -106,14 +106,15 @@ class PostServiceImplTest {
 
     @BeforeEach
     fun default_setting() {
-        val user: User = User(
-            id = UUID.randomUUID(),
-            email = "test@test.com",
-            password = "test1234!",
-            nickname = "test",
-            providerType = ProviderType.LOCAL,
-            role = Role.ROLE_VERIFIED_USER,
-        )
+        val user: User =
+            User(
+                id = UUID.randomUUID(),
+                email = "test@test.com",
+                password = "test1234!",
+                nickname = "test",
+                providerType = ProviderType.LOCAL,
+                role = Role.ROLE_VERIFIED_USER,
+            )
         writer = userRepository.saveAndFlush(user)
 
         accessToken = tokenProvider.createAuthToken(

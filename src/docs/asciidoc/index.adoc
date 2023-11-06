@@ -115,7 +115,6 @@ include::{snippets}/duplicate-nickname-is-duplicate/http-response.adoc[]
 include::{snippets}/duplicate-nickname-is-duplicate/response-body.adoc[]
 include::{snippets}/duplicate-nickname-is-duplicate/response-fields.adoc[]
 
-
 === POST API ( /api/v1/post )
 
 ==== 글 등록

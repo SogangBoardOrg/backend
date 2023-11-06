@@ -1,14 +1,14 @@
 package com.kotlin.boardproject
 
-import com.kotlin.boardproject.auth.ProviderType
-import com.kotlin.boardproject.common.enums.NormalType
-import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.model.Comment
-import com.kotlin.boardproject.model.NormalPost
-import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.CommentRepository
-import com.kotlin.boardproject.repository.NormalPostRepository
-import com.kotlin.boardproject.repository.UserRepository
+import com.kotlin.boardproject.domain.comment.domain.Comment
+import com.kotlin.boardproject.domain.comment.repository.CommentRepository
+import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
+import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
 import org.springframework.context.annotation.Profile
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component

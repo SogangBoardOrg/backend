@@ -1,12 +1,12 @@
 package com.kotlin.boardproject.docs
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.kotlin.boardproject.auth.AuthToken
-import com.kotlin.boardproject.auth.AuthTokenProvider
-import com.kotlin.boardproject.auth.ProviderType
-import com.kotlin.boardproject.common.enums.Role
-import com.kotlin.boardproject.model.User
-import com.kotlin.boardproject.repository.UserRepository
+import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
+import com.kotlin.boardproject.global.util.AuthToken
+import com.kotlin.boardproject.global.util.AuthTokenProvider
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.hamcrest.CoreMatchers
