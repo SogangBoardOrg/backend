@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.post.dto.normalpost
 
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto.Companion.fromNormalPostToQueryOneNormalPostResponseDto
 import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto.Companion.fromNormalPostToQueryOneNormalPostResponseDto
 import com.kotlin.boardproject.domain.user.domain.User
 import org.springframework.data.domain.Page
 

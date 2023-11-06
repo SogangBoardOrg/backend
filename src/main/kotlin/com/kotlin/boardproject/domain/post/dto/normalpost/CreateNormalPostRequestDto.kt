@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.post.dto.normalpost
 
-import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.enums.NormalType
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull

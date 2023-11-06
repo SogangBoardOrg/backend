@@ -1,10 +1,10 @@
 package com.kotlin.boardproject.domain.post.service
 
-import com.kotlin.boardproject.global.enums.ErrorCode
-import com.kotlin.boardproject.global.enums.PostStatus
-import com.kotlin.boardproject.global.exception.ConditionConflictException
-import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import com.kotlin.boardproject.domain.comment.dto.CommentsByPostIdResponseDto
+import com.kotlin.boardproject.domain.comment.repository.CommentRepository
+import com.kotlin.boardproject.domain.post.domain.BlackPost
+import com.kotlin.boardproject.domain.post.domain.LikePost
+import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.BlackPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.CancelLikePostResponseDto
@@ -21,16 +21,16 @@ import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostResponse
 import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryResponseDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.OneNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.domain.BlackPost
-import com.kotlin.boardproject.domain.post.domain.LikePost
-import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
-import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
 import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.ErrorCode
+import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.exception.ConditionConflictException
+import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

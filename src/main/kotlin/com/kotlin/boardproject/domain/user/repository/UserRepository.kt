@@ -1,9 +1,9 @@
 package com.kotlin.boardproject.domain.user.repository
 
 import com.kotlin.boardproject.domain.user.domain.User
+import java.util.*
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import java.util.UUID
 
 interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmail(email: String): User?

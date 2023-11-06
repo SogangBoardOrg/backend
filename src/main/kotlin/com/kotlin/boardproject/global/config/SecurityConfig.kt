@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.global.config
 
-import com.kotlin.boardproject.global.util.AuthTokenProvider
+import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.config.properties.AppProperties
 import com.kotlin.boardproject.global.config.properties.CorsProperties
 import com.kotlin.boardproject.global.enums.Role
@@ -9,10 +9,10 @@ import com.kotlin.boardproject.global.filter.TokenAuthenticationFilter
 import com.kotlin.boardproject.global.handler.OAuth2AuthenticationFailureHandler
 import com.kotlin.boardproject.global.handler.OAuth2AuthenticationSuccessHandler
 import com.kotlin.boardproject.global.handler.TokenAccessDeniedHandler
-import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.repository.OAuth2AuthorizationRequestBasedOnCookieRepository
 import com.kotlin.boardproject.global.repository.RedisRepository
 import com.kotlin.boardproject.global.service.CustomOAuth2UserService
+import com.kotlin.boardproject.global.util.AuthTokenProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

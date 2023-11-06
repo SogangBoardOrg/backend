@@ -1,11 +1,11 @@
 package com.kotlin.boardproject.domain.post.domain
 
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.global.exception.ConditionConflictException
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.domain.user.domain.User
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated

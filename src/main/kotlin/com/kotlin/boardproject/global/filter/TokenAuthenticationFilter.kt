@@ -3,11 +3,11 @@ package com.kotlin.boardproject.global.filter
 import com.kotlin.boardproject.global.util.AuthTokenProvider
 import com.kotlin.boardproject.global.util.getAccessToken
 import com.kotlin.boardproject.global.util.log
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.filter.OncePerRequestFilter
 
 class TokenAuthenticationFilter(
     private val tokenProvider: AuthTokenProvider,

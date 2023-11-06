@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.post.repository
 
-import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.global.enums.PostStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

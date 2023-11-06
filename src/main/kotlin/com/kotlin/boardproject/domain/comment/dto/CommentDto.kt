@@ -1,10 +1,10 @@
 package com.kotlin.boardproject.domain.comment.dto
 
-import com.kotlin.boardproject.global.enums.PostStatus
-import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.domain.LikeComment
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.enums.PostStatus
 import java.time.LocalDateTime
 
 data class CommentDto(

@@ -1,10 +1,6 @@
 package com.kotlin.boardproject.domain.post
 
-import com.kotlin.boardproject.global.annotation.LoginUser
-import com.kotlin.boardproject.global.enums.NormalType
-import com.kotlin.boardproject.global.util.log
 import com.kotlin.boardproject.domain.comment.dto.CommentsByPostIdResponseDto
-import com.kotlin.boardproject.global.dto.ApiResponse
 import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.BlackPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.CancelLikePostResponseDto
@@ -20,6 +16,13 @@ import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryR
 import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryResponseDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.OneNormalPostResponseDto
 import com.kotlin.boardproject.domain.post.service.PostService
+import com.kotlin.boardproject.global.annotation.LoginUser
+import com.kotlin.boardproject.global.dto.ApiResponse
+import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.util.log
+import java.security.Principal
+import javax.validation.Valid
+import javax.validation.constraints.Positive
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
@@ -32,9 +35,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.security.Principal
-import javax.validation.Valid
-import javax.validation.constraints.Positive
 
 @Validated
 @RestController

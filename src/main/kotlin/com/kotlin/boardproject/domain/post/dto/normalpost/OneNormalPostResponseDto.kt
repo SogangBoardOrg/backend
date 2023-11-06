@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.post.dto.normalpost
 
+import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.dto.CommentDto
 import com.kotlin.boardproject.domain.comment.dto.commentDtos
-import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.user.domain.User
 import java.time.LocalDateTime

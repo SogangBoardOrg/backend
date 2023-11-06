@@ -1,10 +1,10 @@
 package com.kotlin.boardproject.global.handler
 
+import com.kotlin.boardproject.global.dto.ApiResponse
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.exception.BizException
 import com.kotlin.boardproject.global.exception.InternalServiceException
 import com.kotlin.boardproject.global.util.log
-import com.kotlin.boardproject.global.dto.ApiResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler

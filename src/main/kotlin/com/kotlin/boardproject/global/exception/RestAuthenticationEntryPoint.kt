@@ -3,10 +3,10 @@ package com.kotlin.boardproject.global.exception
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.util.log
 import com.nimbusds.jose.shaded.json.JSONObject
-import org.springframework.security.core.AuthenticationException
-import org.springframework.security.web.AuthenticationEntryPoint
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.web.AuthenticationEntryPoint
 
 class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
     override fun commence(

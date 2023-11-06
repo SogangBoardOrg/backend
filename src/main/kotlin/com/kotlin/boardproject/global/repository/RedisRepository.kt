@@ -3,10 +3,10 @@ package com.kotlin.boardproject.global.repository
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.global.config.properties.AppProperties
 import com.kotlin.boardproject.global.util.log
+import java.util.concurrent.TimeUnit
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Repository
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
-import java.util.concurrent.TimeUnit
 
 const val PASSWORD_VERIFICATION_MINUTE = 5
 const val RANKING = "ranking"

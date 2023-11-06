@@ -1,16 +1,16 @@
 package com.kotlin.boardproject.domain.post.repository
 
-import com.kotlin.boardproject.global.enums.NormalType
-import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto
+import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.dto.post.normalpost.QNormalPostByQueryElementDto
-import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.model.QLikePost.likePost
 import com.kotlin.boardproject.model.QNormalPost.normalPost
 import com.kotlin.boardproject.model.QScrapPost.scrapPost
 import com.kotlin.boardproject.model.QUser.user
-import com.kotlin.boardproject.domain.user.domain.User
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions

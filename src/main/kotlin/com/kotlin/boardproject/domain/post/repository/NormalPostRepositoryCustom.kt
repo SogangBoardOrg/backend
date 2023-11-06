@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.post.repository
 
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 

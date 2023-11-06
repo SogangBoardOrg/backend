@@ -4,32 +4,32 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
-import com.kotlin.boardproject.global.util.AUTHORITIES_KEY
-import com.kotlin.boardproject.global.util.AuthTokenProvider
-import com.kotlin.boardproject.global.enums.ProviderType
-import com.kotlin.boardproject.global.config.properties.AppProperties
-import com.kotlin.boardproject.global.enums.ErrorCode
-import com.kotlin.boardproject.global.enums.Role
-import com.kotlin.boardproject.global.exception.ConditionConflictException
-import com.kotlin.boardproject.global.exception.UnAuthorizedException
-import com.kotlin.boardproject.global.util.getAccessToken
-import com.kotlin.boardproject.global.util.getCookie
-import com.kotlin.boardproject.global.util.log
 import com.kotlin.boardproject.domain.auth.dto.TokenDto
+import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.dto.UserInfoDto
 import com.kotlin.boardproject.domain.user.dto.UserLoginMobileRequestDto
 import com.kotlin.boardproject.domain.user.dto.UserLoginRequestDto
 import com.kotlin.boardproject.domain.user.dto.UserSignUpDto
 import com.kotlin.boardproject.domain.user.dto.UserSignUpMobileDto
-import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.config.properties.AppProperties
+import com.kotlin.boardproject.global.enums.ErrorCode
+import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
+import com.kotlin.boardproject.global.exception.ConditionConflictException
+import com.kotlin.boardproject.global.exception.UnAuthorizedException
 import com.kotlin.boardproject.global.repository.REFRESH_TOKEN
 import com.kotlin.boardproject.global.repository.RedisRepository
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.stereotype.Service
+import com.kotlin.boardproject.global.util.AUTHORITIES_KEY
+import com.kotlin.boardproject.global.util.AuthTokenProvider
+import com.kotlin.boardproject.global.util.getAccessToken
+import com.kotlin.boardproject.global.util.getCookie
+import com.kotlin.boardproject.global.util.log
 import java.util.*
 import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Service
 
 private const val THREE_DAYS_MSEC = 259200000
 

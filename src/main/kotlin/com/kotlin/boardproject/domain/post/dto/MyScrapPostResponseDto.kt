@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.post.dto
 
-import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
+import com.kotlin.boardproject.global.enums.PostStatus
 import org.springframework.data.domain.Page
 
 data class MyScrapPostResponseDto(

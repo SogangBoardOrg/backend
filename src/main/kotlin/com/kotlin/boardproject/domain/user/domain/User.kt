@@ -1,14 +1,13 @@
 package com.kotlin.boardproject.domain.user.domain
 
-import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
-import com.kotlin.boardproject.global.enums.CurrentStatus
-import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.global.domain.BaseEntity
-import org.hibernate.annotations.GenericGenerator
+import com.kotlin.boardproject.global.enums.CurrentStatus
+import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -16,6 +15,7 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToMany
+import org.hibernate.annotations.GenericGenerator
 
 @Entity
 class User(

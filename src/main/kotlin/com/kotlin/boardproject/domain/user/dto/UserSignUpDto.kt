@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.user.dto
 
-import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.enums.ProviderType
 
 data class UserSignUpDto(
     val email: String,

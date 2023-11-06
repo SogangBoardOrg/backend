@@ -1,14 +1,14 @@
 package com.kotlin.boardproject.domain.my
 
-import com.kotlin.boardproject.global.annotation.LoginUser
-import com.kotlin.boardproject.domain.user.dto.UserInfoDto
+import com.kotlin.boardproject.domain.auth.service.AuthService
 import com.kotlin.boardproject.domain.comment.dto.MyCommentResponseDto
-import com.kotlin.boardproject.global.dto.ApiResponse
+import com.kotlin.boardproject.domain.comment.service.CommentService
 import com.kotlin.boardproject.domain.post.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.MyWrittenPostResponseDto
-import com.kotlin.boardproject.domain.auth.service.AuthService
-import com.kotlin.boardproject.domain.comment.service.CommentService
 import com.kotlin.boardproject.domain.post.service.PostService
+import com.kotlin.boardproject.domain.user.dto.UserInfoDto
+import com.kotlin.boardproject.global.annotation.LoginUser
+import com.kotlin.boardproject.global.dto.ApiResponse
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
