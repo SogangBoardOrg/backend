@@ -1,8 +1,9 @@
 package com.kotlin.boardproject.global.util
 
-import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
+import java.util.Collections
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -10,7 +11,6 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.oauth2.core.user.OAuth2User
-import java.util.Collections
 
 class UserPrincipal(
     private val userId: String,

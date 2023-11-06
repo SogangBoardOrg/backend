@@ -12,7 +12,7 @@ import com.kotlin.boardproject.global.dto.ApiResponse
 import com.kotlin.boardproject.global.repository.REFRESH_TOKEN
 import com.kotlin.boardproject.global.util.addCookie
 import com.kotlin.boardproject.global.util.deleteCookie
-import java.util.*
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.validation.constraints.NotBlank

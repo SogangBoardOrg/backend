@@ -17,7 +17,8 @@ import com.kotlin.boardproject.global.util.addCookie
 import com.kotlin.boardproject.global.util.deleteCookie
 import com.kotlin.boardproject.global.util.log
 import java.net.URI
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

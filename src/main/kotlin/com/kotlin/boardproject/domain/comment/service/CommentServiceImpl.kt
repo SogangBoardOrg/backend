@@ -1,10 +1,8 @@
 package com.kotlin.boardproject.domain.comment.service
 
-import com.kotlin.boardproject.global.enums.ErrorCode
-import com.kotlin.boardproject.global.enums.NotificationType
-import com.kotlin.boardproject.global.enums.PostStatus
-import com.kotlin.boardproject.global.exception.ConditionConflictException
-import com.kotlin.boardproject.global.util.log
+import com.kotlin.boardproject.domain.comment.domain.BlackComment
+import com.kotlin.boardproject.domain.comment.domain.Comment
+import com.kotlin.boardproject.domain.comment.domain.LikeComment
 import com.kotlin.boardproject.domain.comment.dto.BlackCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.BlackCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.CancelLikeCommentResponseDto
@@ -16,19 +14,21 @@ import com.kotlin.boardproject.domain.comment.dto.LikeCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.MyCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.UpdateCommentResponseDto
-import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
-import com.kotlin.boardproject.domain.comment.domain.BlackComment
-import com.kotlin.boardproject.domain.comment.domain.Comment
-import com.kotlin.boardproject.domain.comment.domain.LikeComment
-import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.comment.repository.BlackCommentRepository
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.comment.repository.LikeCommentRepository
+import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
+import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.ErrorCode
+import com.kotlin.boardproject.global.enums.NotificationType
+import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.exception.ConditionConflictException
+import com.kotlin.boardproject.global.util.log
+import javax.persistence.EntityNotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityNotFoundException
 
 @Service
 class CommentServiceImpl(

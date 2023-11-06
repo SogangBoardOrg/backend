@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.comment.domain
 
-import com.kotlin.boardproject.global.enums.BlackReason
-import com.kotlin.boardproject.global.domain.BaseEntity
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.domain.BaseEntity
+import com.kotlin.boardproject.global.enums.BlackReason
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType

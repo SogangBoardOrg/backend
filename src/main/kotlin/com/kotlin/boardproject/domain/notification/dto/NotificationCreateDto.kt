@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.notification.dto
 
-import com.kotlin.boardproject.global.enums.NotificationType
 import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.enums.NotificationType
 
 data class NotificationCreateDto(
     val fromUser: User,

@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.user.repository
 
 import com.kotlin.boardproject.domain.user.domain.User
-import java.util.*
+import java.util.UUID
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 

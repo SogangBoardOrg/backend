@@ -9,7 +9,8 @@ import com.kotlin.boardproject.global.exception.OAuthProviderMissMatchException
 import com.kotlin.boardproject.global.util.OAuth2UserInfo
 import com.kotlin.boardproject.global.util.OAuth2UserInfoFactory
 import com.kotlin.boardproject.global.util.UserPrincipal
-import java.util.*
+import java.util.Locale
+import java.util.UUID
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User

@@ -1,12 +1,12 @@
 package com.kotlin.boardproject.domain.notification.service
 
-import com.kotlin.boardproject.global.exception.EntityNotFoundException
+import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.dto.GetNotificationsResponseDto
 import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
 import com.kotlin.boardproject.domain.notification.dto.NotificationResponseDto
-import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.repository.NotificationRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

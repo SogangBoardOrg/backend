@@ -5,7 +5,8 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.Headers
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
-import java.util.*
+import java.util.Date
+import java.util.UUID
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 

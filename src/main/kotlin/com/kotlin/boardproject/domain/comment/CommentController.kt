@@ -1,7 +1,5 @@
 package com.kotlin.boardproject.domain.comment
 
-import com.kotlin.boardproject.global.annotation.LoginUser
-import com.kotlin.boardproject.global.util.log
 import com.kotlin.boardproject.domain.comment.dto.BlackCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.BlackCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.CancelLikeCommentResponseDto
@@ -12,10 +10,14 @@ import com.kotlin.boardproject.domain.comment.dto.DeleteCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.LikeCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.UpdateCommentResponseDto
-import com.kotlin.boardproject.global.dto.ApiResponse
 import com.kotlin.boardproject.domain.comment.service.CommentService
 import com.kotlin.boardproject.domain.notification.service.NotificationService
 import com.kotlin.boardproject.domain.notification.service.SseService
+import com.kotlin.boardproject.global.annotation.LoginUser
+import com.kotlin.boardproject.global.dto.ApiResponse
+import com.kotlin.boardproject.global.util.log
+import javax.validation.Valid
+import javax.validation.constraints.Positive
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -25,8 +27,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.validation.Valid
-import javax.validation.constraints.Positive
 
 @Validated
 @RestController

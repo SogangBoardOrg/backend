@@ -1,11 +1,11 @@
 package com.kotlin.boardproject.domain.notification.service
 
-import com.kotlin.boardproject.global.util.log
-import com.kotlin.boardproject.domain.notification.dto.NotificationResponseDto
 import com.kotlin.boardproject.domain.notification.domain.Notification
+import com.kotlin.boardproject.domain.notification.dto.NotificationResponseDto
 import com.kotlin.boardproject.domain.notification.repository.NotificationRepository
-import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.domain.notification.repository.SseRepository
+import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.util.log
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 

@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.notification.domain
 
-import com.kotlin.boardproject.global.enums.NotificationType
-import com.kotlin.boardproject.global.domain.BaseEntity
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.domain.BaseEntity
+import com.kotlin.boardproject.global.enums.NotificationType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType

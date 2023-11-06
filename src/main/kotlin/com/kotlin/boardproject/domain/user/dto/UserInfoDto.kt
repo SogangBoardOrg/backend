@@ -2,7 +2,7 @@ package com.kotlin.boardproject.domain.user.dto
 
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.enums.Role
-import java.util.*
+import java.util.UUID
 
 data class UserInfoDto(
     val id: UUID,

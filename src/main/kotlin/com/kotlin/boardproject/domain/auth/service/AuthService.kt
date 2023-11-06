@@ -6,7 +6,7 @@ import com.kotlin.boardproject.domain.user.dto.UserLoginMobileRequestDto
 import com.kotlin.boardproject.domain.user.dto.UserLoginRequestDto
 import com.kotlin.boardproject.domain.user.dto.UserSignUpDto
 import com.kotlin.boardproject.domain.user.dto.UserSignUpMobileDto
-import java.util.*
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
 interface AuthService {
