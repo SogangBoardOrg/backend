@@ -6,6 +6,7 @@ import com.kotlin.boardproject.global.domain.BaseEntity
 import com.kotlin.boardproject.global.enums.CurrentStatus
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
+import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
@@ -15,7 +16,6 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToMany
-import org.hibernate.annotations.GenericGenerator
 
 @Entity
 class User(
