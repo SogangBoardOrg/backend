@@ -25,12 +25,12 @@ import com.kotlin.boardproject.global.util.AuthTokenProvider
 import com.kotlin.boardproject.global.util.getAccessToken
 import com.kotlin.boardproject.global.util.getCookie
 import com.kotlin.boardproject.global.util.log
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Service
 import java.util.Date
 import java.util.UUID
 import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.stereotype.Service
 
 private const val THREE_DAYS_MSEC = 259200000
 

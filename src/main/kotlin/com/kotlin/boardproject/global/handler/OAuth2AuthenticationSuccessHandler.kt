@@ -16,12 +16,6 @@ import com.kotlin.boardproject.global.util.OAuth2UserInfoFactory
 import com.kotlin.boardproject.global.util.addCookie
 import com.kotlin.boardproject.global.util.deleteCookie
 import com.kotlin.boardproject.global.util.log
-import java.net.URI
-import java.util.Date
-import java.util.Locale
-import javax.persistence.EntityNotFoundException
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
@@ -29,6 +23,12 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import org.springframework.web.util.WebUtils.getCookie
+import java.net.URI
+import java.util.Date
+import java.util.Locale
+import javax.persistence.EntityNotFoundException
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @Component
 class OAuth2AuthenticationSuccessHandler(

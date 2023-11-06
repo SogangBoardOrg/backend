@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.notification.dto
 
-import com.kotlin.boardproject.global.enums.NotificationType
 import com.kotlin.boardproject.domain.notification.domain.Notification
+import com.kotlin.boardproject.global.enums.NotificationType
 import java.time.LocalDateTime
 
 class NotificationResponseDto(

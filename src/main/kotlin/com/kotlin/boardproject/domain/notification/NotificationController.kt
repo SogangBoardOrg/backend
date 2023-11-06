@@ -4,7 +4,6 @@ import com.kotlin.boardproject.domain.notification.dto.GetNotificationsResponseD
 import com.kotlin.boardproject.domain.notification.service.NotificationService
 import com.kotlin.boardproject.global.annotation.LoginUser
 import com.kotlin.boardproject.global.dto.ApiResponse
-import javax.validation.constraints.Positive
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.constraints.Positive
 
 @Validated
 @RestController

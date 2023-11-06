@@ -4,11 +4,11 @@ import com.kotlin.boardproject.global.util.addCookie
 import com.kotlin.boardproject.global.util.deleteCookie
 import com.kotlin.boardproject.global.util.deserialize
 import com.kotlin.boardproject.global.util.serialize
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.web.util.WebUtils.getCookie
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME: String = "oauth2_auth_request"
 const val REDIRECT_URI_PARAM_COOKIE_NAME: String = "redirect_uri"

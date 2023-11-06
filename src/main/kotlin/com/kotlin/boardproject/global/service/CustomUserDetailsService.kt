@@ -2,10 +2,10 @@ package com.kotlin.boardproject.global.service
 
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.util.UserPrincipal
-import javax.persistence.EntityNotFoundException
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
+import javax.persistence.EntityNotFoundException
 
 @Service
 class CustomUserDetailsService(

@@ -1,29 +1,29 @@
 package com.kotlin.boardproject.docs
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.kotlin.boardproject.global.util.AuthToken
-import com.kotlin.boardproject.global.util.AuthTokenProvider
-import com.kotlin.boardproject.global.enums.ProviderType
-import com.kotlin.boardproject.global.enums.BlackReason
-import com.kotlin.boardproject.global.enums.NormalType
-import com.kotlin.boardproject.global.enums.PostStatus
-import com.kotlin.boardproject.global.enums.Role
-import com.kotlin.boardproject.global.util.log
+import com.kotlin.boardproject.domain.comment.domain.Comment
+import com.kotlin.boardproject.domain.comment.domain.LikeComment
 import com.kotlin.boardproject.domain.comment.dto.BlackCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.CreateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.DeleteCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
-import com.kotlin.boardproject.domain.post.domain.BasePost
-import com.kotlin.boardproject.domain.comment.domain.Comment
-import com.kotlin.boardproject.domain.comment.domain.LikeComment
-import com.kotlin.boardproject.domain.post.domain.NormalPost
-import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.comment.repository.BlackCommentRepository
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.comment.repository.LikeCommentRepository
+import com.kotlin.boardproject.domain.post.domain.BasePost
+import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
+import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.BlackReason
+import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.enums.ProviderType
+import com.kotlin.boardproject.global.enums.Role
+import com.kotlin.boardproject.global.util.AuthToken
+import com.kotlin.boardproject.global.util.AuthTokenProvider
+import com.kotlin.boardproject.global.util.log
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.BeforeEach
@@ -42,7 +42,6 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
@@ -181,13 +180,13 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "add-single-comment",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
-                    PayloadDocumentation.requestFields(
+                    requestFields(
                         fieldWithPath("content").description("글 내용"),
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("postId").description("글 번호"),
@@ -251,13 +250,13 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "add-single-parent-comment",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
-                    PayloadDocumentation.requestFields(
+                    requestFields(
                         fieldWithPath("content").description("글 내용"),
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("postId").description("글 번호"),
@@ -335,8 +334,8 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "add-single-descendent-comment",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
@@ -466,13 +465,13 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "update-single-comment",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
-                    PayloadDocumentation.requestFields(
+                    requestFields(
                         fieldWithPath("content").description("수정할 댓글 내용"),
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("postId").description("수정하는 글의 번호"),
@@ -520,8 +519,8 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "like-comment-add",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
@@ -577,8 +576,8 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "like-comment-cancel",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
@@ -629,13 +628,13 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "comment-black",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 신고하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
-                    PayloadDocumentation.requestFields(
+                    requestFields(
                         fieldWithPath("blackReason").description("신고 사유"),
                     ),
                     responseFields(
@@ -694,8 +693,8 @@ class CommentServiceImplTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "view-my-comment",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                    preprocessRequest(Preprocessors.prettyPrint()),
+                    preprocessResponse(Preprocessors.prettyPrint()),
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 자신이 쓴 댓글을 조회하는 유저를 위해 필요함"),

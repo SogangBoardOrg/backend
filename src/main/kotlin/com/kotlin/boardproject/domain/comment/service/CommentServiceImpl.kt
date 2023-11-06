@@ -25,10 +25,10 @@ import com.kotlin.boardproject.global.enums.NotificationType
 import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.util.log
-import javax.persistence.EntityNotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityNotFoundException
 
 @Service
 class CommentServiceImpl(

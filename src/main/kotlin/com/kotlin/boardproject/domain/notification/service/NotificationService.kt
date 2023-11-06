@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.notification.service
 
+import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.dto.GetNotificationsResponseDto
 import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
-import com.kotlin.boardproject.domain.notification.domain.Notification
 import org.springframework.stereotype.Service
 
 @Service
