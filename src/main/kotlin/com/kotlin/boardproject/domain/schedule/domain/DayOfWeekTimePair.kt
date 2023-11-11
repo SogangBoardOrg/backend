@@ -3,16 +3,19 @@ package com.kotlin.boardproject.domain.schedule.domain
 import java.time.DayOfWeek
 import java.time.LocalTime
 import javax.persistence.Embeddable
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 
 @Embeddable
-class TimeAndDayOfWeekPair(
+class DayOfWeekTimePair(
+    @Enumerated(EnumType.STRING)
     var dayOfWeek: DayOfWeek,
 
     var startTime: LocalTime,
 
     var endTime: LocalTime,
 ) {
-    infix fun TimeAndDayOfWeekPair.isOverlappedWith(other: TimeAndDayOfWeekPair): Boolean {
+    infix fun DayOfWeekTimePair.isOverlappedWith(other: DayOfWeekTimePair): Boolean {
         if (this.dayOfWeek != other.dayOfWeek) {
             return false
         }

@@ -25,7 +25,7 @@ class TimeTable(
     val user: User,
 
     @Embedded
-    var seasonAndYear: SeasonAndYear,
+    var yearAndSeason: YearAndSeason,
 
     var title: String,
 
@@ -33,4 +33,11 @@ class TimeTable(
     var schedules: MutableList<Schedule> = mutableListOf(),
 
     var isMain: Boolean,
-) : BaseEntity()
+
+    var isPublic: Boolean,
+) : BaseEntity() {
+
+    fun isOwner(user: User) : Boolean {
+        return this.user == user
+    }
+}

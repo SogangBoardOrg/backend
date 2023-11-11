@@ -1,14 +1,17 @@
 package com.kotlin.boardproject.domain.schedule.service
 
-import com.kotlin.boardproject.domain.schedule.domain.SeasonAndYear
 import com.kotlin.boardproject.domain.schedule.domain.TimeTable
+import com.kotlin.boardproject.domain.schedule.domain.YearAndSeason
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.MyTimeTableListResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.TimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.repository.ScheduleRepository
 import com.kotlin.boardproject.domain.schedule.repository.TimeTableRepository
+import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
+import com.kotlin.boardproject.global.enums.ErrorCode
+import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
 
 class TimeTableServiceImpl(
@@ -23,9 +26,9 @@ class TimeTableServiceImpl(
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("${userEmail}에 해당하는 유저가 없습니다.")
 
-        val isNewTimeTableMain = timeTableRepository.findByUserAndSeasonAndYear(
+        val isNewTimeTableMain = timeTableRepository.findByUserAndYearAndSeason(
             user = user,
-            seasonAndYear = SeasonAndYear(
+            yearAndSeason = YearAndSeason(
                 year = createTimeTableRequestDto.year,
                 season = createTimeTableRequestDto.season,
             ),
@@ -34,12 +37,13 @@ class TimeTableServiceImpl(
         val newTimeTable = timeTableRepository.save(
             TimeTable(
                 user = user,
-                seasonAndYear = SeasonAndYear(
+                yearAndSeason = YearAndSeason(
                     year = createTimeTableRequestDto.year,
                     season = createTimeTableRequestDto.season,
                 ),
                 title = createTimeTableRequestDto.title,
                 isMain = isNewTimeTableMain,
+                isPublic = createTimeTableRequestDto.isPublic,
             ),
         )
 
@@ -50,15 +54,52 @@ class TimeTableServiceImpl(
 
     override fun getMyTimeTableList(
         userEmail: String,
-    ): List<MyTimeTableListResponseDto> {
-        TODO("Not yet implemented")
+    ): MyTimeTableListResponseDto {
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("${userEmail}에 해당하는 유저가 없습니다.")
+
+        val myTimeTables = timeTableRepository.findByUserFetchYearAndSeason(user)
+
+        return MyTimeTableListResponseDto.fromTimeTableList(myTimeTables)
     }
 
     override fun getTimeTableById(
         userEmail: String,
         timeTableId: Long,
     ): TimeTableResponseDto {
-        TODO("Not yet implemented")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("${userEmail}에 해당하는 유저가 없습니다.")
+
+        val timeTable = timeTableRepository.findByIdFetchUserAndSchedule(timeTableId)
+            ?: throw EntityNotFoundException("${timeTableId}에 해당하는 시간표가 없습니다.")
+
+        require(validateVisibility(user, timeTable)) {
+            throw ConditionConflictException(ErrorCode.FORBIDDEN, "해당 시간표를 볼 수 있는 권한이 없습니다.")
+        }
+
+        val schedules = scheduleRepository.findByTimeTableFetchYearAndSeasons(timeTable)
+
+        return TimeTableResponseDto.fromTimeTable(timeTable, schedules)
+    }
+
+    private fun validateVisibility(
+        user: User,
+        timeTable: TimeTable,
+    ): Boolean {
+        return timeTable.isOwner(user) || friendShow(user, timeTable)
+    }
+
+    private fun friendShow(
+        user: User,
+        timeTable: TimeTable,
+    ): Boolean {
+        // 2. 자신의 시간표는 아니지만 친구가 공개를 한 시간표 -> 볼 수 있음
+        // 3. 자신의 시간표는 아니지만 친구가 공개를 하지 않은 시간표 -> 에러
+        // 4. 친구가 아님
+        return false
+        // val friendList = user.friendList
+        // val friendTimeTable = friendList.map { it.timeTableList }
+        // return friendTimeTable.contains(timeTable)
     }
 
     override fun deleteMyTimeTable(

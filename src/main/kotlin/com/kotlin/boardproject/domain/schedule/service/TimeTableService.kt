@@ -14,7 +14,7 @@ interface TimeTableService {
 
     fun getMyTimeTableList(
         userEmail: String,
-    ): List<MyTimeTableListResponseDto>
+    ): MyTimeTableListResponseDto
 
     fun getTimeTableById(
         userEmail: String,

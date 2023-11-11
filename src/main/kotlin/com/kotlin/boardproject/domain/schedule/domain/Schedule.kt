@@ -1,8 +1,12 @@
 package com.kotlin.boardproject.domain.schedule.domain
 
 import com.kotlin.boardproject.global.domain.BaseEntity
+import com.kotlin.boardproject.global.enums.AlphabetGrade
 import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -21,9 +25,21 @@ class Schedule(
 
     var memo: String,
 
-    var seasonAndYear: SeasonAndYear,
+    @Embedded
+    var yearAndSeason: YearAndSeason,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "time_table_id")
     val timeTable: TimeTable,
+
+    @Enumerated(EnumType.STRING)
+    var alphabetGrade: AlphabetGrade,
+
+    var credit: Float,
+
+    var isMajor: Boolean,
+
+    var professor: String,
+
+    var location: String,
 ) : BaseEntity()

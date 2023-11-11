@@ -6,4 +6,5 @@ data class CreateTimeTableRequestDto(
     val year: Int,
     val season: Seasons,
     val title: String,
+    val isPublic: Boolean,
 )
