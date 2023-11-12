@@ -3,7 +3,7 @@ package com.kotlin.boardproject.domain.schedule.domain
 import com.kotlin.boardproject.global.domain.BaseEntity
 import com.kotlin.boardproject.global.enums.AlphabetGrade
 import javax.persistence.Column
-import javax.persistence.Embedded
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -25,15 +25,16 @@ class Schedule(
 
     var memo: String,
 
-    @Embedded
-    var yearAndSeason: YearAndSeason,
+    // 시간 요일 pair
+    @ElementCollection(fetch = FetchType.LAZY)
+    val dayOfWeekTimePairs: MutableList<DayOfWeekTimePair> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "time_table_id")
     val timeTable: TimeTable,
 
     @Enumerated(EnumType.STRING)
-    var alphabetGrade: AlphabetGrade,
+    var alphabetGrade: AlphabetGrade?,
 
     var credit: Float,
 

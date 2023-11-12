@@ -12,12 +12,12 @@ data class TimeTableResponseDto(
     val year: Int,
     val season: Seasons,
     val scheduleList: List<ScheduleResponseDto>,
-){
-    companion object{
+) {
+    companion object {
         fun fromTimeTable(
             timeTable: TimeTable,
             schedules: List<Schedule>,
-        ): TimeTableResponseDto{
+        ): TimeTableResponseDto {
             return TimeTableResponseDto(
                 id = timeTable.id!!,
                 title = timeTable.title,
@@ -30,8 +30,13 @@ data class TimeTableResponseDto(
                         id = it.id!!,
                         title = it.title,
                         memo = it.memo,
-                        year = it.yearAndSeason.year,
-                        season = it.yearAndSeason.season,
+                        dayOfWeekTimePairs = it.dayOfWeekTimePairs.map { dayOfWeekTimePair ->
+                            DayOfWeekTimePairDto(
+                                dayOfWeek = dayOfWeekTimePair.dayOfWeek,
+                                startTime = dayOfWeekTimePair.startTime,
+                                endTime = dayOfWeekTimePair.endTime,
+                            )
+                        },
                     )
                 },
             )

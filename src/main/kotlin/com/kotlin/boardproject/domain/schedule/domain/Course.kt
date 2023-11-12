@@ -2,8 +2,10 @@ package com.kotlin.boardproject.domain.schedule.domain
 
 import com.kotlin.boardproject.global.domain.BaseEntity
 import javax.persistence.Column
+import javax.persistence.ElementCollection
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -20,6 +22,9 @@ class Course(
 
     @Embedded
     val yearAndSeason: YearAndSeason,
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    val dayOfWeekTimePairs: MutableList<DayOfWeekTimePair> = mutableListOf(),
 
     val credit: Float,
 

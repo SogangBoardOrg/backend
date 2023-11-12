@@ -2,6 +2,7 @@ package com.kotlin.boardproject.domain.schedule.service
 
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableResponseDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteMyTimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.MyTimeTableListResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.TimeTableResponseDto
 
@@ -24,5 +25,5 @@ interface TimeTableService {
     fun deleteMyTimeTable(
         userEmail: String,
         timeTableId: Long,
-    ): Boolean
+    ): DeleteMyTimeTableResponseDto
 }
