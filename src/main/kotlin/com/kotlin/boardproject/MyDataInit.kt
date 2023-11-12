@@ -56,7 +56,6 @@ class MyDataInit(
     }
 
     private fun scheduleAdder(timetable: TimeTable) {
-
         val schedule_1 = Schedule(
             title = "schedule_1",
             memo = "schedule_1",

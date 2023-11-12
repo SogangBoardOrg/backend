@@ -13,7 +13,8 @@ enum class AlphabetGrade(val alphabet: String, val gradeV1: Double, val gradeV2:
     D_PLUS("D+", 1.3, 1.3),
     D("D", 1.0, 1.0),
     F("F", 0.0, 0.0),
-    S("S", 0.0, 0.0);
+    S("S", 0.0, 0.0),
+    ;
 
     override fun toString(): String {
         return "$alphabet (Grade: $gradeV1, Grade Point: $gradeV2)"

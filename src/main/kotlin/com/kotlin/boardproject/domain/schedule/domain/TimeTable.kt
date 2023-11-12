@@ -37,7 +37,7 @@ class TimeTable(
     var isPublic: Boolean,
 ) : BaseEntity() {
 
-    fun isOwner(user: User) : Boolean {
+    fun isOwner(user: User): Boolean {
         return this.user == user
     }
 

@@ -54,7 +54,7 @@ class TimeTableController(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         timeTableId: Long,
-    ) : ApiResponse<DeleteMyTimeTableResponseDto> {
+    ): ApiResponse<DeleteMyTimeTableResponseDto> {
         val data = timeTableService.deleteMyTimeTableById(loginUser.username, timeTableId)
 
         return ApiResponse.success(data)

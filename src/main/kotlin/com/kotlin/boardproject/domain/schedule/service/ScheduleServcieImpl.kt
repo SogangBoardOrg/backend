@@ -48,8 +48,7 @@ class ScheduleServcieImpl(
                 newDayOfWeekTimePairs,
                 timeTable.schedules.flatMap { it.dayOfWeekTimePairs },
             ),
-        )
-        {
+        ) {
             throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "시간표에 이미 존재하는 시간입니다.")
         }
 
@@ -76,7 +75,6 @@ class ScheduleServcieImpl(
             newDayOfWeekTimePairs.none { newPair -> oldPair overlap newPair }
         }
     }
-
 
     @Transactional
     override fun deleteSchedule(

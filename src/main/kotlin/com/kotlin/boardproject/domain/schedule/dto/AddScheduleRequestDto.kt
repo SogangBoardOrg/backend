@@ -2,7 +2,6 @@ package com.kotlin.boardproject.domain.schedule.dto
 
 import com.kotlin.boardproject.global.enums.AlphabetGrade
 
-
 data class AddScheduleRequestDto(
     val title: String,
     val memo: String,

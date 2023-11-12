@@ -2,7 +2,6 @@ package com.kotlin.boardproject.domain.schedule.service
 
 import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
 
-
 interface ScheduleService {
 
     fun addSchedule(
@@ -16,5 +15,4 @@ interface ScheduleService {
         timeTableId: Long,
         scheduleId: Long,
     )
-
 }

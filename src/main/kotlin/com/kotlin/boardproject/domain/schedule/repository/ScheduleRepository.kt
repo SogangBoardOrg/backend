@@ -23,7 +23,7 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
         FROM Schedule s
         LEFT JOIN FETCH s.timeTable
         WHERE s.id = :scheduleId
-        """
+        """,
     )
     fun findByIdFetchTimetable(scheduleId: Long): Schedule?
 }
