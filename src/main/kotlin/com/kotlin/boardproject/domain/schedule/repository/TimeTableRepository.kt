@@ -52,4 +52,15 @@ interface TimeTableRepository : JpaRepository<TimeTable, Long> {
         """,
     )
     fun findByIdFetchUserAndSchedule(timeTableId: Long): TimeTable?
+
+    @Query(
+        """
+        SELECT t
+        FROM TimeTable t
+        LEFT JOIN FETCH t.user
+        LEFT JOIN FETCH t.yearAndSeason
+        WHERE t.id = :timeTableId
+        """,
+    )
+    fun findByIdFetchUserAndYearAndSeason(timeTableId: Long): TimeTable?
 }

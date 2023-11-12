@@ -22,8 +22,19 @@ interface TimeTableService {
         timeTableId: Long,
     ): TimeTableResponseDto
 
-    fun deleteMyTimeTable(
+    fun deleteMyTimeTableById(
         userEmail: String,
         timeTableId: Long,
     ): DeleteMyTimeTableResponseDto
+
+    fun changeTimeTableVisibility(
+        userEmail: String,
+        timeTableId: Long,
+        isPublic: Boolean,
+    ): Long
+
+    fun makeTimeTableMain(
+        userEmail: String,
+        timeTableId: Long,
+    ): Long
 }

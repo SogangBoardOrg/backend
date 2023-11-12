@@ -40,4 +40,8 @@ class TimeTable(
     fun isOwner(user: User) : Boolean {
         return this.user == user
     }
+
+    fun changeVisibility(public: Boolean) {
+        this.isPublic = public
+    }
 }

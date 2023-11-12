@@ -11,9 +11,19 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
         """
         SELECT s
         FROM Schedule s
-        LEFT JOIN FETCH s.yearAndSeason
+        LEFT JOIN FETCH s.dayOfWeekTimePairs
         WHERE s.timeTable = :timeTable
         """,
     )
-    fun findByTimeTableFetchYearAndSeasons(timeTable: TimeTable): List<Schedule>
+    fun findByTimeTableFetchDayOfWeekTimePairs(timeTable: TimeTable): List<Schedule>
+
+    @Query(
+        """
+        SELECT s
+        FROM Schedule s
+        LEFT JOIN FETCH s.timeTable
+        WHERE s.id = :scheduleId
+        """
+    )
+    fun findByIdFetchTimetable(scheduleId: Long): Schedule?
 }

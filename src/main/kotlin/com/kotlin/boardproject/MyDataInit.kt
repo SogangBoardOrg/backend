@@ -4,14 +4,23 @@ import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
+import com.kotlin.boardproject.domain.schedule.domain.DayOfWeekTimePair
+import com.kotlin.boardproject.domain.schedule.domain.Schedule
+import com.kotlin.boardproject.domain.schedule.domain.TimeTable
+import com.kotlin.boardproject.domain.schedule.domain.YearAndSeason
+import com.kotlin.boardproject.domain.schedule.repository.ScheduleRepository
+import com.kotlin.boardproject.domain.schedule.repository.TimeTableRepository
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
+import com.kotlin.boardproject.global.enums.Seasons
 import org.springframework.context.annotation.Profile
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
+import java.time.DayOfWeek
+import java.time.LocalTime
 import javax.annotation.PostConstruct
 
 @Profile("local")
@@ -20,11 +29,19 @@ class MyDataInit(
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
     private val normalPostRepository: NormalPostRepository,
+    private val scheduleRepository: ScheduleRepository,
+    private val timeTableRepository: TimeTableRepository,
     private val passwordEncoder: BCryptPasswordEncoder,
 ) {
     @PostConstruct
     fun init() {
         val (user_a, user_b) = userCreate()
+        val (timetable_1, timetable_2, timetable_3) = timetableCreate(user_a)
+
+        scheduleAdder(timetable_1)
+        scheduleAdder(timetable_2)
+        scheduleAdder(timetable_3)
+
         // a 는 포스트를 쓰고,
         // post 4개 생성 1, 2는 a 가 작성했고, 3, 4는 b가 작성한 post다.
         val (n_post_1, n_post_2) = postCreate(user_a, 1)
@@ -36,6 +53,94 @@ class MyDataInit(
         commentCreate(n_post_2, user_a, user_b)
         commentCreate(n_post_3, user_a, user_b)
         commentCreate(n_post_4, user_a, user_b)
+    }
+
+    private fun scheduleAdder(timetable: TimeTable) {
+
+        val schedule_1 = Schedule(
+            title = "schedule_1",
+            memo = "schedule_1",
+            timeTable = timetable,
+            dayOfWeekTimePairs = listOf(
+                DayOfWeekTimePair(
+                    dayOfWeek = DayOfWeek.MONDAY,
+                    startTime = LocalTime.of(1, 0),
+                    endTime = LocalTime.of(3, 0),
+                ),
+                DayOfWeekTimePair(
+                    dayOfWeek = DayOfWeek.TUESDAY,
+                    startTime = LocalTime.of(1, 0),
+                    endTime = LocalTime.of(3, 0),
+                ),
+            ).toMutableList(),
+            alphabetGrade = null,
+            credit = 2.5F,
+            isMajor = true,
+            professor = "professor_1",
+            location = "location_1",
+        )
+
+        val schedule_2 = Schedule(
+            title = "schedule_2",
+            memo = "schedule_2",
+            timeTable = timetable,
+            dayOfWeekTimePairs = listOf(
+                DayOfWeekTimePair(
+                    dayOfWeek = DayOfWeek.THURSDAY,
+                    startTime = LocalTime.of(21, 0),
+                    endTime = LocalTime.of(23, 0),
+                ),
+                DayOfWeekTimePair(
+                    dayOfWeek = DayOfWeek.FRIDAY,
+                    startTime = LocalTime.of(2, 0),
+                    endTime = LocalTime.of(12, 0),
+                ),
+            ).toMutableList(),
+            alphabetGrade = null,
+            credit = 2.5F,
+            isMajor = true,
+            professor = "professor_1",
+            location = "location_1",
+        )
+
+        scheduleRepository.saveAllAndFlush(listOf(schedule_1, schedule_2))
+    }
+
+    private fun timetableCreate(userA: User): List<TimeTable> {
+        val timetable_1 = TimeTable(
+            title = "timetable_1",
+            user = userA,
+            isPublic = true,
+            isMain = true,
+            yearAndSeason = YearAndSeason(
+                year = 2021,
+                season = Seasons.SPRING,
+            ),
+        )
+        val timetable_2 = TimeTable(
+            title = "timetable_2",
+            user = userA,
+            isPublic = false,
+            isMain = false,
+            yearAndSeason = YearAndSeason(
+                year = 2021,
+                season = Seasons.SPRING,
+            ),
+        )
+
+        val timeTable_3 = TimeTable(
+            title = "timetable_3",
+            user = userA,
+            isPublic = false,
+            isMain = true,
+            yearAndSeason = YearAndSeason(
+                year = 2022,
+                season = Seasons.SPRING,
+            ),
+        )
+
+        timeTableRepository.saveAllAndFlush(listOf(timetable_1, timetable_2, timeTable_3))
+        return listOf(timetable_1, timetable_2, timeTable_3)
     }
 
     private fun commentCreate(post: NormalPost, user_a: User, user_b: User) {
@@ -160,8 +265,6 @@ class MyDataInit(
         storeOwner.encodePassword(encodedPassword2)
 
         userRepository.saveAllAndFlush(listOf(customer, storeOwner))
-        userRepository.flush()
-
         return listOf(customer, storeOwner)
     }
 }

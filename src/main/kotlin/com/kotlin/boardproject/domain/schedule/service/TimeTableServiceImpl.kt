@@ -85,7 +85,7 @@ class TimeTableServiceImpl(
             throw ConditionConflictException(ErrorCode.FORBIDDEN, "해당 시간표를 볼 수 있는 권한이 없습니다.")
         }
 
-        val schedules = scheduleRepository.findByTimeTableFetchYearAndSeasons(timeTable)
+        val schedules = scheduleRepository.findByTimeTableFetchDayOfWeekTimePairs(timeTable)
 
         return TimeTableResponseDto.fromTimeTable(timeTable, schedules)
     }
@@ -111,7 +111,7 @@ class TimeTableServiceImpl(
     }
 
     @Transactional
-    override fun deleteMyTimeTable(
+    override fun deleteMyTimeTableById(
         userEmail: String,
         timeTableId: Long,
     ): DeleteMyTimeTableResponseDto {
@@ -130,5 +130,48 @@ class TimeTableServiceImpl(
         return DeleteMyTimeTableResponseDto(
             id = timeTable.id!!,
         )
+    }
+
+    override fun changeTimeTableVisibility(
+        userEmail: String,
+        timeTableId: Long,
+        isPublic: Boolean,
+    ): Long {
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("${userEmail}에 해당하는 유저가 없습니다.")
+
+        val timeTable = timeTableRepository.findByIdFetchUser(timeTableId)
+            ?: throw EntityNotFoundException("${timeTableId}에 해당하는 시간표가 없습니다.")
+
+        require(timeTable.isOwner(user)) {
+            throw ConditionConflictException(ErrorCode.FORBIDDEN, "해당 시간표를 수정할 수 있는 권한이 없습니다.")
+        }
+
+        timeTable.changeVisibility(isPublic)
+
+        return timeTable.id!!
+    }
+
+    override fun makeTimeTableMain(
+        userEmail: String,
+        timeTableId: Long,
+    ): Long {
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("${userEmail}에 해당하는 유저가 없습니다.")
+
+        val timeTable = timeTableRepository.findByIdFetchUserAndYearAndSeason(timeTableId)
+            ?: throw EntityNotFoundException("해당하는 시간표가 없습니다.")
+
+        require(timeTable.isOwner(user)) {
+            throw ConditionConflictException(ErrorCode.FORBIDDEN, "해당 시간표를 수정할 수 있는 권한이 없습니다.")
+        }
+
+        timeTableRepository.findByUserAndYearAndSeason(user, timeTable.yearAndSeason).forEach {
+            it.isMain = false
+        }
+
+        timeTable.isMain = true
+
+        return timeTable.id!!
     }
 }
