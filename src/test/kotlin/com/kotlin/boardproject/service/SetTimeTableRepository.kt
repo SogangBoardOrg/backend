@@ -65,6 +65,25 @@ fun setTimeTableRepository(
         )
     } returns timeTableThree
 
+    every {
+        timeTableRepository.findByIdFetchUserAndSchedule(
+            timeTableOne.id!!,
+        )
+    } returns timeTableOne
+
+    every {
+        timeTableRepository.findByIdFetchUserAndSchedule(
+            timeTableTwo.id!!,
+        )
+    } returns timeTableTwo
+
+    every {
+        timeTableRepository.findByIdFetchUserAndSchedule(
+            timeTableThree.id!!,
+        )
+    } returns timeTableThree
+
+
     every { timeTableRepository.save(timeTableOne) } returns timeTableOne
     every { timeTableRepository.save(timeTableTwo) } returns timeTableTwo
     every { timeTableRepository.save(timeTableThree) } returns timeTableThree
