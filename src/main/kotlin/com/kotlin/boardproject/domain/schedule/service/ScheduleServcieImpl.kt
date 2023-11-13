@@ -3,18 +3,21 @@ package com.kotlin.boardproject.domain.schedule.service
 import com.kotlin.boardproject.domain.schedule.domain.DayOfWeekTimePair
 import com.kotlin.boardproject.domain.schedule.domain.Schedule
 import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.domain.schedule.repository.ScheduleRepository
 import com.kotlin.boardproject.domain.schedule.repository.TimeTableRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ScheduleServcieImpl(
     private val scheduleRepository: ScheduleRepository,
+    private val courseRepository: CourseRepository,
     private val timeTableRepository: TimeTableRepository,
     private val userRepository: UserRepository,
 ) : ScheduleService {
@@ -24,9 +27,14 @@ class ScheduleServcieImpl(
         userEmail: String,
         timeTableId: Long,
         addScheduleRequestDto: AddScheduleRequestDto,
-    ) {
+    ): Long {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("존재하지 않는 유저입니다.")
+
+        val course = addScheduleRequestDto.courseId?.let {
+            courseRepository.findByIdOrNull(it)
+                ?: throw EntityNotFoundException("존재하지 않는 과목입니다.")
+        }
 
         val timeTable = timeTableRepository.findByIdFetchUser(timeTableId)
             ?: throw EntityNotFoundException("존재하지 않는 시간표입니다.")
@@ -52,7 +60,7 @@ class ScheduleServcieImpl(
             throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "시간표에 이미 존재하는 시간입니다.")
         }
 
-        scheduleRepository.save(
+        return scheduleRepository.save(
             Schedule(
                 title = addScheduleRequestDto.title,
                 memo = addScheduleRequestDto.memo,
@@ -63,8 +71,9 @@ class ScheduleServcieImpl(
                 isMajor = addScheduleRequestDto.isMajor,
                 professor = addScheduleRequestDto.professor,
                 location = addScheduleRequestDto.location,
+                course = course,
             ),
-        )
+        ).id!!
     }
 
     private fun areSchedulesValid(

@@ -195,5 +195,18 @@ class TimeTableServiceImplTest : BehaviorSpec(
                 }
             }
         }
+
+        // 자신의 시간표를 조회하는 요청
+        Given("자신의 시간표 조회") {
+            When("자신의 시간표 조회") {
+                val data = timeTableService.getMyTimeTableList(userOne.email)
+
+                Then("자신의 시간표를 조회한다") {
+                    data.timeTableMap.size shouldBe 2
+                    data.timeTableMap[YearAndSeason(2021, Seasons.SPRING)]?.size shouldBe 2
+                    data.timeTableMap[YearAndSeason(2023, Seasons.SPRING)]?.size shouldBe 1
+                }
+            }
+        }
     },
 )

@@ -8,7 +8,7 @@ interface ScheduleService {
         userEmail: String,
         timeTableId: Long,
         addScheduleRequestDto: AddScheduleRequestDto,
-    )
+    ): Long
 
     fun deleteSchedule(
         userEmail: String,

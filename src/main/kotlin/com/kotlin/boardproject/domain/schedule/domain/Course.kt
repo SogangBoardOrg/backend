@@ -20,9 +20,6 @@ class Course(
 
     val title: String,
 
-    @Embedded
-    val yearAndSeason: YearAndSeason,
-
     @ElementCollection(fetch = FetchType.LAZY)
     val dayOfWeekTimePairs: MutableList<DayOfWeekTimePair> = mutableListOf(),
 
@@ -33,4 +30,8 @@ class Course(
     val professor: String,
 
     val locaton: String,
+
+    @Embedded
+    val yearAndSeason: YearAndSeason,
+
 ) : BaseEntity()

@@ -23,18 +23,8 @@ class Schedule(
 
     var title: String,
 
-    var memo: String,
-
-    // 시간 요일 pair
     @ElementCollection(fetch = FetchType.LAZY)
     val dayOfWeekTimePairs: MutableList<DayOfWeekTimePair> = mutableListOf(),
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "time_table_id")
-    val timeTable: TimeTable,
-
-    @Enumerated(EnumType.STRING)
-    var alphabetGrade: AlphabetGrade?,
 
     var credit: Float,
 
@@ -43,4 +33,17 @@ class Schedule(
     var professor: String,
 
     var location: String,
+
+    var memo: String,
+
+    @Enumerated(EnumType.STRING)
+    var alphabetGrade: AlphabetGrade?,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "time_table_id")
+    val timeTable: TimeTable,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    val course: Course? = null,
 ) : BaseEntity()

@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.domain.schedule
 
+import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.DeleteMyTimeTableResponseDto
@@ -58,5 +59,35 @@ class TimeTableController(
         val data = timeTableService.deleteMyTimeTableById(loginUser.username, timeTableId)
 
         return ApiResponse.success(data)
+    }
+
+    @PostMapping("/{timeTableId}/addSchedule")
+    fun addSchdule(
+        @LoginUser loginUser: User,
+        @PathVariable @Positive
+        timeTableId: Long,
+        @RequestBody @Valid
+        addScheduleRequestDto: AddScheduleRequestDto,
+    ): ApiResponse<Long> {
+
+        val data = scheduleService.addSchedule(
+            loginUser.username,
+            timeTableId,
+            addScheduleRequestDto,
+        )
+
+        return ApiResponse.success(data)
+    }
+
+    @DeleteMapping("/{timeTableId}/deleteSchedule")
+    fun deleteSchdule(
+        @LoginUser loginUser: User,
+        @PathVariable @Positive
+        timeTableId: Long,
+    ): ApiResponse<TimeTableResponseDto> {
+        TODO()
+        // val data =
+
+        //    return ApiResponse.success(data)
     }
 }

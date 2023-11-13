@@ -13,6 +13,10 @@ fun setTimeTableRepository(
     timeTableRepository: TimeTableRepository,
 ) {
     every{
+        timeTableRepository.findByUserFetchYearAndSeason(timeTableOne.user)
+    } returns listOf(timeTableOne, timeTableTwo, timeTableThree)
+
+    every{
         timeTableRepository.findByUserAndYearAndSeason(
             user = timeTableOne.user,
             yearAndSeason = YearAndSeason(

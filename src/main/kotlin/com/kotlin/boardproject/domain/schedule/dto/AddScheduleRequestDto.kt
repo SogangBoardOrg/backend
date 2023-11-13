@@ -10,5 +10,6 @@ data class AddScheduleRequestDto(
     val isMajor: Boolean,
     val professor: String,
     val location: String,
+    val courseId: Long?,
     val dayOfWeekTimePairs: List<DayOfWeekTimePairDto>,
 )
