@@ -25,7 +25,7 @@ class Course(
 
     val credit: Float,
 
-    val isMajor: Boolean,
+    val majorDepartment: String,
 
     val professor: String,
 

@@ -28,13 +28,15 @@ class Schedule(
 
     var credit: Float,
 
-    var isMajor: Boolean,
+    var majorDepartment: String,
 
     var professor: String,
 
     var location: String,
 
     var memo: String,
+
+    var isMajor: Boolean,
 
     @Enumerated(EnumType.STRING)
     var alphabetGrade: AlphabetGrade?,
