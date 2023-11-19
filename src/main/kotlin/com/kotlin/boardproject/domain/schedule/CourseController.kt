@@ -31,7 +31,7 @@ class CourseController(
         @RequestParam("professor", required = false) professor: String?,
         pageable: Pageable,
     ): ApiResponse<CourseListByQueryDto> {
-        val courses = courseService.getCourseListByQuery(
+        val data = courseService.getCourseListByQuery(
             title = title,
             major = major,
             professor = professor,
@@ -39,7 +39,7 @@ class CourseController(
             seasons = seasons,
             pageable = pageable,
         )
-        TODO()
+        return ApiResponse.success(data)
     }
 
     @GetMapping("/{courseId}")

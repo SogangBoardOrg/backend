@@ -55,11 +55,11 @@ class MyDataInit(
         commentCreate(n_post_4, user_a, user_b)
     }
 
-    private fun scheduleAdder(timetable: TimeTable) {
+    private fun scheduleAdder(timeTable: TimeTable) {
         val schedule_1 = Schedule(
             title = "schedule_1",
             memo = "schedule_1",
-            timeTable = timetable,
+            timeTable = timeTable,
             dayOfWeekTimePairs = listOf(
                 DayOfWeekTimePair(
                     dayOfWeek = DayOfWeek.MONDAY,
@@ -77,12 +77,13 @@ class MyDataInit(
             isMajor = true,
             professor = "professor_1",
             location = "location_1",
+            majorDepartment = "majorDepartment_1",
         )
 
         val schedule_2 = Schedule(
             title = "schedule_2",
             memo = "schedule_2",
-            timeTable = timetable,
+            timeTable = timeTable,
             dayOfWeekTimePairs = listOf(
                 DayOfWeekTimePair(
                     dayOfWeek = DayOfWeek.THURSDAY,
@@ -100,6 +101,7 @@ class MyDataInit(
             isMajor = true,
             professor = "professor_1",
             location = "location_1",
+            majorDepartment = "majorDepartment_1",
         )
 
         scheduleRepository.saveAllAndFlush(listOf(schedule_1, schedule_2))

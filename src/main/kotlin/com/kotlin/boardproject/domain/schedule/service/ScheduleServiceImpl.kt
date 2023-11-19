@@ -3,6 +3,8 @@ package com.kotlin.boardproject.domain.schedule.service
 import com.kotlin.boardproject.domain.schedule.domain.DayOfWeekTimePair
 import com.kotlin.boardproject.domain.schedule.domain.Schedule
 import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleResponseDto
 import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.domain.schedule.repository.ScheduleRepository
 import com.kotlin.boardproject.domain.schedule.repository.TimeTableRepository
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ScheduleServcieImpl(
+class ScheduleServiceImpl(
     private val scheduleRepository: ScheduleRepository,
     private val courseRepository: CourseRepository,
     private val timeTableRepository: TimeTableRepository,
@@ -51,6 +53,16 @@ class ScheduleServcieImpl(
             )
         }
 
+        require(newDayOfWeekTimePairs.isNotEmpty()) {
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "시간표에 추가할 시간이 없습니다.")
+        }
+
+        require(
+            newSchedulesValid(newDayOfWeekTimePairs),
+        ) {
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "시간이 올바르지 않습니다.")
+        }
+
         require(
             areSchedulesValid(
                 newDayOfWeekTimePairs,
@@ -72,8 +84,17 @@ class ScheduleServcieImpl(
                 professor = addScheduleRequestDto.professor,
                 location = addScheduleRequestDto.location,
                 course = course,
+                majorDepartment = addScheduleRequestDto.majorDepartment,
             ),
         ).id!!
+    }
+
+    private fun newSchedulesValid(
+        newDayOfWeekTimePairs: List<DayOfWeekTimePair>,
+    ): Boolean {
+        return newDayOfWeekTimePairs.all { newPair ->
+            newDayOfWeekTimePairs.none { it != newPair && it overlap newPair }
+        }
     }
 
     private fun areSchedulesValid(
@@ -89,8 +110,8 @@ class ScheduleServcieImpl(
     override fun deleteSchedule(
         userEmail: String,
         timeTableId: Long,
-        scheduleId: Long,
-    ) {
+        deleteScheduleRequestDto: DeleteScheduleRequestDto,
+    ): DeleteScheduleResponseDto {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 존재하지 않습니다.")
 
@@ -101,7 +122,7 @@ class ScheduleServcieImpl(
             throw ConditionConflictException(ErrorCode.FORBIDDEN, "시간표의 주인이 아닙니다.")
         }
 
-        val schedule = scheduleRepository.findByIdFetchTimetable(scheduleId)
+        val schedule = scheduleRepository.findByIdFetchTimetable(deleteScheduleRequestDto.scheduleId)
             ?: throw EntityNotFoundException("존재하지 않는 스케쥴입니다.")
 
         require(schedule.timeTable == timeTable) {
@@ -109,5 +130,9 @@ class ScheduleServcieImpl(
         }
 
         scheduleRepository.delete(schedule)
+
+        return DeleteScheduleResponseDto(
+            scheduleId = schedule.id!!,
+        )
     }
 }

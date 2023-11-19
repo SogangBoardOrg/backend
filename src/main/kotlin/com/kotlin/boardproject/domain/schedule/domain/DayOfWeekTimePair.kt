@@ -16,12 +16,8 @@ class DayOfWeekTimePair(
     var endTime: LocalTime,
 ) {
     infix fun overlap(other: DayOfWeekTimePair): Boolean {
-        if (this.dayOfWeek != other.dayOfWeek) {
-            return false
-        }
-        if (this.endTime.isBefore(other.startTime) || this.startTime.isAfter(other.endTime)) {
-            return false
-        }
-        return true
+        return this.dayOfWeek == other.dayOfWeek &&
+            this.endTime.isAfter(other.startTime) &&
+            this.startTime.isBefore(other.endTime)
     }
 }

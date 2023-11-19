@@ -8,6 +8,7 @@ data class AddScheduleRequestDto(
     val alphabetGrade: AlphabetGrade?,
     val credit: Float,
     val isMajor: Boolean,
+    val majorDepartment: String,
     val professor: String,
     val location: String,
     val courseId: Long?,

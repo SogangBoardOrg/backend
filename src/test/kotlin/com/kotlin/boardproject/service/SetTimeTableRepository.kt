@@ -12,11 +12,11 @@ fun setTimeTableRepository(
     timeTableThree: TimeTable,
     timeTableRepository: TimeTableRepository,
 ) {
-    every{
+    every {
         timeTableRepository.findByUserFetchYearAndSeason(timeTableOne.user)
     } returns listOf(timeTableOne, timeTableTwo, timeTableThree)
 
-    every{
+    every {
         timeTableRepository.findByUserAndYearAndSeason(
             user = timeTableOne.user,
             yearAndSeason = YearAndSeason(
@@ -86,7 +86,6 @@ fun setTimeTableRepository(
             timeTableThree.id!!,
         )
     } returns timeTableThree
-
 
     every { timeTableRepository.save(timeTableOne) } returns timeTableOne
     every { timeTableRepository.save(timeTableTwo) } returns timeTableTwo

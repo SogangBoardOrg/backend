@@ -4,6 +4,8 @@ import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.DeleteMyTimeTableResponseDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.TimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.service.ScheduleService
 import com.kotlin.boardproject.domain.schedule.service.TimeTableService
@@ -83,10 +85,15 @@ class TimeTableController(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         timeTableId: Long,
-    ): ApiResponse<TimeTableResponseDto> {
-        TODO()
-        // val data =
+        @RequestBody @Valid
+        deleteScheduleRequestDto: DeleteScheduleRequestDto,
+    ): ApiResponse<DeleteScheduleResponseDto> {
+        val data = scheduleService.deleteSchedule(
+            loginUser.username,
+            timeTableId,
+            deleteScheduleRequestDto,
+        )
 
-        //    return ApiResponse.success(data)
+        return ApiResponse.success(data)
     }
 }

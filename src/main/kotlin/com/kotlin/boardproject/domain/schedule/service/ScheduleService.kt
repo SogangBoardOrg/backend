@@ -1,6 +1,8 @@
 package com.kotlin.boardproject.domain.schedule.service
 
 import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleResponseDto
 
 interface ScheduleService {
 
@@ -13,6 +15,6 @@ interface ScheduleService {
     fun deleteSchedule(
         userEmail: String,
         timeTableId: Long,
-        scheduleId: Long,
-    )
+        deleteScheduleRequestDto: DeleteScheduleRequestDto,
+    ): DeleteScheduleResponseDto
 }

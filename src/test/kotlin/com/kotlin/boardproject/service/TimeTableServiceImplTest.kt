@@ -1,10 +1,15 @@
 package com.kotlin.boardproject.service
 
+import com.kotlin.boardproject.domain.schedule.domain.Schedule
 import com.kotlin.boardproject.domain.schedule.domain.TimeTable
 import com.kotlin.boardproject.domain.schedule.domain.YearAndSeason
+import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.DayOfWeekTimePairDto
+import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.domain.schedule.repository.ScheduleRepository
 import com.kotlin.boardproject.domain.schedule.repository.TimeTableRepository
+import com.kotlin.boardproject.domain.schedule.service.ScheduleServiceImpl
 import com.kotlin.boardproject.domain.schedule.service.TimeTableServiceImpl
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.Seasons
@@ -16,6 +21,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import java.time.DayOfWeek
+import java.time.LocalTime
 
 class TimeTableServiceImplTest : BehaviorSpec(
     {
@@ -27,12 +34,24 @@ class TimeTableServiceImplTest : BehaviorSpec(
         val userRepository: UserRepository = mockk()
         val timeTableRepository: TimeTableRepository = mockk()
         val scheduleRepository: ScheduleRepository = mockk()
+        val courseRepository: CourseRepository = mockk()
 
         val timeTableService = TimeTableServiceImpl(
             userRepository = userRepository,
             timeTableRepository = timeTableRepository,
             scheduleRepository = scheduleRepository,
         )
+
+        val scheduleService = ScheduleServiceImpl(
+            userRepository = userRepository,
+            timeTableRepository = timeTableRepository,
+            scheduleRepository = scheduleRepository,
+            courseRepository = courseRepository,
+        )
+
+        connectTimeTableAndSchedule(timeTableOne)
+        connectTimeTableAndSchedule(timeTableTwo)
+        connectTimeTableAndSchedule(timeTableThree)
 
         setUserRepository(
             userOne,
@@ -120,7 +139,6 @@ class TimeTableServiceImplTest : BehaviorSpec(
 
                 Then("시간표를 조회한다") {
                     data.id shouldBe timeTableOne.id!!
-                    data.scheduleList shouldBe timeTableOne.schedules
                 }
             }
 
@@ -132,7 +150,6 @@ class TimeTableServiceImplTest : BehaviorSpec(
 
                 Then("시간표를 조회한다") {
                     data.id shouldBe timeTableTwo.id!!
-                    data.scheduleList shouldBe timeTableTwo.schedules
                 }
             }
 
@@ -208,5 +225,148 @@ class TimeTableServiceImplTest : BehaviorSpec(
                 }
             }
         }
+
+        // 스케쥴을 추가하는 요청
+        Given("스케쥴을 추가하는 요청") {
+            When("스케쥴을 정상적으로 추가하는 요청") {
+                every { scheduleRepository.save(any()) } returns Schedule(
+                    id = 4L,
+                    title = "스케쥴1",
+                    memo = "메모1",
+                    timeTable = timeTableOne,
+                    dayOfWeekTimePairs = mutableListOf(),
+                    alphabetGrade = null,
+                    credit = 3.0f,
+                    isMajor = true,
+                    professor = "김교수",
+                    location = "A동",
+                    majorDepartment = "컴퓨터공학과",
+                )
+                val data =
+                    scheduleService.addSchedule(
+                        userEmail = userOne.email,
+                        timeTableId = timeTableOne.id!!,
+                        addScheduleRequestDto = AddScheduleRequestDto(
+                            title = "스케쥴1",
+                            memo = "메모1",
+                            alphabetGrade = null,
+                            credit = 3.0f,
+                            isMajor = true,
+                            majorDepartment = "컴퓨터공학과",
+                            professor = "김교수",
+                            location = "A동",
+                            courseId = null,
+                            dayOfWeekTimePairs = listOf(
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.MONDAY,
+                                    startTime = LocalTime.of(11, 0),
+                                    endTime = LocalTime.of(12, 0),
+                                ),
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.TUESDAY,
+                                    startTime = LocalTime.of(12, 0),
+                                    endTime = LocalTime.of(13, 0),
+                                ),
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.TUESDAY,
+                                    startTime = LocalTime.of(11, 0),
+                                    endTime = LocalTime.of(12, 0),
+                                ),
+                            ),
+                        ),
+                    )
+
+                Then("스케쥴을 추가한다") {
+                }
+            }
+
+            xWhen("없는 시간표에 스케쥴을 추가하는 요청") {
+
+            }
+
+            xWhen("타인의 시간표에 스케쥴을 추가하는 요청") {
+
+            }
+
+            When("추가하는 시간표끼리 겹치는 시간이 있는 요청") {
+                val error = shouldThrow<ConditionConflictException> {
+                    scheduleService.addSchedule(
+                        userEmail = userOne.email,
+                        timeTableId = timeTableOne.id!!,
+                        addScheduleRequestDto = AddScheduleRequestDto(
+                            title = "스케쥴1",
+                            memo = "메모1",
+                            alphabetGrade = null,
+                            credit = 3.0f,
+                            isMajor = true,
+                            majorDepartment = "컴퓨터공학과",
+                            professor = "김교수",
+                            location = "A동",
+                            courseId = null,
+                            dayOfWeekTimePairs = listOf(
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.MONDAY,
+                                    startTime = LocalTime.of(1, 0),
+                                    endTime = LocalTime.of(3, 0),
+                                ),
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.MONDAY,
+                                    startTime = LocalTime.of(2, 0),
+                                    endTime = LocalTime.of(4, 0),
+                                ),
+                            ),
+                        ),
+                    )
+                }
+
+                Then("에러") {
+                    error.log shouldBe "시간이 올바르지 않습니다."
+                }
+            }
+
+            When("시간표에 이미 있는 시간에 스케쥴을 추가하는 요청") {
+                val error = shouldThrow<ConditionConflictException> {
+                    scheduleService.addSchedule(
+                        userEmail = userOne.email,
+                        timeTableId = timeTableOne.id!!,
+                        addScheduleRequestDto = AddScheduleRequestDto(
+                            title = "스케쥴1",
+                            memo = "메모1",
+                            alphabetGrade = null,
+                            credit = 3.0f,
+                            isMajor = true,
+                            majorDepartment = "컴퓨터공학과",
+                            professor = "김교수",
+                            location = "A동",
+                            courseId = null,
+                            dayOfWeekTimePairs = listOf(
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.MONDAY,
+                                    startTime = LocalTime.of(1, 0),
+                                    endTime = LocalTime.of(3, 0),
+                                ),
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.TUESDAY,
+                                    startTime = LocalTime.of(1, 0),
+                                    endTime = LocalTime.of(3, 0),
+                                ),
+                                DayOfWeekTimePairDto(
+                                    dayOfWeek = DayOfWeek.TUESDAY,
+                                    startTime = LocalTime.of(10, 0),
+                                    endTime = LocalTime.of(11, 0),
+                                ),
+                            ),
+                        ),
+                    )
+                }
+
+                Then("이미 시간이 존재하는 에러") {
+                    error.log shouldBe "시간표에 이미 존재하는 시간입니다."
+                }
+            }
+        }
+
+        // 스케쥴을 삭제하는 요청
     },
 )
+

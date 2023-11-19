@@ -17,6 +17,6 @@ interface CourseService {
     ): CourseListByQueryDto
 
     fun getCourseById(
-        courseId: Long
+        courseId: Long,
     ): CourseResponseDto
 }

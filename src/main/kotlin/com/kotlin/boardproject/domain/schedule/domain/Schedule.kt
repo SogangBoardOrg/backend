@@ -28,7 +28,7 @@ class Schedule(
 
     var credit: Float,
 
-    var majorDepartment: String,
+    var majorDepartment: String?,
 
     var professor: String,
 
