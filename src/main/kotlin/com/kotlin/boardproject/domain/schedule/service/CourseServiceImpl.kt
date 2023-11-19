@@ -4,6 +4,7 @@ import com.kotlin.boardproject.domain.schedule.dto.CourseListByQueryDto
 import com.kotlin.boardproject.domain.schedule.dto.CourseResponseDto
 import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.global.enums.Seasons
+import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
@@ -25,13 +26,18 @@ class CourseServiceImpl(
             professor,
             year,
             seasons,
-            pageable)
-        TODO()
+            pageable,
+        )
+
+        return CourseListByQueryDto.fromCoursePageable(courses)
     }
 
     override fun getCourseById(
         courseId: Long,
     ): CourseResponseDto {
-        TODO()
+        val course = courseRepository.finByIdFetchDayOfWeekTimePairs(courseId)
+            ?: throw EntityNotFoundException("$courseId 번의 강의를 찾을 수 없습니다.")
+
+        return CourseResponseDto.fromCourse(course)
     }
 }

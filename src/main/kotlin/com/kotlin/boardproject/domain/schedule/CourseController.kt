@@ -8,9 +8,12 @@ import com.kotlin.boardproject.global.enums.Seasons
 import org.springframework.data.domain.Pageable
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Positive
 
 @Validated
 @RestController
@@ -21,9 +24,9 @@ class CourseController(
 
     @GetMapping("query")
     fun getCourseListByQuery(
-        @RequestParam("title", required = false) title: String?,
-        @RequestParam("major", required = false) major: String?,
-        @RequestParam("year", required = false) year: Int?,
+        @RequestParam("title", required = false) @NotBlank title: String?,
+        @RequestParam("major", required = false) @NotBlank major: String?,
+        @RequestParam("year", required = false) @Positive year: Int?,
         @RequestParam("seasons", required = false) seasons: Seasons?,
         @RequestParam("professor", required = false) professor: String?,
         pageable: Pageable,
@@ -41,8 +44,11 @@ class CourseController(
 
     @GetMapping("/{courseId}")
     fun getCourseById(
-        @RequestParam("course-id", required = true) courseId: Long,
+        @PathVariable @Positive
+        courseId: Long,
     ): ApiResponse<CourseResponseDto> {
-        TODO()
+        val data = courseService.getCourseById(courseId)
+
+        return ApiResponse.success(data)
     }
 }

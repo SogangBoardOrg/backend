@@ -23,6 +23,7 @@ class CourseRepositoryCustomImpl(
             .select(course.id)
             .from(course)
             .distinct()
+            .leftJoin(course.dayOfWeekTimePairs).fetchJoin()
             .where(
                 titleContains(title),
                 majorEq(major),
@@ -54,6 +55,7 @@ class CourseRepositoryCustomImpl(
             .where(
                 course.id.`in`(dataIds),
             )
+            .leftJoin(course.dayOfWeekTimePairs).fetchJoin()
             .orderBy(course.id.desc())
             .fetch()
 

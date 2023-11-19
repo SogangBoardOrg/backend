@@ -69,7 +69,6 @@ class TimeTableController(
         @RequestBody @Valid
         addScheduleRequestDto: AddScheduleRequestDto,
     ): ApiResponse<Long> {
-
         val data = scheduleService.addSchedule(
             loginUser.username,
             timeTableId,
