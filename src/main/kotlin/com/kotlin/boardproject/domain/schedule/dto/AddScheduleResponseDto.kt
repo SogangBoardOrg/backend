@@ -1,5 +1,5 @@
 package com.kotlin.boardproject.domain.schedule.dto
 
-data class DeleteScheduleResponseDto(
+data class AddScheduleResponseDto(
     val id: Long,
 )

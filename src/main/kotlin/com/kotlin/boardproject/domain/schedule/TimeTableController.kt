@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.domain.schedule
 
 import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.AddScheduleResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.CreateTimeTableResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.DeleteMyTimeTableResponseDto
@@ -70,7 +71,7 @@ class TimeTableController(
         timeTableId: Long,
         @RequestBody @Valid
         addScheduleRequestDto: AddScheduleRequestDto,
-    ): ApiResponse<Long> {
+    ): ApiResponse<AddScheduleResponseDto> {
         val data = scheduleService.addSchedule(
             loginUser.username,
             timeTableId,

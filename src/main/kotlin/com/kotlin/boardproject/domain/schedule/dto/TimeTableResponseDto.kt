@@ -11,7 +11,7 @@ data class TimeTableResponseDto(
     val isPublic: Boolean,
     val year: Int,
     val season: Seasons,
-    val scheduleList: List<ScheduleResponseDto>,
+    val schedules: List<ScheduleResponseDto>,
 ) {
     companion object {
         fun fromTimeTable(
@@ -25,7 +25,7 @@ data class TimeTableResponseDto(
                 isPublic = timeTable.isPublic,
                 year = timeTable.yearAndSeason.year,
                 season = timeTable.yearAndSeason.season,
-                scheduleList = schedules.map {
+                schedules = schedules.map {
                     ScheduleResponseDto(
                         id = it.id!!,
                         title = it.title,

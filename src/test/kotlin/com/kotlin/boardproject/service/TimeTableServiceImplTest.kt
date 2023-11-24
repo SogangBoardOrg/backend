@@ -281,11 +281,9 @@ class TimeTableServiceImplTest : BehaviorSpec(
             }
 
             xWhen("없는 시간표에 스케쥴을 추가하는 요청") {
-
             }
 
             xWhen("타인의 시간표에 스케쥴을 추가하는 요청") {
-
             }
 
             When("추가하는 시간표끼리 겹치는 시간이 있는 요청") {
@@ -369,4 +367,3 @@ class TimeTableServiceImplTest : BehaviorSpec(
         // 스케쥴을 삭제하는 요청
     },
 )
-

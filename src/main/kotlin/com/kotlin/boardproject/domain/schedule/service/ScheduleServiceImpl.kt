@@ -3,6 +3,7 @@ package com.kotlin.boardproject.domain.schedule.service
 import com.kotlin.boardproject.domain.schedule.domain.DayOfWeekTimePair
 import com.kotlin.boardproject.domain.schedule.domain.Schedule
 import com.kotlin.boardproject.domain.schedule.dto.AddScheduleRequestDto
+import com.kotlin.boardproject.domain.schedule.dto.AddScheduleResponseDto
 import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleRequestDto
 import com.kotlin.boardproject.domain.schedule.dto.DeleteScheduleResponseDto
 import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
@@ -29,7 +30,7 @@ class ScheduleServiceImpl(
         userEmail: String,
         timeTableId: Long,
         addScheduleRequestDto: AddScheduleRequestDto,
-    ): Long {
+    ): AddScheduleResponseDto {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("존재하지 않는 유저입니다.")
 
@@ -72,7 +73,7 @@ class ScheduleServiceImpl(
             throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "시간표에 이미 존재하는 시간입니다.")
         }
 
-        return scheduleRepository.save(
+        val schedule = scheduleRepository.save(
             Schedule(
                 title = addScheduleRequestDto.title,
                 memo = addScheduleRequestDto.memo,
@@ -86,7 +87,11 @@ class ScheduleServiceImpl(
                 course = course,
                 majorDepartment = addScheduleRequestDto.majorDepartment,
             ),
-        ).id!!
+        )
+
+        return AddScheduleResponseDto(
+            id = schedule.id!!,
+        )
     }
 
     private fun newSchedulesValid(
@@ -132,7 +137,7 @@ class ScheduleServiceImpl(
         scheduleRepository.delete(schedule)
 
         return DeleteScheduleResponseDto(
-            scheduleId = schedule.id!!,
+            id = schedule.id!!,
         )
     }
 }
