@@ -23,7 +23,6 @@ class CourseRepositoryCustomImpl(
             .select(course.id)
             .from(course)
             .distinct()
-            .leftJoin(course.dayOfWeekTimePairs).fetchJoin()
             .where(
                 titleContains(title),
                 majorEq(major),
@@ -52,6 +51,7 @@ class CourseRepositoryCustomImpl(
 
         val data = queryFactory
             .selectFrom(course)
+            .distinct()
             .where(
                 course.id.`in`(dataIds),
             )

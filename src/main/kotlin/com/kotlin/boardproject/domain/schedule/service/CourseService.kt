@@ -12,7 +12,7 @@ interface CourseService {
         major: String?,
         professor: String?,
         year: Int?,
-        seasons: Seasons?,
+        season: Seasons?,
         pageable: Pageable,
     ): CourseListByQueryDto
 

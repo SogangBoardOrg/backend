@@ -31,6 +31,8 @@ class Course(
 
     val locaton: String,
 
+    val courseCode: String,
+
     @Embedded
     val yearAndSeason: YearAndSeason,
 
