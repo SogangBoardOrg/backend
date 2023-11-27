@@ -125,10 +125,10 @@ class TimeTableServiceImpl(
             throw ConditionConflictException(ErrorCode.FORBIDDEN, "해당 시간표를 삭제할 수 있는 권한이 없습니다.")
         }
 
-        // val scheduleIds = timeTable.schedules.map { it.id!! }
+        val scheduleIds = timeTable.schedules.map { it.id!! }
 
         // scheduleRepository.deleteByIdIn(scheduleIds)
-        scheduleRepository.deleteAll(timeTable.schedules)
+        scheduleRepository.deleteAllById(scheduleIds)
         timeTableRepository.delete(timeTable)
 
         return DeleteMyTimeTableResponseDto(

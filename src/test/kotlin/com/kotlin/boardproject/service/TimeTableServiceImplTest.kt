@@ -187,6 +187,7 @@ class TimeTableServiceImplTest : BehaviorSpec(
         // 시간표를 삭제하는 요청
         Given("시간표를 삭제하는 요청") {
             every { timeTableRepository.delete(any()) } returns Unit
+            every { scheduleRepository.deleteAllById(any()) } returns Unit
 
             When("자신의 시간표를 삭제하는 요청") {
                 val data = timeTableService.deleteMyTimeTableById(
