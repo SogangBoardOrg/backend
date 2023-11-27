@@ -127,7 +127,8 @@ class TimeTableServiceImpl(
 
         val scheduleIds = timeTable.schedules.map { it.id!! }
 
-        scheduleRepository.deleteByIdIn(scheduleIds)
+        // scheduleRepository.deleteByIdIn(scheduleIds)
+        scheduleRepository.deleteAllById(scheduleIds)
         timeTableRepository.delete(timeTable)
 
         return DeleteMyTimeTableResponseDto(
