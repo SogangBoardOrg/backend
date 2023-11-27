@@ -36,7 +36,7 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
             DELETE
             FROM Schedule s
             WHERE s.id IN :scheduleIds
-        """
+        """,
     )
     fun deleteByIdIn(scheduleIds: List<Long>)
 }
