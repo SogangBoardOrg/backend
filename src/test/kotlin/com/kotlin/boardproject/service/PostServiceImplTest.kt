@@ -2,7 +2,6 @@ package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.LikePost
-import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostResponseDto
@@ -15,13 +14,10 @@ import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.post.service.PostService
 import com.kotlin.boardproject.domain.post.service.PostServiceImpl
-import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.global.enums.PostStatus
-import com.kotlin.boardproject.global.enums.ProviderType
-import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import com.kotlin.boardproject.global.exception.UnAuthorizedException
@@ -32,7 +28,6 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.util.UUID
 
 // beforespec, afterspec -> 모든 테스트 실행 전, 후 -> 제일 위
 // beforeEach, AfterEach -> 테스트하나 마다
@@ -42,13 +37,7 @@ class PostServiceImplTest : BehaviorSpec(
         isolationMode = IsolationMode.InstancePerTest
 
         val (userOne, userTwo, userThree) = makeUser()
-        val (normalPostPresent, normalPostDeleted) = makePost(userOne)
-        val nonExistPostId = -1L
-        val nonExistUserEmail = "fail@test.com"
-
-        normalPostPresent.id = 1L
-        normalPostDeleted.id = 2L
-        normalPostDeleted.status = PostStatus.DELETED
+        val (normalPostPresent, normalPostDeleted) = makeNormalPost(userOne)
 
         val userRepository: UserRepository = mockk()
         val normalPostRepository: NormalPostRepository = mockk()
@@ -60,103 +49,6 @@ class PostServiceImplTest : BehaviorSpec(
 
         lateinit var postService: PostService
 
-        fun setUserRepository() {
-            every { userRepository.findByEmail(userOne.email) } returns userOne
-            every { userRepository.findByEmail(userTwo.email) } returns userTwo
-            every { userRepository.findByEmail(userThree.email) } returns userThree
-            every { userRepository.findByEmail(nonExistUserEmail) } returns null
-
-            every { userRepository.findByEmailFetchLikeList(userOne.email) } returns userOne
-            every { userRepository.findByEmailFetchLikeList(userTwo.email) } returns userTwo
-            every { userRepository.findByEmailFetchLikeList(userThree.email) } returns userThree
-            every { userRepository.findByEmailFetchLikeList(nonExistUserEmail) } returns null
-
-            every { userRepository.findByEmailFetchScrapList(userOne.email) } returns userOne
-            every { userRepository.findByEmailFetchScrapList(userTwo.email) } returns userTwo
-            every { userRepository.findByEmailFetchScrapList(userThree.email) } returns userThree
-            every { userRepository.findByEmailFetchScrapList(nonExistUserEmail) } returns null
-        }
-
-        fun setNormalPostRepository() {
-            every {
-                normalPostRepository.findByIdAndStatus(
-                    normalPostPresent.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns normalPostPresent
-            every {
-                normalPostRepository.findByIdAndStatus(
-                    normalPostDeleted.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-            every {
-                normalPostRepository.findByIdAndStatus(
-                    nonExistPostId,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-        }
-
-        fun setBasePostRepository() {
-            every {
-                basePostRepository.findByIdAndStatus(
-                    normalPostPresent.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns normalPostPresent
-            every {
-                basePostRepository.findByIdAndStatusFetchLikeList(
-                    normalPostPresent.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns normalPostPresent
-            every {
-                basePostRepository.findByIdAndStatusFetchScrapList(
-                    normalPostPresent.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns normalPostPresent
-
-            every {
-                basePostRepository.findByIdAndStatus(
-                    normalPostDeleted.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-            every {
-                basePostRepository.findByIdAndStatusFetchLikeList(
-                    normalPostDeleted.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-            every {
-                basePostRepository.findByIdAndStatusFetchScrapList(
-                    normalPostDeleted.id!!,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-
-            every {
-                basePostRepository.findByIdAndStatus(
-                    nonExistPostId,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-            every {
-                basePostRepository.findByIdAndStatusFetchLikeList(
-                    nonExistPostId,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-            every {
-                basePostRepository.findByIdAndStatusFetchScrapList(
-                    nonExistPostId,
-                    PostStatus.NORMAL,
-                )
-            } returns null
-        }
-
         postService = PostServiceImpl(
             normalPostRepository,
             userRepository,
@@ -167,9 +59,24 @@ class PostServiceImplTest : BehaviorSpec(
             commentRepository,
         )
 
-        setUserRepository()
-        setNormalPostRepository()
-        setBasePostRepository()
+        setUserRepository(
+            userOne,
+            userTwo,
+            userThree,
+            userRepository,
+        )
+
+        setNormalPostRepository(
+            normalPostPresent,
+            normalPostDeleted,
+            normalPostRepository,
+        )
+
+        setBasePostRepository(
+            normalPostPresent,
+            normalPostDeleted,
+            basePostRepository,
+        )
 
         given("일반 게시판 글 등록") {
             val createNormalPostRequestDto = CreateNormalPostRequestDto(
@@ -540,51 +447,3 @@ class PostServiceImplTest : BehaviorSpec(
         }*/
     },
 )
-
-fun makeUser(): List<User> {
-    val userOne = User(
-        id = UUID.randomUUID(),
-        email = "userOne@test.com",
-        nickname = "userOne",
-        role = Role.ROLE_VERIFIED_USER,
-        providerType = ProviderType.LOCAL,
-    )
-
-    val userTwo = User(
-        id = UUID.randomUUID(),
-        email = "userTwo@test.com",
-        nickname = "userTwo",
-        role = Role.ROLE_VERIFIED_USER,
-        providerType = ProviderType.LOCAL,
-    )
-
-    val userThree = User(
-        id = UUID.randomUUID(),
-        email = "userThree@test.com",
-        nickname = "userThree",
-        role = Role.ROLE_VERIFIED_USER,
-        providerType = ProviderType.LOCAL,
-    )
-
-    return listOf(userOne, userTwo, userThree)
-}
-
-fun makePost(writer: User): List<NormalPost> {
-    val one = NormalPost(
-        title = "postOne",
-        content = "postOne",
-        writer = writer,
-        isAnon = false,
-        commentOn = true,
-        normalType = NormalType.FREE,
-    )
-    val two = NormalPost(
-        title = "postOne",
-        content = "postOne",
-        writer = writer,
-        isAnon = false,
-        commentOn = true,
-        normalType = NormalType.FREE,
-    )
-    return listOf(one, two)
-}

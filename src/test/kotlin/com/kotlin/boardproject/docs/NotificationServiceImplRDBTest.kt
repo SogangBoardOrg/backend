@@ -26,11 +26,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.restdocs.headers.HeaderDocumentation
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
-import org.springframework.restdocs.operation.preprocess.Preprocessors
-import org.springframework.restdocs.payload.PayloadDocumentation
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
+import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -164,16 +168,16 @@ class NotificationServiceImplRDBTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "get-all-notification",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 알림을 받을 사용자의 이름을 해더에 넣어줘야 한다."),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data.notificationCount").description("읽지 않은 알림의 수"),
-                        PayloadDocumentation.fieldWithPath("data.notifications").description("읽지 않은 알림의 모임"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.notificationCount").description("읽지 않은 알림의 수"),
+                        fieldWithPath("data.notifications").description("읽지 않은 알림의 모임"),
                     ),
                 ),
             )
@@ -230,15 +234,15 @@ class NotificationServiceImplRDBTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "read-one-notification",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 알림을 읽을 사용자의 이름을 해더에 넣어줘야 한다."),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data").description("성공여부"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data").description("성공여부"),
                     ),
                 ),
             )
@@ -274,15 +278,15 @@ class NotificationServiceImplRDBTest {
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 MockMvcRestDocumentation.document(
                     "read-all-notification",
-                    Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
-                    Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 알림을 읽을 사용자의 이름을 해더에 넣어줘야 한다."),
                     ),
-                    PayloadDocumentation.responseFields(
-                        PayloadDocumentation.fieldWithPath("status").description("성공 여부"),
-                        PayloadDocumentation.fieldWithPath("data").description("성공여부"),
+                    responseFields(
+                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data").description("성공여부"),
                     ),
                 ),
             )

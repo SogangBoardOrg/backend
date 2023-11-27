@@ -6,6 +6,8 @@ import com.kotlin.boardproject.domain.comment.service.CommentService
 import com.kotlin.boardproject.domain.post.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.MyWrittenPostResponseDto
 import com.kotlin.boardproject.domain.post.service.PostService
+import com.kotlin.boardproject.domain.schedule.dto.MyTimeTableListResponseDto
+import com.kotlin.boardproject.domain.schedule.service.TimeTableService
 import com.kotlin.boardproject.domain.user.dto.UserInfoDto
 import com.kotlin.boardproject.global.annotation.LoginUser
 import com.kotlin.boardproject.global.dto.ApiResponse
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 class MyController(
     private val postService: PostService,
     private val commentService: CommentService,
+    private val timeTableService: TimeTableService,
     private val authService: AuthService,
 ) {
     @GetMapping("/comment")
@@ -59,6 +62,15 @@ class MyController(
         @LoginUser loginUser: User,
     ): ApiResponse<UserInfoDto> {
         val data = authService.getUserInfo(loginUser.username)
+
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("/timetable")
+    fun myTimeTable(
+        @LoginUser loginUser: User,
+    ): ApiResponse<MyTimeTableListResponseDto> {
+        val data = timeTableService.getMyTimeTableList(loginUser.username)
 
         return ApiResponse.success(data)
     }

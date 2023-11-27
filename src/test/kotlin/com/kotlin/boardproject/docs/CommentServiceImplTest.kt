@@ -35,7 +35,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.restdocs.headers.HeaderDocumentation
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors
@@ -182,8 +183,8 @@ class CommentServiceImplTest {
                     "add-single-comment",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     requestFields(
@@ -252,8 +253,8 @@ class CommentServiceImplTest {
                     "add-single-parent-comment",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     requestFields(
@@ -336,8 +337,8 @@ class CommentServiceImplTest {
                     "add-single-descendent-comment",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     requestFields(
@@ -402,8 +403,8 @@ class CommentServiceImplTest {
                     "delete-single-comment",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
                     requestFields(
@@ -467,8 +468,8 @@ class CommentServiceImplTest {
                     "update-single-comment",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
                     requestFields(
@@ -521,8 +522,8 @@ class CommentServiceImplTest {
                     "like-comment-add",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
@@ -578,8 +579,8 @@ class CommentServiceImplTest {
                     "like-comment-cancel",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
@@ -630,8 +631,8 @@ class CommentServiceImplTest {
                     "comment-black",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 댓글을 신고하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
@@ -695,8 +696,8 @@ class CommentServiceImplTest {
                     "view-my-comment",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION)
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION)
                             .description("인증을 위한 Access 토큰, 자신이 쓴 댓글을 조회하는 유저를 위해 필요함"),
                     ),
                     responseFields(

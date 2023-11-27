@@ -6,7 +6,7 @@ import com.kotlin.boardproject.domain.user.domain.User
 import org.springframework.data.domain.Page
 
 data class NormalPostByQueryResponseDto(
-    val contents: List<NormalPostByQueryElementDto>? = null,
+    val contents: List<NormalPostByQueryElementDto>,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
