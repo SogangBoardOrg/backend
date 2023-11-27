@@ -36,6 +36,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
+import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
@@ -85,7 +86,6 @@ class TimeTableServiceImplTest {
 
     val statsEndPoint = "/api/v1/timetable"
 
-
     @BeforeEach
     fun default_setting() {
         val user: User =
@@ -121,7 +121,6 @@ class TimeTableServiceImplTest {
             role = Role.ROLE_VERIFIED_USER.code,
         )
     }
-
 
     @Test
     @Rollback(true)
@@ -341,6 +340,23 @@ class TimeTableServiceImplTest {
                             "인증을 위한 Access 토큰, 시간표에 일정을 추가하는 유저를 식별하기 위해서 반드시 필요함",
                         ),
                     ),
+                    requestFields(
+                        fieldWithPath("title").description("일정의 제목").type(JsonFieldType.STRING),
+                        fieldWithPath("memo").description("일정에 대한 메모").type(JsonFieldType.STRING),
+                        fieldWithPath("alphabetGrade").description("알파벳 등급 (옵션)").type(JsonFieldType.STRING).optional(),
+                        fieldWithPath("credit").description("학점").type(JsonFieldType.NUMBER),
+                        fieldWithPath("isMajor").description("주 전공 여부").type(JsonFieldType.BOOLEAN),
+                        fieldWithPath("majorDepartment").description("주 전공 학과").type(JsonFieldType.STRING),
+                        fieldWithPath("professor").description("교수님 이름").type(JsonFieldType.STRING),
+                        fieldWithPath("location").description("수업 장소").type(JsonFieldType.STRING),
+                        fieldWithPath("courseId").description("과목 ID (옵션)").type(JsonFieldType.NUMBER).optional(),
+                        fieldWithPath("dayOfWeekTimePairs").description("수업 시간 및 요일").type(JsonFieldType.ARRAY),
+                        fieldWithPath("dayOfWeekTimePairs[].dayOfWeek").description("요일").type(JsonFieldType.STRING),
+                        fieldWithPath("dayOfWeekTimePairs[].startTime").description("수업 시작 시간")
+                            .type(JsonFieldType.STRING),
+                        fieldWithPath("dayOfWeekTimePairs[].endTime").description("수업 종료 시간")
+                            .type(JsonFieldType.STRING),
+                    ),
                     responseFields(
                         fieldWithPath("data.id").description("추가된 일정 번호"),
                         fieldWithPath("status").description("성공 여부"),
@@ -418,6 +434,9 @@ class TimeTableServiceImplTest {
                         headerWithName(HttpHeaders.AUTHORIZATION).description(
                             "인증을 위한 Access 토큰, 시간표에 일정을 추가하는 유저를 식별하기 위해서 반드시 필요함",
                         ),
+                    ),
+                    requestFields(
+                        fieldWithPath("scheduleId").description("일정의 ID").type(JsonFieldType.NUMBER),
                     ),
                     responseFields(
                         fieldWithPath("data.id").description("삭제된 일정 번호"),

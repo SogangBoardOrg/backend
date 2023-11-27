@@ -118,13 +118,16 @@ class TimeTableServiceImpl(
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("${userEmail}에 해당하는 유저가 없습니다.")
 
-        val timeTable = timeTableRepository.findByIdFetchUser(timeTableId)
+        val timeTable = timeTableRepository.findByIdFetchUserAndSchedule(timeTableId)
             ?: throw EntityNotFoundException("${timeTableId}에 해당하는 시간표가 없습니다.")
 
         require(timeTable.isOwner(user)) {
             throw ConditionConflictException(ErrorCode.FORBIDDEN, "해당 시간표를 삭제할 수 있는 권한이 없습니다.")
         }
 
+        val scheduleIds = timeTable.schedules.map { it.id!! }
+
+        scheduleRepository.deleteByIdIn(scheduleIds)
         timeTableRepository.delete(timeTable)
 
         return DeleteMyTimeTableResponseDto(

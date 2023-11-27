@@ -5,7 +5,6 @@ import com.kotlin.boardproject.domain.schedule.dto.CourseResponseDto
 import com.kotlin.boardproject.domain.schedule.service.CourseService
 import com.kotlin.boardproject.global.dto.ApiResponse
 import com.kotlin.boardproject.global.enums.Seasons
-import com.kotlin.boardproject.global.util.log
 import org.springframework.data.domain.Pageable
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,7 +30,6 @@ class CourseController(
         @RequestParam("professor", required = false) professor: String?,
         pageable: Pageable,
     ): ApiResponse<CourseListByQueryDto> {
-        log.info("title: $title, major: $major, year: $year, season: $season, professor: $professor")
         val data = courseService.getCourseListByQuery(
             title = title,
             major = major,

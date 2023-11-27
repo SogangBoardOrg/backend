@@ -65,7 +65,7 @@ class TimeTableController(
     }
 
     @PostMapping("/{timeTableId}/addSchedule")
-    fun addSchdule(
+    fun addSchedule(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         timeTableId: Long,
@@ -82,7 +82,7 @@ class TimeTableController(
     }
 
     @DeleteMapping("/{timeTableId}/deleteSchedule")
-    fun deleteSchdule(
+    fun deleteSchedule(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         timeTableId: Long,
