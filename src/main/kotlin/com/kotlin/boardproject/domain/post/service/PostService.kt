@@ -8,15 +8,15 @@ import com.kotlin.boardproject.domain.post.dto.CancelScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.LikePostResponseDto
 import com.kotlin.boardproject.domain.post.dto.MyScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.MyWrittenPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.PostByQueryResponseDto
 import com.kotlin.boardproject.domain.post.dto.ScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.DeleteNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.OneNormalPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.DeletePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.OnePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.PostByQueryRequestDto
 import org.springframework.data.domain.Pageable
 
 interface PostService {
@@ -24,13 +24,13 @@ interface PostService {
     fun findNormalPostByQuery(
         userEmail: String?,
         pageable: Pageable,
-        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
-    ): NormalPostByQueryResponseDto
+        postByQueryRequestDto: PostByQueryRequestDto,
+    ): PostByQueryResponseDto
 
-    fun findOneNormalPost(
+    fun findOnePost(
         userEmail: String?,
         postId: Long,
-    ): OneNormalPostResponseDto
+    ): OnePostResponseDto
 
     fun findMyWrittenPost(
         userEmail: String,
@@ -42,21 +42,21 @@ interface PostService {
         pageable: Pageable,
     ): MyScrapPostResponseDto
 
-    fun createNormalPost(
+    fun createPost(
         userEmail: String,
-        createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): CreateNormalPostResponseDto
+        createPostRequestDto: CreatePostRequestDto,
+    ): CreatePostResponseDto
 
-    fun editNormalPost(
+    fun editPost(
         userEmail: String,
         postId: Long,
-        editNormalPostRequestDto: EditNormalPostRequestDto,
-    ): EditNormalPostResponseDto
+        editPostRequestDto: EditPostRequestDto,
+    ): EditPostResponseDto
 
-    fun deleteNormalPost(
+    fun deletePost(
         userEmail: String,
         postId: Long,
-    ): DeleteNormalPostResponseDto
+    ): DeletePostResponseDto
 
     fun blackPost(
         userEmail: String,

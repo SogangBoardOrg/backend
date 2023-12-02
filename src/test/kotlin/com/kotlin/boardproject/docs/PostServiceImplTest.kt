@@ -3,21 +3,20 @@ package com.kotlin.boardproject.docs
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.post.domain.LikePost
-import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
-import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.BlackReason
-import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.global.util.AuthToken
@@ -72,9 +71,6 @@ class PostServiceImplTest {
 
     @Autowired
     private lateinit var commentRepository: CommentRepository
-
-    @Autowired
-    private lateinit var normalPostRepository: NormalPostRepository
 
     @Autowired
     private lateinit var basePostRepository: BasePostRepository
@@ -155,16 +151,16 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val createNormalPostRequestDto = CreateNormalPostRequestDto(
+        val createPostRequestDto = CreatePostRequestDto(
             title = title,
             content = content,
             isAnon = true,
             commentOn = true,
-            normalType = NormalType.FREE,
+            postType = PostType.NORMAL,
             photoList = listOf(),
         )
 
-        val normalPostString = objectMapper.writeValueAsString(createNormalPostRequestDto)
+        val normalPostString = objectMapper.writeValueAsString(createPostRequestDto)
         // when
 
         val result = mockMvc.perform(
@@ -189,7 +185,9 @@ class PostServiceImplTest {
                         fieldWithPath("content").description("글 내용"),
                         fieldWithPath("isAnon").description("익명 여부"),
                         fieldWithPath("commentOn").description("댓글 여부"),
-                        fieldWithPath("normalType").description("일반 포스트의 게시판 타입"),
+                        fieldWithPath("postType").description("게시글 타입"),
+                        fieldWithPath("reviewScore").description("리뷰 평점"),
+                        fieldWithPath("courseId").description("코스 번호"),
                         fieldWithPath("photoList").description("사진 url 배열"),
                     ),
                     responseFields(
@@ -200,7 +198,7 @@ class PostServiceImplTest {
             )
         // then
 
-        val basePosts = normalPostRepository.findAll()
+        val basePosts = basePostRepository.findAll()
 
         basePosts.size shouldBe 1
         basePosts[0].title shouldBe "title_test"
@@ -221,19 +219,19 @@ class PostServiceImplTest {
         val new_title = "new_title_test"
         val new_content = "new_content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
                 photoList = listOf(),
             ),
         )
 
-        val editNormalPostRequestDto = EditNormalPostRequestDto(
+        val editPostRequestDto = EditPostRequestDto(
             title = new_title,
             content = new_content,
             isAnon = false,
@@ -241,7 +239,7 @@ class PostServiceImplTest {
             photoList = listOf(),
         )
 
-        val editNormalPostRequestString = objectMapper.writeValueAsString(editNormalPostRequestDto)
+        val editNormalPostRequestString = objectMapper.writeValueAsString(editPostRequestDto)
 
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.put(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
@@ -275,7 +273,7 @@ class PostServiceImplTest {
             )
         // then
 
-        val basePosts = normalPostRepository.findAll()
+        val basePosts = basePostRepository.findAll()
 
         basePosts.size shouldBe 1
         basePosts[0].title shouldBe "new_title_test"
@@ -291,14 +289,14 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -326,7 +324,7 @@ class PostServiceImplTest {
             )
         // then
 
-        val basePosts = normalPostRepository.findAll()
+        val basePosts = basePostRepository.findAll()
 
         basePosts.size shouldBe 1
         // writer.postList.size shouldBe 0
@@ -341,14 +339,14 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -403,14 +401,14 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -456,14 +454,14 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -514,25 +512,25 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
-        val post2 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post2 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_2",
                 content = "content_2",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -582,25 +580,25 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
-        val post2 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post2 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_2",
                 content = "content_2",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -656,25 +654,25 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
-        val post2 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post2 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_2",
                 content = "content_2",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
@@ -719,6 +717,8 @@ class PostServiceImplTest {
                         fieldWithPath("data.updatedAt").description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").description("댓글 내용"),
                         fieldWithPath("data.photoList").description("사진 url 배열"),
+                        fieldWithPath("data.reviewScore").description("리뷰 평점"),
+                        fieldWithPath("data.postType").description("게시글 타입"),
                         fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                         fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
@@ -756,26 +756,26 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
                 photoList = listOf(),
             ),
         )
 
-        val post2 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post2 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_2",
                 content = "content_2",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
                 photoList = listOf(),
             ),
         )
@@ -818,6 +818,8 @@ class PostServiceImplTest {
                         fieldWithPath("data.updatedAt").description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").description("댓글 내용"),
                         fieldWithPath("data.photoList").description("사진 url 배열"),
+                        fieldWithPath("data.reviewScore").description("리뷰 평점"),
+                        fieldWithPath("data.postType").description("게시글 타입"),
                         fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                         fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
@@ -855,26 +857,26 @@ class PostServiceImplTest {
         val title = "title_test"
         val content = "content_test"
 
-        val post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = title,
                 content = content,
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
                 photoList = listOf(),
             ),
         )
 
-        val post2 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post2 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_2",
                 content = "content_2",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
                 photoList = listOf(),
             ),
         )
@@ -939,34 +941,34 @@ class PostServiceImplTest {
         val title = ""
         val content = ""
         val writerName = "test"
-        val normalType = "FREE"
+        val postType = "NORMAL"
         val page = 0
         val size = 7
         val sort = ""
 
         // 글 postNumber 만큼 등록
         for (i in 1..postNumber) {
-            normalPostRepository.saveAndFlush(
-                NormalPost(
+            basePostRepository.saveAndFlush(
+                BasePost(
                     title = "title_$i",
                     content = "content_$i",
                     isAnon = false,
                     commentOn = true,
                     writer = writer,
-                    normalType = NormalType.FREE,
+                    postType = PostType.NORMAL,
                 ),
             )
         }
 
         for (i in 1..postNumber) {
-            normalPostRepository.saveAndFlush(
-                NormalPost(
+            basePostRepository.saveAndFlush(
+                BasePost(
                     title = "diff_$i",
                     content = "diff_$i",
                     isAnon = true,
                     commentOn = true,
                     writer = writer,
-                    normalType = NormalType.FREE,
+                    postType = PostType.NORMAL,
                 ),
             )
         }
@@ -978,7 +980,7 @@ class PostServiceImplTest {
                     "title=$title&" +
                     "content=$content&" +
                     "writer-name=$writerName&" +
-                    "normal-type=$normalType&" +
+                    "post-type=$postType&" +
                     "page=$page&" +
                     "size=$size&" +
                     "sort=$sort",
@@ -992,10 +994,11 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestParameters(
-                        parameterWithName("title").description("찾을 글 제목"),
-                        parameterWithName("content").description("찾을 글의 내용"),
-                        parameterWithName("writer-name").description("글 작성자"),
-                        parameterWithName("normal-type").description("일반 게시판 글 종류"),
+                        parameterWithName("title").description("찾을 글 제목").optional(),
+                        parameterWithName("content").description("찾을 글의 내용").optional(),
+                        parameterWithName("writer-name").description("글 작성자").optional(),
+                        parameterWithName("post-type").description("일반 게시판 글 종류"),
+                        parameterWithName("course-id").description("찾는 강의 id").optional(),
                         parameterWithName("page").description("찾는 페이지 번호"),
                         parameterWithName("size").description("페이지 당 불러올 글의 크기"),
                         parameterWithName("sort").description("정렬"),
@@ -1011,6 +1014,19 @@ class PostServiceImplTest {
                         fieldWithPath("data.contents.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
                         fieldWithPath("data.contents.[].isScrapped").type(JsonFieldType.BOOLEAN).description("스크랩 여부"),
                         fieldWithPath("data.contents.[].isWriter").type(JsonFieldType.BOOLEAN).description("글쓴이 여부"),
+                        fieldWithPath("data.contents.[].postType").type(JsonFieldType.STRING).description("글 종류"),
+                        fieldWithPath("data.contents.[].courseId").type(JsonFieldType.NUMBER).description("강의 번호")
+                            .optional(),
+                        fieldWithPath("data.contents.[].courseYear").type(JsonFieldType.NUMBER).description("강의 년도")
+                            .optional(),
+                        fieldWithPath("data.contents.[].courseSeason").type(JsonFieldType.STRING).description("강의 계절")
+                            .optional(),
+                        fieldWithPath("data.contents.[].courseCode").type(JsonFieldType.STRING).description("강의 코드")
+                            .optional(),
+                        fieldWithPath("data.contents.[].courseName").type(JsonFieldType.STRING).description("강의 이름")
+                            .optional(),
+                        fieldWithPath("data.contents.[].reviewScore").type(JsonFieldType.NUMBER).description("강의 평점")
+                            .optional(),
                         fieldWithPath("data.contents.[].commentOn").type(JsonFieldType.BOOLEAN).description("댓글 여부"),
                         fieldWithPath("data.contents.[].commentCnt").type(JsonFieldType.NUMBER).description("댓글 개수"),
                         fieldWithPath("data.contents.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
@@ -1042,27 +1058,27 @@ class PostServiceImplTest {
 
         // 글 postNumber 만큼 등록
         for (i in 1..postNumber) {
-            normalPostRepository.saveAndFlush(
-                NormalPost(
+            basePostRepository.saveAndFlush(
+                BasePost(
                     title = "title_$i",
                     content = "content_$i",
                     isAnon = true,
                     commentOn = true,
                     writer = writer,
-                    normalType = NormalType.FREE,
+                    postType = PostType.NORMAL,
                 ),
             )
         }
 
         for (i in 1..postNumber) {
-            normalPostRepository.saveAndFlush(
-                NormalPost(
+            basePostRepository.saveAndFlush(
+                BasePost(
                     title = "diff_$i",
                     content = "diff_$i",
                     isAnon = true,
                     commentOn = true,
                     writer = writer,
-                    normalType = NormalType.FREE,
+                    postType = PostType.NORMAL,
                 ),
             )
         }
@@ -1127,36 +1143,36 @@ class PostServiceImplTest {
 
         // 글 postNumber 만큼 등록
 
-        val post1 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post1 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_1",
                 content = "content_1",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
-        val post2 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post2 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_2",
                 content = "content_2",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 
-        val post3 = normalPostRepository.saveAndFlush(
-            NormalPost(
+        val post3 = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title_3",
                 content = "content_3",
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                normalType = NormalType.FREE,
+                postType = PostType.NORMAL,
             ),
         )
 

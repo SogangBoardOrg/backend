@@ -3,11 +3,12 @@ package com.kotlin.boardproject.domain.post.dto.normalpost
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.dto.CommentDto
 import com.kotlin.boardproject.domain.comment.dto.commentDtos
-import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
+import com.kotlin.boardproject.global.enums.PostType
 import java.time.LocalDateTime
 
-data class OneNormalPostResponseDto(
+data class OnePostResponseDto(
     val id: Long,
     val title: String,
     val content: String,
@@ -18,18 +19,20 @@ data class OneNormalPostResponseDto(
     val isWriter: Boolean?,
     val commentOn: Boolean,
     val commentCnt: Int,
+    val reviewScore: Int?,
+    val postType: PostType,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val commentList: List<CommentDto>,
     val photoList: List<String>,
 ) {
     companion object {
-        fun fromNormalPost(
-            post: NormalPost,
+        fun fromPost(
+            post: BasePost,
             searchUser: User?,
             commentList: List<Comment>,
-        ): OneNormalPostResponseDto {
-            return OneNormalPostResponseDto(
+        ): OnePostResponseDto {
+            return OnePostResponseDto(
                 id = post.id!!,
                 commentOn = post.commentOn,
                 title = post.title,
@@ -44,19 +47,21 @@ data class OneNormalPostResponseDto(
                 updatedAt = post.updatedAt!!,
                 commentList = if (!post.commentOn) emptyList() else commentDtos(post, commentList, searchUser),
                 photoList = post.photoList,
+                reviewScore = post.reviewScore,
+                postType = post.postType,
             )
         }
 
         private fun isLiked(userList: List<User>, searchUser: User?): Boolean =
             userList.contains(searchUser)
 
-        private fun isScrapped(post: NormalPost, searchUser: User?): Boolean =
+        private fun isScrapped(post: BasePost, searchUser: User?): Boolean =
             post.scrapList.map { it.user }.contains(searchUser)
 
-        private fun isWriter(post: NormalPost, searchUser: User?): Boolean =
+        private fun isWriter(post: BasePost, searchUser: User?): Boolean =
             post.writer == searchUser
 
-        private fun postWriterNameGenerator(post: NormalPost): String =
+        private fun postWriterNameGenerator(post: BasePost): String =
             if (post.isAnon) "ANON" else post.writer.nickname
     }
 }

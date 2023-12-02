@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.comment.dto
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
-import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
 
 data class CommentsByPostIdResponseDto(
@@ -10,7 +10,7 @@ data class CommentsByPostIdResponseDto(
     companion object {
 
         fun fromCommentList(
-            post: NormalPost,
+            post: BasePost,
             searchUser: User?,
             commentList: List<Comment>,
         ): CommentsByPostIdResponseDto {

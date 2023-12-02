@@ -1,11 +1,11 @@
 package com.kotlin.boardproject.domain.comment.dto
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
-import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
 
 fun commentDtos(
-    post: NormalPost,
+    post: BasePost,
     commentList: List<Comment>,
     searchUser: User?,
 ): List<CommentDto> {
@@ -41,7 +41,7 @@ private fun returnList(
 }
 
 private fun convertToCommentDtoList(
-    post: NormalPost,
+    post: BasePost,
     searchUser: User?,
     commentList: List<Comment>,
     writerMap: Map<User, Int>,
@@ -52,7 +52,7 @@ private fun convertToCommentDtoList(
 }
 
 private fun generateWriterMap(
-    post: NormalPost,
+    post: BasePost,
     commentList: List<Comment>,
 ): Map<User, Int> {
     // 2. 글쓴이는 리스트의 1번째에 넣어준다.

@@ -7,8 +7,9 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 
-interface BasePostRepository : JpaRepository<BasePost, Long> {
+interface BasePostRepository : JpaRepository<BasePost, Long>, BasePostRepositoryCustom {
 
     @Query(
         """
@@ -29,6 +30,19 @@ interface BasePostRepository : JpaRepository<BasePost, Long> {
         """,
     )
     fun findByIdAndStatusFetchCommentList(id: Long, status: PostStatus): BasePost?
+
+    @Query(
+        """
+            SELECT DISTINCT post
+            FROM BasePost AS post
+            LEFT JOIN FETCH post.photoList
+            LEFT JOIN FETCH post.writer
+            WHERE post.id = :id AND post.status = :status""",
+    )
+    fun findByIdAndStatusFetchPhotoListAndUser(
+        @Param("id") id: Long,
+        @Param("status") status: PostStatus,
+    ): BasePost?
 
     @Query(
         """

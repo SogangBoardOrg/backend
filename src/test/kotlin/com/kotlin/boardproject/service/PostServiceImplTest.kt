@@ -3,21 +3,21 @@ package com.kotlin.boardproject.service
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostResponseDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
-import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.post.service.PostService
 import com.kotlin.boardproject.domain.post.service.PostServiceImpl
+import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.ErrorCode
-import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import com.kotlin.boardproject.global.exception.UnAuthorizedException
@@ -37,10 +37,10 @@ class PostServiceImplTest : BehaviorSpec(
         isolationMode = IsolationMode.InstancePerTest
 
         val (userOne, userTwo, userThree) = makeUser()
-        val (normalPostPresent, normalPostDeleted) = makeNormalPost(userOne)
+        val (normalPostPresent, normalPostDeleted) = makeBasePost(userOne)
 
         val userRepository: UserRepository = mockk()
-        val normalPostRepository: NormalPostRepository = mockk()
+        val courseRepository: CourseRepository = mockk()
         val basePostRepository: BasePostRepository = mockk()
         val blackPostRepository: BlackPostRepository = mockk()
         val likePostRepository: LikePostRepository = mockk()
@@ -50,8 +50,8 @@ class PostServiceImplTest : BehaviorSpec(
         lateinit var postService: PostService
 
         postService = PostServiceImpl(
-            normalPostRepository,
             userRepository,
+            courseRepository,
             basePostRepository,
             blackPostRepository,
             likePostRepository,
@@ -66,12 +66,6 @@ class PostServiceImplTest : BehaviorSpec(
             userRepository,
         )
 
-        setNormalPostRepository(
-            normalPostPresent,
-            normalPostDeleted,
-            normalPostRepository,
-        )
-
         setBasePostRepository(
             normalPostPresent,
             normalPostDeleted,
@@ -79,27 +73,27 @@ class PostServiceImplTest : BehaviorSpec(
         )
 
         given("일반 게시판 글 등록") {
-            val createNormalPostRequestDto = CreateNormalPostRequestDto(
+            val createPostRequestDto = CreatePostRequestDto(
                 title = "postOne",
                 content = "postOne",
                 isAnon = false,
                 commentOn = true,
-                normalType = NormalType.FREE,
                 photoList = listOf(),
+                postType = PostType.NORMAL,
             )
             val postId = 1L
-            every { normalPostRepository.save(any()).id!! } returns postId
+            every { basePostRepository.save(any()).id!! } returns postId
             `when`("정상 등록") {
-                val data = postService.createNormalPost(userOne.email, createNormalPostRequestDto)
+                val data = postService.createPost(userOne.email, createPostRequestDto)
                 then("통과") {
-                    verify(exactly = 1) { normalPostRepository.save(any()) }
-                    data shouldBe CreateNormalPostResponseDto(postId)
+                    verify(exactly = 1) { basePostRepository.save(any()) }
+                    data shouldBe CreatePostResponseDto(postId)
                 }
             }
         }
 
         given("일반게시판 글 수정") {
-            val editNormalPostRequestDto = EditNormalPostRequestDto(
+            val editPostRequestDto = EditPostRequestDto(
                 title = "postOneEdit",
                 content = "postOneEdit",
                 isAnon = false,
@@ -107,29 +101,29 @@ class PostServiceImplTest : BehaviorSpec(
                 photoList = listOf(),
             )
             `when`("정상 수정") {
-                val data = postService.editNormalPost(userOne.email, normalPostPresent.id!!, editNormalPostRequestDto)
+                val data = postService.editPost(userOne.email, normalPostPresent.id!!, editPostRequestDto)
                 then("통과") {
                     verify(exactly = 1) { userRepository.findByEmail(userOne.email) }
                     verify(exactly = 1) {
-                        normalPostRepository.findByIdAndStatus(
+                        basePostRepository.findByIdAndStatus(
                             normalPostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    data shouldBe EditNormalPostResponseDto(normalPostPresent.id!!)
+                    data shouldBe EditPostResponseDto(normalPostPresent.id!!)
                 }
             }
 
             `when`("없는 번호의 글 찾음") {
                 // when
                 val exception = shouldThrow<EntityNotFoundException> {
-                    postService.editNormalPost(userOne.email, nonExistPostId, editNormalPostRequestDto)
+                    postService.editPost(userOne.email, nonExistPostId, editPostRequestDto)
                 }
                 // then
                 then("글이 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmail(userOne.email) }
                     verify(exactly = 1) {
-                        normalPostRepository.findByIdAndStatus(
+                        basePostRepository.findByIdAndStatus(
                             nonExistPostId,
                             PostStatus.NORMAL,
                         )
@@ -141,13 +135,13 @@ class PostServiceImplTest : BehaviorSpec(
             `when`("삭제된 글 찾음") {
                 // when
                 val exception = shouldThrow<EntityNotFoundException> {
-                    postService.editNormalPost(userOne.email, normalPostDeleted.id!!, editNormalPostRequestDto)
+                    postService.editPost(userOne.email, normalPostDeleted.id!!, editPostRequestDto)
                 }
                 // then
                 then("글이 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmail(userOne.email) }
                     verify(exactly = 1) {
-                        normalPostRepository.findByIdAndStatus(
+                        basePostRepository.findByIdAndStatus(
                             normalPostDeleted.id!!,
                             PostStatus.NORMAL,
                         )
@@ -158,24 +152,24 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("없는 유저 찾음") {
                 val exception = shouldThrow<EntityNotFoundException> {
-                    postService.editNormalPost(nonExistUserEmail, normalPostPresent.id!!, editNormalPostRequestDto)
+                    postService.editPost(nonExistUserEmail, normalPostPresent.id!!, editPostRequestDto)
                 }
                 then("유저가 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmail(nonExistUserEmail) }
-                    verify(exactly = 0) { normalPostRepository.findByIdAndStatus(nonExistPostId, PostStatus.NORMAL) }
+                    verify(exactly = 0) { basePostRepository.findByIdAndStatus(nonExistPostId, PostStatus.NORMAL) }
                     exception.log shouldBe "$nonExistUserEmail 는 없는 유저 이메일 입니다."
                 }
             }
 
             `when`("다른 유저의 글을 수정함") {
                 val exception = shouldThrow<UnAuthorizedException> {
-                    postService.editNormalPost(userTwo.email, normalPostPresent.id!!, editNormalPostRequestDto)
+                    postService.editPost(userTwo.email, normalPostPresent.id!!, editPostRequestDto)
                 }
 
                 then("해당 글의 주인이 아니라고 에러") {
                     verify(exactly = 1) { userRepository.findByEmail(userTwo.email) }
                     verify(exactly = 1) {
-                        normalPostRepository.findByIdAndStatus(
+                        basePostRepository.findByIdAndStatus(
                             normalPostPresent.id!!,
                             PostStatus.NORMAL,
                         )

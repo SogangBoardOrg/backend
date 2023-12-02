@@ -1,12 +1,13 @@
 package com.kotlin.boardproject.domain.post.dto.normalpost
 
-import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostType
 
 // title, content, writerName, normalType
 
-class FindNormalPostByQueryRequestDto(
+data class PostByQueryRequestDto(
     val title: String?,
     val content: String?,
     val writerName: String?,
-    val normalType: NormalType,
+    val courseId: Long?,
+    val postType: PostType,
 )

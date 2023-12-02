@@ -1,26 +1,26 @@
 package com.kotlin.boardproject.service
 
-import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
-import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.enums.PostType
 
-fun makeNormalPost(writer: User): List<NormalPost> {
-    val one = NormalPost(
+fun makeBasePost(writer: User): List<BasePost> {
+    val one = BasePost(
         title = "postOne",
         content = "postOne",
         writer = writer,
         isAnon = false,
         commentOn = true,
-        normalType = NormalType.FREE,
+        postType = PostType.NORMAL,
     )
-    val two = NormalPost(
+    val two = BasePost(
         title = "postOne",
         content = "postOne",
         writer = writer,
         isAnon = false,
         commentOn = true,
-        normalType = NormalType.FREE,
+        postType = PostType.NORMAL,
     )
 
     one.id = 1L

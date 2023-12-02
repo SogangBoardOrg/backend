@@ -4,8 +4,8 @@ import com.kotlin.boardproject.domain.post.domain.NormalPost
 import com.kotlin.boardproject.domain.post.domain.QLikePost.likePost
 import com.kotlin.boardproject.domain.post.domain.QNormalPost.normalPost
 import com.kotlin.boardproject.domain.post.domain.QScrapPost.scrapPost
-import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.PostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.dto.normalpost.QNormalPostByQueryElementDto
 import com.kotlin.boardproject.domain.user.domain.QUser.user
 import com.kotlin.boardproject.domain.user.domain.User
@@ -24,7 +24,7 @@ class NormalPostRepositoryCustomImpl(
 ) : NormalPostRepositoryCustom {
 
     override fun findNormalPostByQuery(
-        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
+        postByQueryRequestDto: PostByQueryRequestDto,
         pageable: Pageable,
     ): Page<NormalPost> {
         val dataIds = queryFactory
@@ -35,10 +35,10 @@ class NormalPostRepositoryCustomImpl(
             .leftJoin(normalPost.photoList)
             .leftJoin(normalPost.commentList)
             .where(
-                writerNoAnonEq(findNormalPostByQueryRequestDto.writerName),
-                titleEq(findNormalPostByQueryRequestDto.title),
-                contentEq(findNormalPostByQueryRequestDto.content),
-                normalTypeEq(findNormalPostByQueryRequestDto.normalType),
+                writerNoAnonEq(postByQueryRequestDto.writerName),
+                titleEq(postByQueryRequestDto.title),
+                contentEq(postByQueryRequestDto.content),
+                // normalTypeEq(postByQueryRequestDto.normalType),
                 postStatus(PostStatus.NORMAL),
             )
             .offset(pageable.offset)
@@ -54,10 +54,10 @@ class NormalPostRepositoryCustomImpl(
             .leftJoin(normalPost.photoList)
             .leftJoin(normalPost.commentList)
             .where(
-                writerNoAnonEq(findNormalPostByQueryRequestDto.writerName),
-                titleEq(findNormalPostByQueryRequestDto.title),
-                contentEq(findNormalPostByQueryRequestDto.content),
-                normalTypeEq(findNormalPostByQueryRequestDto.normalType),
+                writerNoAnonEq(postByQueryRequestDto.writerName),
+                titleEq(postByQueryRequestDto.title),
+                contentEq(postByQueryRequestDto.content),
+                // normalTypeEq(postByQueryRequestDto.normalType),
                 postStatus(PostStatus.NORMAL),
             )
             .fetch()
@@ -76,7 +76,7 @@ class NormalPostRepositoryCustomImpl(
     }
 
     override fun findNormalPostByQueryV2(
-        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
+        postByQueryRequestDto: PostByQueryRequestDto,
         userEmail: String?,
         pageable: Pageable,
     ): Page<NormalPostByQueryElementDto> {
@@ -90,10 +90,10 @@ class NormalPostRepositoryCustomImpl(
             .from(normalPost)
             .distinct()
             .where(
-                writerNoAnonEq(findNormalPostByQueryRequestDto.writerName),
-                titleEq(findNormalPostByQueryRequestDto.title),
-                contentEq(findNormalPostByQueryRequestDto.content),
-                normalTypeEq(findNormalPostByQueryRequestDto.normalType),
+                writerNoAnonEq(postByQueryRequestDto.writerName),
+                titleEq(postByQueryRequestDto.title),
+                contentEq(postByQueryRequestDto.content),
+                // normalTypeEq(postByQueryRequestDto.normalType),
                 postStatus(PostStatus.NORMAL),
             )
             .leftJoin(normalPost.writer)
@@ -111,10 +111,10 @@ class NormalPostRepositoryCustomImpl(
             .from(normalPost)
             .distinct()
             .where(
-                writerNoAnonEq(findNormalPostByQueryRequestDto.writerName),
-                titleEq(findNormalPostByQueryRequestDto.title),
-                contentEq(findNormalPostByQueryRequestDto.content),
-                normalTypeEq(findNormalPostByQueryRequestDto.normalType),
+                writerNoAnonEq(postByQueryRequestDto.writerName),
+                titleEq(postByQueryRequestDto.title),
+                contentEq(postByQueryRequestDto.content),
+                // normalTypeEq(postByQueryRequestDto.normalType),
                 postStatus(PostStatus.NORMAL),
             )
             .leftJoin(normalPost.writer)

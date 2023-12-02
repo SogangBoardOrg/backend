@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.domain.post.dto.normalpost
 
-import com.kotlin.boardproject.domain.post.domain.NormalPost
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
 import com.querydsl.core.annotations.QueryProjection
 import java.time.LocalDateTime
@@ -32,7 +32,7 @@ data class NormalPostByQueryElementDto @QueryProjection constructor(
 ) {
     companion object {
         fun fromNormalPostToQueryOneNormalPostResponseDto(
-            post: NormalPost,
+            post: BasePost,
             user: User?,
         ): NormalPostByQueryElementDto {
             return NormalPostByQueryElementDto(

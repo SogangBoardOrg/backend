@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.post.dto
 
-import com.kotlin.boardproject.domain.post.dto.normalpost.OneNormalPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.normalpost.OnePostResponseDto
 
 data class ReadAllPostResponseDto(
-    val postList: List<OneNormalPostResponseDto>,
+    val postList: List<OnePostResponseDto>,
 )

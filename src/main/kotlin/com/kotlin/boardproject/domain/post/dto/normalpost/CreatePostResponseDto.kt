@@ -1,5 +1,5 @@
 package com.kotlin.boardproject.domain.post.dto.normalpost
 
-data class DeleteNormalPostResponseDto(
+data class CreatePostResponseDto(
     val id: Long,
 )
