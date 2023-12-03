@@ -32,6 +32,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
+import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.context.ActiveProfiles
@@ -141,7 +142,7 @@ class NotificationServiceImplRDBTest {
     }
 
     @Test
-    fun getNotifications() {
+    fun 알림_받기() {
         val urlPoint = ""
         val finalUrl = "$statsEndPoint$urlPoint"
 
@@ -156,9 +157,16 @@ class NotificationServiceImplRDBTest {
         val createCommentRequestDtoString = objectMapper.writeValueAsString(createCommentRequestDto)
 
         // when
+        mockMvc.perform(
+            RestDocumentationRequestBuilders.post("/api/v1/comment").contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .content(createCommentRequestDtoString)
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.get(finalUrl).contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenComment.token}")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenPost.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
@@ -174,20 +182,29 @@ class NotificationServiceImplRDBTest {
                             .description("인증을 위한 Access 토큰, 알림을 받을 사용자의 이름을 해더에 넣어줘야 한다."),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data.notificationCount").description("읽지 않은 알림의 수"),
-                        fieldWithPath("data.notifications").description("읽지 않은 알림의 모임"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.notificationCount").type(JsonFieldType.NUMBER).description("읽지 않은 알림의 수"),
+                        fieldWithPath("data.notifications").type(JsonFieldType.ARRAY).description("읽지 않은 알림의 모임"),
+                        // NotificationResponseDto 내부 필드
+                        fieldWithPath("data.notifications[].id").type(JsonFieldType.NUMBER).description("알림 ID"),
+                        fieldWithPath("data.notifications[].from").type(JsonFieldType.STRING).description("알림 발신자"),
+                        fieldWithPath("data.notifications[].url").type(JsonFieldType.STRING).description("알림과 관련된 URL"),
+                        fieldWithPath("data.notifications[].content").type(JsonFieldType.STRING).description("알림 내용"),
+                        fieldWithPath("data.notifications[].notificationType").type(JsonFieldType.STRING)
+                            .description("알림 타입"),
+                        fieldWithPath("data.notifications[].createdAt").type(JsonFieldType.STRING)
+                            .description("알림 생성 시간"),
                     ),
                 ),
             )
 
         val notificationList = notificationRepository.findAll()
 
-        notificationList.size shouldBe 1
+        notificationList.size shouldBe 2
     }
 
     @Test
-    fun createNotification() {
+    fun 알림을_만들기() {
         val urlPoint = ""
         val finalUrl = "/api/v1/comment"
 
@@ -216,7 +233,7 @@ class NotificationServiceImplRDBTest {
     }
 
     @Test
-    fun deleteNotificationByEmailAndNotificationId() {
+    fun 알림을_이메일과_알림ID로_읽기() {
         val urlPoint = "/{notificationId}"
         val finalUrl = "$statsEndPoint$urlPoint"
         val notificationId = notification.id!!
@@ -240,8 +257,8 @@ class NotificationServiceImplRDBTest {
                             .description("인증을 위한 Access 토큰, 알림을 읽을 사용자의 이름을 해더에 넣어줘야 한다."),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data").description("성공여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data").type(JsonFieldType.STRING).description("성공여부"),
                     ),
                 ),
             )
@@ -252,7 +269,7 @@ class NotificationServiceImplRDBTest {
     }
 
     @Test
-    fun deleteAllUnreadNotificationByEmail() {
+    fun 알림을_이메일로_읽기() {
         val urlPoint = ""
         val finalUrl = "$statsEndPoint$urlPoint"
 
@@ -284,8 +301,8 @@ class NotificationServiceImplRDBTest {
                             .description("인증을 위한 Access 토큰, 알림을 읽을 사용자의 이름을 해더에 넣어줘야 한다."),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data").description("성공여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data").type(JsonFieldType.STRING).description("성공여부"),
                     ),
                 ),
             )
