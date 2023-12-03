@@ -319,7 +319,7 @@ class TimeTableServiceImplTest {
     @Rollback(true)
     fun 스케쥴_추가() {
         // given
-        val urlPoint = "/{timeTableId}/addSchedule"
+        val urlPoint = "/{timeTableId}/schedule"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val timeTable = timeTableRepository.saveAndFlush(
@@ -407,7 +407,7 @@ class TimeTableServiceImplTest {
     @Rollback(true)
     fun 스케쥴_삭제() {
         // given
-        val urlPoint = "/{timeTableId}/deleteSchedule"
+        val urlPoint = "/{timeTableId}/schedule"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val timeTable = timeTableRepository.saveAndFlush(

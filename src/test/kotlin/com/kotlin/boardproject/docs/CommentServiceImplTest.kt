@@ -495,7 +495,7 @@ class CommentServiceImplTest {
     @Rollback(true)
     fun 댓글_추천() {
         // given
-        val urlPoint = "/like/{commentId}"
+        val urlPoint = "/{commentId}/like"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val content = "content_test"
@@ -544,7 +544,7 @@ class CommentServiceImplTest {
     @Rollback(true)
     fun 댓글_추천_취소() {
         // given
-        val urlPoint = "/like/{postId}"
+        val urlPoint = "/{postId}/like"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val content = "content_test"
@@ -598,7 +598,7 @@ class CommentServiceImplTest {
     @Test
     @Rollback(true)
     fun 댓글_신고() {
-        val urlPoint = "/black/{commentId}"
+        val urlPoint = "/{commentId}/black"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val content = "content_test"
