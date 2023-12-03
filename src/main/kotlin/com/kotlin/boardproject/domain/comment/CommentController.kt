@@ -90,7 +90,7 @@ class CommentController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/like/{commentId}")
+    @PostMapping("/{commentId}/like")
     fun likeComment(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -101,7 +101,7 @@ class CommentController(
         return ApiResponse.success(data)
     }
 
-    @DeleteMapping("/like/{commentId}")
+    @DeleteMapping("/{commentId}/like")
     fun cancelLikeComment(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -112,7 +112,7 @@ class CommentController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/black/{commentId}")
+    @PostMapping("/{commentId}/black")
     fun blackComment(
         @LoginUser loginUser: User,
         @PathVariable @Positive

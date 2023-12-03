@@ -300,7 +300,7 @@ include::{snippets}/free-post-delete/response-fields.adoc[]
 글을 신고하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/post/black/{postId: Long}
+End-Point : /api/v1/post/{postId: Long}/black
 ----
 
 .Sample Request
@@ -331,7 +331,7 @@ include::{snippets}/post-black/response-fields.adoc[]
 글을 추천하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/post/like/{postId: Long}
+End-Point : /api/v1/post/{postId: Long}/like
 ----
 
 .Sample Request
@@ -357,7 +357,7 @@ include::{snippets}/like-post-add/response-fields.adoc[]
 글을 추천을 취소하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/post/like/{postId: Long}
+End-Point : /api/v1/post/{postId: Long}/like
 ----
 
 .Sample Request
@@ -383,7 +383,7 @@ include::{snippets}/like-post-cancel/response-fields.adoc[]
 글을 스크랩하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/post/scrap/{postId: Long}
+End-Point : /api/v1/post/{postId: Long}/scrap
 ----
 
 .Sample Request
@@ -409,7 +409,7 @@ include::{snippets}/scrap-post-add/response-fields.adoc[]
 글을 스크랩을 취소하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/post/scrap/{postId: Long}
+End-Point : /api/v1/post/{postId: Long}/scrap
 ----
 
 .Sample Request
@@ -553,7 +553,7 @@ include::{snippets}/delete-single-comment/response-fields.adoc[]
 댓글을 신고하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/comment/black/{commentId: Long}
+End-Point : /api/v1/comment/{commentId: Long}/black
 ----
 
 .Sample Request
@@ -584,7 +584,7 @@ include::{snippets}/comment-black/response-fields.adoc[]
 댓글을 추천하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/comment/like/{commentId: Long}
+End-Point : /api/v1/comment/{commentId: Long}/like
 ----
 
 .Sample Request
@@ -610,7 +610,7 @@ include::{snippets}/like-comment-add/response-fields.adoc[]
 댓글을 추천을 취소하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/comment/like/{commentId: Long}
+End-Point : /api/v1/comment/{commentId: Long}/like
 ----
 
 .Sample Request
@@ -778,7 +778,7 @@ include::{snippets}/timetable-get-by-id/response-fields.adoc[]
 시간표를 삭제하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/post/{postId: Long}
+End-Point : /api/v1/timetable/{postId: Long}
 ----
 
 .Sample Request
@@ -804,7 +804,7 @@ include::{snippets}/timetable-delete/response-fields.adoc[]
 시간표에 스케쥴을 추가하기 위한 API입니다.
 
 HTTP Method : POST
-End-Point : /api/v1/timetable/{timetableId : Long}/addSchedule
+End-Point : /api/v1/timetable/{timetableId : Long}/schedule
 ----
 
 .Sample Request
@@ -834,7 +834,7 @@ include::{snippets}/timetable-add-schedule/response-fields.adoc[]
 시간표에 스케쥴을 제거하기 위한 API입니다.
 
 HTTP Method : DELETE
-End-Point : /api/v1/timetable/{timetableId : Long}/deleteSchedule
+End-Point : /api/v1/timetable/{timetableId : Long}/schedule
 ----
 
 .Sample Request

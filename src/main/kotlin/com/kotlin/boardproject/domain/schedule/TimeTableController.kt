@@ -64,7 +64,7 @@ class TimeTableController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/{timeTableId}/addSchedule")
+    @PostMapping("/{timeTableId}/schedule")
     fun addSchedule(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -81,7 +81,7 @@ class TimeTableController(
         return ApiResponse.success(data)
     }
 
-    @DeleteMapping("/{timeTableId}/deleteSchedule")
+    @DeleteMapping("/{timeTableId}/schedule")
     fun deleteSchedule(
         @LoginUser loginUser: User,
         @PathVariable @Positive

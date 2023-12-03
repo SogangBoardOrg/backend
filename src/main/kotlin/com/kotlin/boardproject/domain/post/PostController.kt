@@ -126,7 +126,7 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/black/{postId}")
+    @PostMapping("/{postId}/black")
     fun blackPost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -138,7 +138,7 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/like/{postId}")
+    @PostMapping("/{postId}/like")
     fun likePost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -148,7 +148,7 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @DeleteMapping("/like/{postId}")
+    @DeleteMapping("/{postId}/like")
     fun cancelLikePost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -158,7 +158,7 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/scrap/{postId}")
+    @PostMapping("/{postId}/scrap")
     fun scrapPost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
@@ -168,7 +168,7 @@ class PostController(
         return ApiResponse.success(data)
     }
 
-    @DeleteMapping("/scrap/{postId}")
+    @DeleteMapping("/{postId}/scrap")
     fun cancelScrapPost(
         @LoginUser loginUser: User,
         @PathVariable @Positive

@@ -332,7 +332,7 @@ class PostServiceImplTest {
     @Test
     @Rollback(true)
     fun 게시물_신고() {
-        val urlPoint = "/black/{postId}"
+        val urlPoint = "/{postId}/black"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val title = "title_test"
@@ -394,7 +394,7 @@ class PostServiceImplTest {
     @Rollback(true)
     fun 글_추천_등록() {
         // given
-        val urlPoint = "/like/{postId}"
+        val urlPoint = "/{postId}/like"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val title = "title_test"
@@ -447,7 +447,7 @@ class PostServiceImplTest {
     @Rollback(true)
     fun 글_추천_취소() {
         // given
-        val urlPoint = "/like/{postId}"
+        val urlPoint = "/{postId}/like"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val title = "title_test"
@@ -505,7 +505,7 @@ class PostServiceImplTest {
     @Rollback(true)
     fun 글_스크랩() {
         // given
-        val urlPoint = "/scrap/{postId}"
+        val urlPoint = "/{postId}/scrap"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val title = "title_test"
@@ -573,7 +573,7 @@ class PostServiceImplTest {
     @Rollback(true)
     fun 글_스크랩_취소() {
         // given
-        val urlPoint = "/scrap/{postId}"
+        val urlPoint = "/{postId}/scrap"
         val finalUrl = "$statsEndPoint$urlPoint"
 
         val title = "title_test"
