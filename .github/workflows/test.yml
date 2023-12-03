@@ -3,6 +3,7 @@ on: [ pull_request ]
 
 jobs:
   deploy:
+    name: unit test
     runs-on: ubuntu-latest
     steps:
       - name: checkout
