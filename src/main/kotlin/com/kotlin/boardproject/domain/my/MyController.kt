@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.my
 
 import com.kotlin.boardproject.domain.auth.service.AuthService
-import com.kotlin.boardproject.domain.comment.dto.MyCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.read.MyCommentResponseDto
 import com.kotlin.boardproject.domain.comment.service.CommentService
 import com.kotlin.boardproject.domain.post.dto.read.MyWrittenPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.scrap.MyScrapPostResponseDto

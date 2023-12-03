@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.domain.post.service
 
-import com.kotlin.boardproject.domain.comment.dto.CommentsByPostIdResponseDto
+import com.kotlin.boardproject.domain.comment.dto.read.CommentsByPostIdResponseDto
 import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.black.BlackPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto

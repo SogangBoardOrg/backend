@@ -1,8 +1,8 @@
 package com.kotlin.boardproject.domain.post.dto.read
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
-import com.kotlin.boardproject.domain.comment.dto.CommentDto
-import com.kotlin.boardproject.domain.comment.dto.commentDtos
+import com.kotlin.boardproject.domain.comment.dto.read.CommentDto
+import com.kotlin.boardproject.domain.comment.dto.read.commentDtos
 import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.enums.PostType

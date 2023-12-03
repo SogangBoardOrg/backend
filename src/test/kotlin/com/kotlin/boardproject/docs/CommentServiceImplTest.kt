@@ -3,10 +3,10 @@ package com.kotlin.boardproject.docs
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.domain.LikeComment
-import com.kotlin.boardproject.domain.comment.dto.BlackCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.CreateCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.DeleteCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.black.BlackCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.delete.DeleteCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.repository.BlackCommentRepository
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.comment.repository.LikeCommentRepository

@@ -1,6 +1,6 @@
 package com.kotlin.boardproject.domain.comment.domain
 
-import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentRequestDto
 import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.domain.BaseEntity

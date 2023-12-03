@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.docs
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.kotlin.boardproject.domain.comment.dto.CreateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.repository.NotificationRepository
