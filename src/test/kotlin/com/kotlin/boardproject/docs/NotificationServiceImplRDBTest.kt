@@ -6,11 +6,10 @@ import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.repository.NotificationRepository
 import com.kotlin.boardproject.domain.post.domain.BasePost
-import com.kotlin.boardproject.domain.post.domain.NormalPost
-import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
+import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
-import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.global.util.AuthToken
@@ -57,13 +56,13 @@ class NotificationServiceImplRDBTest {
     private lateinit var userRepository: UserRepository
 
     @Autowired
-    private lateinit var normalPostRepository: NormalPostRepository
-
-    @Autowired
     private lateinit var notificationRepository: NotificationRepository
 
     @Autowired
     private lateinit var commentRepository: CommentRepository
+
+    @Autowired
+    private lateinit var basePostRepository: BasePostRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -119,14 +118,14 @@ class NotificationServiceImplRDBTest {
             role = Role.ROLE_VERIFIED_USER.code,
         )
 
-        post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title",
                 content = "content",
                 isAnon = true,
                 commentOn = true,
                 writer = postWriter,
-                normalType = NormalType.FREE,
+                postType = PostType.FREE,
                 photoList = emptyList(),
             ),
         )

@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.domain.post.dto.normalpost
+package com.kotlin.boardproject.domain.post.dto.read
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.dto.CommentDto

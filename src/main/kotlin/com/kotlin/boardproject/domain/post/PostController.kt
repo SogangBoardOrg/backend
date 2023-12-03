@@ -1,20 +1,20 @@
 package com.kotlin.boardproject.domain.post
 
 import com.kotlin.boardproject.domain.comment.dto.CommentsByPostIdResponseDto
-import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.BlackPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelLikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.LikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.PostByQueryResponseDto
-import com.kotlin.boardproject.domain.post.dto.ScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.DeletePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.OnePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.delete.DeletePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.CancelLikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.LikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.OnePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.CancelScrapPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.ScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.service.PostService
 import com.kotlin.boardproject.global.annotation.LoginUser
 import com.kotlin.boardproject.global.dto.ApiResponse
@@ -44,7 +44,7 @@ class PostController(
 ) {
     // TODO: newbie이면 글 쓰기가 안됨 -> security config
     @PostMapping("")
-    fun createNormalPost(
+    fun createPost(
         @LoginUser loginUser: User,
         @RequestBody @Valid
         createPostRequestDto: CreatePostRequestDto,
@@ -55,7 +55,7 @@ class PostController(
     }
 
     @GetMapping("/query")
-    fun findNormalPostByQuery(
+    fun findPostByQuery(
         @RequestParam("title", required = false) title: String?,
         @RequestParam("content", required = false) content: String?,
         @RequestParam("writer-name", required = false) writerName: String?,
@@ -66,7 +66,7 @@ class PostController(
     ): ApiResponse<PostByQueryResponseDto> {
         log.info("username: ${principal?.name}")
 
-        val data = postService.findNormalPostByQuery(
+        val data = postService.findPostByQuery(
             principal?.name,
             pageable,
             PostByQueryRequestDto(
@@ -81,7 +81,7 @@ class PostController(
     }
 
     @GetMapping("/{postId}")
-    fun findOneNormalPost(
+    fun findOnePost(
         @PathVariable @Positive
         postId: Long,
         principal: Principal?,
@@ -105,7 +105,7 @@ class PostController(
     }
 
     @PutMapping("/{postId}")
-    fun editNormalPost(
+    fun editPost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         postId: Long,
@@ -117,7 +117,7 @@ class PostController(
     }
 
     @DeleteMapping("/{postId}")
-    fun deleteNormalPost(
+    fun deletePost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         postId: Long,

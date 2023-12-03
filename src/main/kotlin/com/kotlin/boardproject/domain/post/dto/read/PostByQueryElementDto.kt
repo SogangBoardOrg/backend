@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.domain.post.dto
+package com.kotlin.boardproject.domain.post.dto.read
 
 import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.enums.Seasons

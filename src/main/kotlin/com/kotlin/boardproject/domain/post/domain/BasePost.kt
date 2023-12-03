@@ -1,7 +1,7 @@
 package com.kotlin.boardproject.domain.post.domain
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
 import com.kotlin.boardproject.domain.schedule.domain.Course
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.domain.BaseEntity

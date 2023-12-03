@@ -314,7 +314,7 @@ class MyDataInit(
             writer = user,
             isAnon = true,
             commentOn = true,
-            postType = PostType.NORMAL,
+            postType = PostType.FREE,
         )
         val post_2 = BasePost(
             title = "post_${start + 1}",
@@ -322,7 +322,7 @@ class MyDataInit(
             writer = user,
             isAnon = false,
             commentOn = true,
-            postType = PostType.NORMAL,
+            postType = PostType.FREE,
         )
         basePostRepository.saveAllAndFlush(listOf(post_1, post_2))
         return listOf(post_1, post_2)

@@ -6,9 +6,9 @@ import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
-import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
@@ -138,7 +138,6 @@ class PostServiceImplTest {
 
     @AfterEach
     fun cleardb() {
-        // normalPostRepository.deleteAll()
     }
 
     @Test
@@ -156,16 +155,16 @@ class PostServiceImplTest {
             content = content,
             isAnon = true,
             commentOn = true,
-            postType = PostType.NORMAL,
+            postType = PostType.FREE,
             photoList = listOf(),
         )
 
-        val normalPostString = objectMapper.writeValueAsString(createPostRequestDto)
+        val postString = objectMapper.writeValueAsString(createPostRequestDto)
         // when
 
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.post(finalUrl).contentType(MediaType.APPLICATION_JSON)
-                .content(normalPostString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+                .content(postString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
@@ -226,7 +225,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
                 photoList = listOf(),
             ),
         )
@@ -239,11 +238,11 @@ class PostServiceImplTest {
             photoList = listOf(),
         )
 
-        val editNormalPostRequestString = objectMapper.writeValueAsString(editPostRequestDto)
+        val editPostRequestString = objectMapper.writeValueAsString(editPostRequestDto)
 
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.put(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
-                .content(editNormalPostRequestString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+                .content(editPostRequestString).header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
                 .accept(MediaType.APPLICATION_JSON),
         )
 
@@ -296,7 +295,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -346,7 +345,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -408,7 +407,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -461,7 +460,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -519,7 +518,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -530,7 +529,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -587,7 +586,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -598,7 +597,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -661,7 +660,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -672,7 +671,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -763,7 +762,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
                 photoList = listOf(),
             ),
         )
@@ -775,7 +774,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
                 photoList = listOf(),
             ),
         )
@@ -864,7 +863,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
                 photoList = listOf(),
             ),
         )
@@ -876,7 +875,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
                 photoList = listOf(),
             ),
         )
@@ -955,7 +954,7 @@ class PostServiceImplTest {
                     isAnon = false,
                     commentOn = true,
                     writer = writer,
-                    postType = PostType.NORMAL,
+                    postType = PostType.FREE,
                 ),
             )
         }
@@ -968,7 +967,7 @@ class PostServiceImplTest {
                     isAnon = true,
                     commentOn = true,
                     writer = writer,
-                    postType = PostType.NORMAL,
+                    postType = PostType.FREE,
                 ),
             )
         }
@@ -1065,7 +1064,7 @@ class PostServiceImplTest {
                     isAnon = true,
                     commentOn = true,
                     writer = writer,
-                    postType = PostType.NORMAL,
+                    postType = PostType.FREE,
                 ),
             )
         }
@@ -1078,7 +1077,7 @@ class PostServiceImplTest {
                     isAnon = true,
                     commentOn = true,
                     writer = writer,
-                    postType = PostType.NORMAL,
+                    postType = PostType.FREE,
                 ),
             )
         }
@@ -1150,7 +1149,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -1161,7 +1160,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 
@@ -1172,7 +1171,7 @@ class PostServiceImplTest {
                 isAnon = true,
                 commentOn = true,
                 writer = writer,
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             ),
         )
 

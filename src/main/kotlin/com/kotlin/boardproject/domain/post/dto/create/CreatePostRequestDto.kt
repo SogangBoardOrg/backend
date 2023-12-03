@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.domain.post.dto.normalpost
+package com.kotlin.boardproject.domain.post.dto.create
 
 import com.kotlin.boardproject.global.enums.PostType
 import javax.validation.Valid

@@ -1,7 +1,5 @@
-package com.kotlin.boardproject.domain.post.dto
+package com.kotlin.boardproject.domain.post.dto.read
 
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryElementDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryResponseDto
 import org.springframework.data.domain.Page
 
 data class PostByQueryResponseDto(
@@ -21,17 +19,6 @@ data class PostByQueryResponseDto(
                 totalElements = data.totalElements,
                 numberOfElements = data.numberOfElements,
                 size = data.size,
-            )
-        }
-
-        fun createDtoFromPageable(pageData: Page<NormalPostByQueryElementDto>): NormalPostByQueryResponseDto {
-            return NormalPostByQueryResponseDto(
-                contents = pageData.content,
-                currentPage = pageData.pageable.pageNumber,
-                totalPages = pageData.totalPages,
-                totalElements = pageData.totalElements,
-                numberOfElements = pageData.numberOfElements,
-                size = pageData.size,
             )
         }
     }

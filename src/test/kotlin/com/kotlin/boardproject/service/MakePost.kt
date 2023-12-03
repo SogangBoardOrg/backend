@@ -5,14 +5,14 @@ import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.global.enums.PostType
 
-fun makeBasePost(writer: User): List<BasePost> {
+fun makeFreePost(writer: User): List<BasePost> {
     val one = BasePost(
         title = "postOne",
         content = "postOne",
         writer = writer,
         isAnon = false,
         commentOn = true,
-        postType = PostType.NORMAL,
+        postType = PostType.FREE,
     )
     val two = BasePost(
         title = "postOne",
@@ -20,7 +20,7 @@ fun makeBasePost(writer: User): List<BasePost> {
         writer = writer,
         isAnon = false,
         commentOn = true,
-        postType = PostType.NORMAL,
+        postType = PostType.FREE,
     )
 
     one.id = 1L

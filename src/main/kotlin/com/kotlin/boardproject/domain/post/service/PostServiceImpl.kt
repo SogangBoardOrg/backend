@@ -6,22 +6,22 @@ import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.post.domain.BlackPost
 import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
-import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.BlackPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelLikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.LikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.MyScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.MyWrittenPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.PostByQueryResponseDto
-import com.kotlin.boardproject.domain.post.dto.ScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.DeletePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.OnePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.delete.DeletePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.CancelLikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.LikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.MyWrittenPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.OnePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.CancelScrapPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.MyScrapPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.ScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
@@ -50,7 +50,7 @@ class PostServiceImpl(
 ) : PostService {
 
     @Transactional(readOnly = true)
-    override fun findNormalPostByQuery(
+    override fun findPostByQuery(
         userEmail: String?,
         pageable: Pageable,
         postByQueryRequestDto: PostByQueryRequestDto,

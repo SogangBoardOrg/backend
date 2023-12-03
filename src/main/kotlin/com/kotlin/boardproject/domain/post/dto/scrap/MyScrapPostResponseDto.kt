@@ -1,11 +1,12 @@
-package com.kotlin.boardproject.domain.post.dto
+package com.kotlin.boardproject.domain.post.dto.scrap
 
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
+import com.kotlin.boardproject.domain.post.dto.read.MyWrittenPostResponseElementDto
 import com.kotlin.boardproject.global.enums.PostStatus
 import org.springframework.data.domain.Page
 
 data class MyScrapPostResponseDto(
-    val contents: List<FindMyOneBasePostResponseDto>? = null,
+    val contents: List<MyWrittenPostResponseElementDto>? = null,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -25,9 +26,9 @@ data class MyScrapPostResponseDto(
             )
         }
 
-        private fun generatePostDtoList(scrapList: Page<ScrapPost>): List<FindMyOneBasePostResponseDto> =
+        private fun generatePostDtoList(scrapList: Page<ScrapPost>): List<MyWrittenPostResponseElementDto> =
             scrapList.content
                 .filter { it.post.status == PostStatus.NORMAL }
-                .map { FindMyOneBasePostResponseDto.fromBasePostToDto(it.post) }
+                .map { MyWrittenPostResponseElementDto.fromBasePostToDto(it.post) }
     }
 }

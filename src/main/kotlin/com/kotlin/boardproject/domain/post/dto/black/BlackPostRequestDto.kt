@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.domain.post.dto
+package com.kotlin.boardproject.domain.post.dto.black
 
 import com.kotlin.boardproject.global.enums.BlackReason
 import javax.validation.constraints.NotNull

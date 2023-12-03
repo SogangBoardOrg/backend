@@ -6,44 +6,44 @@ import com.kotlin.boardproject.global.enums.PostStatus
 import io.mockk.every
 
 fun setBasePostRepository(
-    normalPostPresent: BasePost,
-    normalPostDeleted: BasePost,
+    freePostPresent: BasePost,
+    freePostDeleted: BasePost,
     basePostRepository: BasePostRepository,
 ) {
     every {
         basePostRepository.findByIdAndStatus(
-            normalPostPresent.id!!,
+            freePostPresent.id!!,
             PostStatus.NORMAL,
         )
-    } returns normalPostPresent
+    } returns freePostPresent
     every {
         basePostRepository.findByIdAndStatusFetchLikeList(
-            normalPostPresent.id!!,
+            freePostPresent.id!!,
             PostStatus.NORMAL,
         )
-    } returns normalPostPresent
+    } returns freePostPresent
     every {
         basePostRepository.findByIdAndStatusFetchScrapList(
-            normalPostPresent.id!!,
+            freePostPresent.id!!,
             PostStatus.NORMAL,
         )
-    } returns normalPostPresent
+    } returns freePostPresent
 
     every {
         basePostRepository.findByIdAndStatus(
-            normalPostDeleted.id!!,
+            freePostDeleted.id!!,
             PostStatus.NORMAL,
         )
     } returns null
     every {
         basePostRepository.findByIdAndStatusFetchLikeList(
-            normalPostDeleted.id!!,
+            freePostDeleted.id!!,
             PostStatus.NORMAL,
         )
     } returns null
     every {
         basePostRepository.findByIdAndStatusFetchScrapList(
-            normalPostDeleted.id!!,
+            freePostDeleted.id!!,
             PostStatus.NORMAL,
         )
     } returns null

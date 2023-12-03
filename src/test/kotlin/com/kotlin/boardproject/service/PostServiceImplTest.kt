@@ -3,10 +3,10 @@ package com.kotlin.boardproject.service
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreatePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostResponseDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
@@ -37,7 +37,7 @@ class PostServiceImplTest : BehaviorSpec(
         isolationMode = IsolationMode.InstancePerTest
 
         val (userOne, userTwo, userThree) = makeUser()
-        val (normalPostPresent, normalPostDeleted) = makeBasePost(userOne)
+        val (freePostPresent, freePostDeleted) = makeFreePost(userOne)
 
         val userRepository: UserRepository = mockk()
         val courseRepository: CourseRepository = mockk()
@@ -67,8 +67,8 @@ class PostServiceImplTest : BehaviorSpec(
         )
 
         setBasePostRepository(
-            normalPostPresent,
-            normalPostDeleted,
+            freePostPresent,
+            freePostDeleted,
             basePostRepository,
         )
 
@@ -79,7 +79,7 @@ class PostServiceImplTest : BehaviorSpec(
                 isAnon = false,
                 commentOn = true,
                 photoList = listOf(),
-                postType = PostType.NORMAL,
+                postType = PostType.FREE,
             )
             val postId = 1L
             every { basePostRepository.save(any()).id!! } returns postId
@@ -101,16 +101,16 @@ class PostServiceImplTest : BehaviorSpec(
                 photoList = listOf(),
             )
             `when`("정상 수정") {
-                val data = postService.editPost(userOne.email, normalPostPresent.id!!, editPostRequestDto)
+                val data = postService.editPost(userOne.email, freePostPresent.id!!, editPostRequestDto)
                 then("통과") {
                     verify(exactly = 1) { userRepository.findByEmail(userOne.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatus(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    data shouldBe EditPostResponseDto(normalPostPresent.id!!)
+                    data shouldBe EditPostResponseDto(freePostPresent.id!!)
                 }
             }
 
@@ -135,14 +135,14 @@ class PostServiceImplTest : BehaviorSpec(
             `when`("삭제된 글 찾음") {
                 // when
                 val exception = shouldThrow<EntityNotFoundException> {
-                    postService.editPost(userOne.email, normalPostDeleted.id!!, editPostRequestDto)
+                    postService.editPost(userOne.email, freePostDeleted.id!!, editPostRequestDto)
                 }
                 // then
                 then("글이 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmail(userOne.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatus(
-                            normalPostDeleted.id!!,
+                            freePostDeleted.id!!,
                             PostStatus.NORMAL,
                         )
                     }
@@ -152,7 +152,7 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("없는 유저 찾음") {
                 val exception = shouldThrow<EntityNotFoundException> {
-                    postService.editPost(nonExistUserEmail, normalPostPresent.id!!, editPostRequestDto)
+                    postService.editPost(nonExistUserEmail, freePostPresent.id!!, editPostRequestDto)
                 }
                 then("유저가 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmail(nonExistUserEmail) }
@@ -163,14 +163,14 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("다른 유저의 글을 수정함") {
                 val exception = shouldThrow<UnAuthorizedException> {
-                    postService.editPost(userTwo.email, normalPostPresent.id!!, editPostRequestDto)
+                    postService.editPost(userTwo.email, freePostPresent.id!!, editPostRequestDto)
                 }
 
                 then("해당 글의 주인이 아니라고 에러") {
                     verify(exactly = 1) { userRepository.findByEmail(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatus(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
@@ -182,29 +182,29 @@ class PostServiceImplTest : BehaviorSpec(
         given("글 추천") {
             val likePost = LikePost(
                 user = userTwo,
-                post = normalPostPresent,
+                post = freePostPresent,
             )
 
-            every { likePostRepository.findByUserAndPost(userTwo, normalPostPresent) } returns null
+            every { likePostRepository.findByUserAndPost(userTwo, freePostPresent) } returns null
             every { likePostRepository.save(any()) } returns likePost
 
             `when`("정상") {
-                postService.likePost(userTwo.email, normalPostPresent.id!!)
+                postService.likePost(userTwo.email, freePostPresent.id!!)
                 then("통과") {
                     verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatusFetchLikeList(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 1) { likePostRepository.findByUserAndPost(userTwo, normalPostPresent) }
+                    verify(exactly = 1) { likePostRepository.findByUserAndPost(userTwo, freePostPresent) }
                     verify(exactly = 1) { likePostRepository.save(any()) }
 
-                    normalPostPresent.likeList.size shouldBe 1
-                    normalPostPresent.likeList[0].user shouldBe userTwo
+                    freePostPresent.likeList.size shouldBe 1
+                    freePostPresent.likeList[0].user shouldBe userTwo
                     userTwo.likePostList.size shouldBe 1
-                    userTwo.likePostList[0].post shouldBe normalPostPresent
+                    userTwo.likePostList[0].post shouldBe freePostPresent
                 }
             }
 
@@ -231,13 +231,13 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("삭제된 글 추천") {
                 val error = shouldThrow<EntityNotFoundException> {
-                    postService.likePost(userTwo.email, normalPostDeleted.id!!)
+                    postService.likePost(userTwo.email, freePostDeleted.id!!)
                 }
                 then("글이 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatusFetchLikeList(
-                            normalPostDeleted.id!!,
+                            freePostDeleted.id!!,
                             PostStatus.NORMAL,
                         )
                     }
@@ -252,42 +252,42 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("없는 유저 찾음") {
                 val error = shouldThrow<EntityNotFoundException> {
-                    postService.likePost(nonExistUserEmail, normalPostPresent.id!!)
+                    postService.likePost(nonExistUserEmail, freePostPresent.id!!)
                 }
                 then("유저가 존재하지 않음") {
 
                     verify(exactly = 1) { userRepository.findByEmailFetchLikeList(nonExistUserEmail) }
                     verify(exactly = 0) {
                         basePostRepository.findByIdAndStatusFetchLikeList(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 0) { likePostRepository.findByUserAndPost(userTwo, normalPostPresent) }
+                    verify(exactly = 0) { likePostRepository.findByUserAndPost(userTwo, freePostPresent) }
                     verify(exactly = 0) { likePostRepository.save(any()) }
 
                     error.log shouldBe "$nonExistUserEmail 는 없는 유저 입니다."
 
-                    normalPostPresent.likeList.size shouldBe 0
+                    freePostPresent.likeList.size shouldBe 0
                     userTwo.likePostList.size shouldBe 0
                 }
             }
 
             `when`("이미 추천했음") {
-                every { likePostRepository.findByUserAndPost(userTwo, normalPostPresent) } returns likePost
+                every { likePostRepository.findByUserAndPost(userTwo, freePostPresent) } returns likePost
                 val error = shouldThrow<ConditionConflictException> {
-                    postService.likePost(userTwo.email, normalPostPresent.id!!)
+                    postService.likePost(userTwo.email, freePostPresent.id!!)
                 }
 
                 then("이미 추천을 한 글") {
                     verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatusFetchLikeList(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 1) { likePostRepository.findByUserAndPost(userTwo, normalPostPresent) }
+                    verify(exactly = 1) { likePostRepository.findByUserAndPost(userTwo, freePostPresent) }
                     verify(exactly = 0) { likePostRepository.save(any()) }
 
                     error.log shouldBe "이미 추천을 했습니다."
@@ -301,29 +301,29 @@ class PostServiceImplTest : BehaviorSpec(
         given("글 스크랩") {
             val scrapPost = ScrapPost(
                 user = userTwo,
-                post = normalPostPresent,
+                post = freePostPresent,
             )
 
-            every { scrapPostRepository.findByUserAndPost(userTwo, normalPostPresent) } returns null
+            every { scrapPostRepository.findByUserAndPost(userTwo, freePostPresent) } returns null
             every { scrapPostRepository.save(any()) } returns scrapPost
 
             `when`("정상") {
-                postService.scrapPost(userTwo.email, normalPostPresent.id!!)
+                postService.scrapPost(userTwo.email, freePostPresent.id!!)
                 then("통과") {
                     verify(exactly = 1) { userRepository.findByEmailFetchScrapList(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatusFetchScrapList(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 1) { scrapPostRepository.findByUserAndPost(userTwo, normalPostPresent) }
+                    verify(exactly = 1) { scrapPostRepository.findByUserAndPost(userTwo, freePostPresent) }
                     verify(exactly = 1) { scrapPostRepository.save(any()) }
 
-                    normalPostPresent.scrapList.size shouldBe 1
-                    normalPostPresent.scrapList[0].user shouldBe userTwo
+                    freePostPresent.scrapList.size shouldBe 1
+                    freePostPresent.scrapList[0].user shouldBe userTwo
                     userTwo.scrapList.size shouldBe 1
-                    userTwo.scrapList[0].post shouldBe normalPostPresent
+                    userTwo.scrapList[0].post shouldBe freePostPresent
                 }
             }
 
@@ -350,13 +350,13 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("삭제된 글 스크랩") {
                 val error = shouldThrow<EntityNotFoundException> {
-                    postService.scrapPost(userTwo.email, normalPostDeleted.id!!)
+                    postService.scrapPost(userTwo.email, freePostDeleted.id!!)
                 }
                 then("글이 존재하지 않음") {
                     verify(exactly = 1) { userRepository.findByEmailFetchScrapList(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatusFetchScrapList(
-                            normalPostDeleted.id!!,
+                            freePostDeleted.id!!,
                             PostStatus.NORMAL,
                         )
                     }
@@ -371,41 +371,41 @@ class PostServiceImplTest : BehaviorSpec(
 
             `when`("없는 유저 찾음") {
                 val error = shouldThrow<EntityNotFoundException> {
-                    postService.scrapPost(nonExistUserEmail, normalPostPresent.id!!)
+                    postService.scrapPost(nonExistUserEmail, freePostPresent.id!!)
                 }
                 then("유저가 존재하지 않음") {
 
                     verify(exactly = 1) { userRepository.findByEmailFetchScrapList(nonExistUserEmail) }
                     verify(exactly = 0) {
                         basePostRepository.findByIdAndStatusFetchScrapList(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 0) { scrapPostRepository.findByUserAndPost(userTwo, normalPostPresent) }
+                    verify(exactly = 0) { scrapPostRepository.findByUserAndPost(userTwo, freePostPresent) }
                     verify(exactly = 0) { scrapPostRepository.save(any()) }
 
                     error.log shouldBe "$nonExistUserEmail 존재하지 않는 유저 입니다."
 
-                    normalPostPresent.scrapList.size shouldBe 0
+                    freePostPresent.scrapList.size shouldBe 0
                     userTwo.scrapList.size shouldBe 0
                 }
             }
 
             `when`("이미 스크랩 했음") {
-                every { scrapPostRepository.findByUserAndPost(userTwo, normalPostPresent) } returns scrapPost
+                every { scrapPostRepository.findByUserAndPost(userTwo, freePostPresent) } returns scrapPost
                 val error = shouldThrow<ConditionConflictException> {
-                    postService.scrapPost(userTwo.email, normalPostPresent.id!!)
+                    postService.scrapPost(userTwo.email, freePostPresent.id!!)
                 }
                 then("이미 스크랩을 하였음") {
                     verify(exactly = 1) { userRepository.findByEmailFetchScrapList(userTwo.email) }
                     verify(exactly = 1) {
                         basePostRepository.findByIdAndStatusFetchScrapList(
-                            normalPostPresent.id!!,
+                            freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 1) { scrapPostRepository.findByUserAndPost(userTwo, normalPostPresent) }
+                    verify(exactly = 1) { scrapPostRepository.findByUserAndPost(userTwo, freePostPresent) }
                     verify(exactly = 0) { scrapPostRepository.save(any()) }
 
                     error.log shouldBe "이미 스크랩을 하였습니다."

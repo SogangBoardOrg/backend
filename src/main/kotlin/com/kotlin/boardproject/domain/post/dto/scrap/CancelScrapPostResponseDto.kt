@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.domain.post.dto
+package com.kotlin.boardproject.domain.post.dto.scrap
 
 class CancelScrapPostResponseDto(
     val id: Long,

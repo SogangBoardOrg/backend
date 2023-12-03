@@ -1,4 +1,4 @@
-package com.kotlin.boardproject.domain.post.dto.normalpost
+package com.kotlin.boardproject.domain.post.dto.edit
 
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
