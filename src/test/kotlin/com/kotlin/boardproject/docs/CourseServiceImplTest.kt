@@ -208,14 +208,14 @@ class CourseServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestParameters(
-                        parameterWithName("title").description("강의 제목"),
-                        parameterWithName("major").description("강의 학과"),
-                        parameterWithName("year").description("강의 연도"),
-                        parameterWithName("season").description("강의 계절"),
-                        parameterWithName("professor").description("교수 이름"),
-                        parameterWithName("page").description("페이지 번호"),
-                        parameterWithName("size").description("페이지 당 요소의 최대 개수"),
-                        parameterWithName("sort").description("정렬 기준"),
+                        parameterWithName("title").description("강의 제목").optional(),
+                        parameterWithName("major").description("강의 학과").optional(),
+                        parameterWithName("year").description("강의 연도").optional(),
+                        parameterWithName("season").description("강의 계절").optional(),
+                        parameterWithName("professor").description("교수 이름").optional(),
+                        parameterWithName("page").description("페이지 번호").optional(),
+                        parameterWithName("size").description("페이지 당 요소의 최대 개수").optional(),
+                        parameterWithName("sort").description("정렬 기준").optional(),
                     ),
                     responseFields(
                         fieldWithPath("status").type(JsonFieldType.STRING)

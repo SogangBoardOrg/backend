@@ -180,18 +180,18 @@ class PostServiceImplTest {
                         ),
                     ),
                     requestFields(
-                        fieldWithPath("title").description("제목"),
-                        fieldWithPath("content").description("글 내용"),
-                        fieldWithPath("isAnon").description("익명 여부"),
-                        fieldWithPath("commentOn").description("댓글 여부"),
-                        fieldWithPath("postType").description("게시글 타입"),
-                        fieldWithPath("reviewScore").description("리뷰 평점"),
-                        fieldWithPath("courseId").description("코스 번호"),
-                        fieldWithPath("photoList").description("사진 url 배열"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("글 내용"),
+                        fieldWithPath("isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("commentOn").type(JsonFieldType.BOOLEAN).description("댓글 여부"),
+                        fieldWithPath("postType").type(JsonFieldType.STRING).description("게시글 타입"),
+                        fieldWithPath("reviewScore").type(JsonFieldType.NUMBER).optional().description("리뷰 평점"),
+                        fieldWithPath("courseId").type(JsonFieldType.NUMBER).optional().description("코스 번호"),
+                        fieldWithPath("photoList").type(JsonFieldType.ARRAY).description("사진 URL 배열"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -254,19 +254,19 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION).description(
-                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                            "인증을 위한 Access 토큰, 글을 수정하는 유저를 식별하기 위해서 반드시 필요함",
                         ),
                     ),
                     requestFields(
-                        fieldWithPath("title").description("제목"),
-                        fieldWithPath("content").description("글 내용"),
-                        fieldWithPath("isAnon").description("익명 여부"),
-                        fieldWithPath("commentOn").description("댓글 여부"),
-                        fieldWithPath("photoList").description("사진 url 배열"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("글 내용"),
+                        fieldWithPath("isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("commentOn").type(JsonFieldType.BOOLEAN).description("댓글 여부"),
+                        fieldWithPath("photoList").type(JsonFieldType.ARRAY).description("사진 URL 배열"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -312,12 +312,12 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION).description(
-                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                            "인증을 위한 Access 토큰, 글을 삭제하는 유저를 식별하기 위해서 반드시 필요함",
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -368,15 +368,15 @@ class PostServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION).description(
-                            "인증을 위한 Access 토큰, 글을 쓰는 유저를 식별하기 위해서 반드시 필요함",
+                            "인증을 위한 Access 토큰, 글을 신고하는 유저를 식별하기 위해서 반드시 필요함",
                         ),
                     ),
                     requestFields(
-                        fieldWithPath("blackReason").description("신고 사유"),
+                        fieldWithPath("blackReason").type(JsonFieldType.STRING).description("신고 사유"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -429,8 +429,8 @@ class PostServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -489,8 +489,8 @@ class PostServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -551,8 +551,8 @@ class PostServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -631,8 +631,8 @@ class PostServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -702,44 +702,47 @@ class PostServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("data.title").description("게시글 제목"),
-                        fieldWithPath("data.content").description("게시글 내용"),
-                        fieldWithPath("data.writerName").description("게시글 작성자 이름"),
-                        fieldWithPath("data.isAnon").description("게시글 작성자 익명 여부"),
-                        fieldWithPath("data.isLiked").description("게시글 좋아요 여부"),
-                        fieldWithPath("data.isScrapped").description("게시글 스크랩 여부"),
-                        fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
-                        fieldWithPath("data.commentCnt").description("댓글 숫자"),
-                        fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
-                        fieldWithPath("data.createdAt").description("게시글 작성 시간"),
-                        fieldWithPath("data.updatedAt").description("게시글 최종 수정 시간"),
-                        fieldWithPath("data.commentList").description("댓글 내용"),
-                        fieldWithPath("data.photoList").description("사진 url 배열"),
-                        fieldWithPath("data.reviewScore").description("리뷰 평점"),
-                        fieldWithPath("data.postType").description("게시글 타입"),
-                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
+                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                        fieldWithPath("data.writerName").type(JsonFieldType.STRING).description("게시글 작성자 이름"),
+                        fieldWithPath("data.isAnon").type(JsonFieldType.BOOLEAN).description("게시글 작성자 익명 여부"),
+                        fieldWithPath("data.isLiked").type(JsonFieldType.BOOLEAN).optional().description("게시글 좋아요 여부"),
+                        fieldWithPath("data.isScrapped").type(JsonFieldType.BOOLEAN).optional()
+                            .description("게시글 스크랩 여부"),
+                        fieldWithPath("data.isWriter").type(JsonFieldType.BOOLEAN).optional().description("게시글 작성자 여부"),
+                        fieldWithPath("data.commentCnt").type(JsonFieldType.NUMBER).description("댓글 숫자"),
+                        fieldWithPath("data.commentOn").type(JsonFieldType.BOOLEAN).description("게시글 댓글 작성 가능 여부"),
+                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("게시글 작성 시간"),
+                        fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("게시글 최종 수정 시간"),
+                        fieldWithPath("data.commentList").type(JsonFieldType.ARRAY).description("댓글 내용"),
+                        fieldWithPath("data.photoList").type(JsonFieldType.ARRAY).description("사진 URL 배열"),
+                        fieldWithPath("data.reviewScore").type(JsonFieldType.NUMBER).optional().description("리뷰 평점"),
+                        fieldWithPath("data.postType").type(JsonFieldType.STRING).description("게시글 타입"),
+                        // CommentDto 내부 필드
+                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
-                        fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
+                        fieldWithPath("data.commentList[].isAnon").type(JsonFieldType.BOOLEAN)
                             .description("댓글 작성자 익명 여부"),
-                        fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING)
+                        fieldWithPath("data.commentList[].writerName").type(JsonFieldType.STRING)
                             .description("댓글 작성인 이름"),
-                        fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN)
-                            .description("댓글이 로그인 한 작성자가 작성했는지의 여부"),
-                        fieldWithPath("data.commentList.[].isPostWriter").type(JsonFieldType.BOOLEAN)
-                            .description("댓글이 글 작성자에 의해서 쓰여졌는지 여부"),
-                        fieldWithPath("data.commentList.[].createdAt").type(JsonFieldType.STRING)
+                        fieldWithPath("data.commentList[].isWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글이 로그인 한 사용자에 의해 작성됨"),
+                        fieldWithPath("data.commentList[].isPostWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글이 게시글 작성자에 의해 작성됨"),
+                        fieldWithPath("data.commentList[].createdAt").type(JsonFieldType.STRING)
                             .description("댓글 생성 시간"),
-                        fieldWithPath("data.commentList.[].updatedAt").type(JsonFieldType.STRING)
+                        fieldWithPath("data.commentList[].updatedAt").type(JsonFieldType.STRING)
                             .description("댓글 최종 수정 시간"),
-                        fieldWithPath("data.commentList.[].parentId").type(JsonFieldType.NUMBER).optional()
-                            .description("부모 댓글 번호"),
-                        fieldWithPath("data.commentList.[].ancestorId").type(JsonFieldType.NUMBER).optional()
-                            .description("조상 댓글 번호"),
-                        fieldWithPath("data.commentList.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
-                        fieldWithPath("data.commentList.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
-                        fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.commentList[].parentId").type(JsonFieldType.NUMBER).optional()
+                            .description("부모 댓글 ID"),
+                        fieldWithPath("data.commentList[].ancestorId").type(JsonFieldType.NUMBER).optional()
+                            .description("조상 댓글 ID"),
+                        fieldWithPath("data.commentList[].isLiked").type(JsonFieldType.BOOLEAN)
+                            .description("댓글 좋아요 여부"),
+                        fieldWithPath("data.commentList[].likeCnt").type(JsonFieldType.NUMBER).description("댓글 좋아요 개수"),
+                        fieldWithPath("data.commentList[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -803,44 +806,51 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("data.title").description("게시글 제목"),
-                        fieldWithPath("data.content").description("게시글 내용"),
-                        fieldWithPath("data.writerName").description("게시글 작성자 이름"),
-                        fieldWithPath("data.isAnon").description("게시글 작성자 익명 여부"),
-                        fieldWithPath("data.isLiked").description("게시글 좋아요 여부"),
-                        fieldWithPath("data.isScrapped").description("게시글 스크랩 여부"),
-                        fieldWithPath("data.isWriter").description("게시글 작성자 여부"),
-                        fieldWithPath("data.commentCnt").description("댓글 숫자"),
-                        fieldWithPath("data.commentOn").description("게시글 댓글 작성 가능 여부"),
-                        fieldWithPath("data.createdAt").description("게시글 작성 시간"),
-                        fieldWithPath("data.updatedAt").description("게시글 최종 수정 시간"),
-                        fieldWithPath("data.commentList").description("댓글 내용"),
-                        fieldWithPath("data.photoList").description("사진 url 배열"),
-                        fieldWithPath("data.reviewScore").description("리뷰 평점"),
-                        fieldWithPath("data.postType").description("게시글 타입"),
-                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
+                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                        fieldWithPath("data.writerName").type(JsonFieldType.STRING).description("게시글 작성자 이름"),
+                        fieldWithPath("data.isAnon").type(JsonFieldType.BOOLEAN).description("게시글 작성자 익명 여부"),
+                        fieldWithPath("data.isLiked").type(JsonFieldType.BOOLEAN).optional()
+                            .description("게시글 좋아요 여부"),
+                        fieldWithPath("data.isScrapped").type(JsonFieldType.BOOLEAN).optional()
+                            .description("게시글 스크랩 여부"),
+                        fieldWithPath("data.isWriter").type(JsonFieldType.BOOLEAN).optional()
+                            .description("게시글 작성자 여부"),
+                        fieldWithPath("data.commentCnt").type(JsonFieldType.NUMBER).description("댓글 숫자"),
+                        fieldWithPath("data.commentOn").type(JsonFieldType.BOOLEAN).description("게시글 댓글 작성 가능 여부"),
+                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("게시글 작성 시간"),
+                        fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("게시글 최종 수정 시간"),
+                        fieldWithPath("data.commentList").type(JsonFieldType.ARRAY).description("댓글 내용"),
+                        fieldWithPath("data.photoList").type(JsonFieldType.ARRAY).description("사진 URL 배열"),
+                        fieldWithPath("data.reviewScore").type(JsonFieldType.NUMBER).optional()
+                            .description("리뷰 평점"),
+                        fieldWithPath("data.postType").type(JsonFieldType.STRING).description("게시글 타입"),
+                        // CommentDto 내부 필드
+                        fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 ID"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
-                        fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
+                        fieldWithPath("data.commentList[].isAnon").type(JsonFieldType.BOOLEAN)
                             .description("댓글 작성자 익명 여부"),
-                        fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING)
+                        fieldWithPath("data.commentList[].writerName").type(JsonFieldType.STRING)
                             .description("댓글 작성인 이름"),
-                        fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN)
-                            .description("댓글이 로그인 한 작성자가 작성했는지의 여부"),
-                        fieldWithPath("data.commentList.[].isPostWriter").type(JsonFieldType.BOOLEAN)
-                            .description("댓글이 글 작성자에 의해서 쓰여졌는지 여부"),
-                        fieldWithPath("data.commentList.[].createdAt").type(JsonFieldType.STRING)
+                        fieldWithPath("data.commentList[].isWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글이 로그인 한 사용자에 의해 작성됨"),
+                        fieldWithPath("data.commentList[].isPostWriter").type(JsonFieldType.BOOLEAN)
+                            .description("댓글이 게시글 작성자에 의해 작성됨"),
+                        fieldWithPath("data.commentList[].createdAt").type(JsonFieldType.STRING)
                             .description("댓글 생성 시간"),
-                        fieldWithPath("data.commentList.[].updatedAt").type(JsonFieldType.STRING)
+                        fieldWithPath("data.commentList[].updatedAt").type(JsonFieldType.STRING)
                             .description("댓글 최종 수정 시간"),
-                        fieldWithPath("data.commentList.[].parentId").type(JsonFieldType.NUMBER).optional()
-                            .description("부모 댓글 번호"),
-                        fieldWithPath("data.commentList.[].ancestorId").type(JsonFieldType.NUMBER).optional()
-                            .description("조상 댓글 번호"),
-                        fieldWithPath("data.commentList.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
-                        fieldWithPath("data.commentList.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
-                        fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.commentList[].parentId").type(JsonFieldType.NUMBER).optional()
+                            .description("부모 댓글 ID"),
+                        fieldWithPath("data.commentList[].ancestorId").type(JsonFieldType.NUMBER).optional()
+                            .description("조상 댓글 ID"),
+                        fieldWithPath("data.commentList[].isLiked").type(JsonFieldType.BOOLEAN)
+                            .description("댓글 좋아요 여부"),
+                        fieldWithPath("data.commentList[].likeCnt").type(JsonFieldType.NUMBER)
+                            .description("댓글 좋아요 개수"),
+                        fieldWithPath("data.commentList[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -901,7 +911,7 @@ class PostServiceImplTest {
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
-                        fieldWithPath("data.commentList").description("댓글 내용"),
+                        fieldWithPath("data.commentList").type(JsonFieldType.ARRAY).description("댓글 내용"),
                         fieldWithPath("data.commentList[].id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                         fieldWithPath("data.commentList[].content").type(JsonFieldType.STRING).description("댓글 내용"),
                         fieldWithPath("data.commentList.[].isAnon").type(JsonFieldType.BOOLEAN)
@@ -923,7 +933,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.commentList.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
                         fieldWithPath("data.commentList.[].likeCnt").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                         fieldWithPath("data.commentList.[].child").type(JsonFieldType.ARRAY).description("대댓글 집합"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
