@@ -26,6 +26,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.context.ActiveProfiles
@@ -98,8 +99,8 @@ class AuthServiceImplTest {
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data").description("중복 여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("중복 여부 (true: 중복, false: 중복 아님)"),
                     ),
                 ),
             )
@@ -126,8 +127,8 @@ class AuthServiceImplTest {
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data").description("중복 여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("중복 여부 (true: 중복, false: 중복 아님)"),
                     ),
                 ),
             )
@@ -155,8 +156,8 @@ class AuthServiceImplTest {
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data").description("중복 여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("중복 여부 (true: 중복, false: 중복 아님)"),
                     ),
                 ),
             )
@@ -184,8 +185,8 @@ class AuthServiceImplTest {
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data").description("중복 여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("중복 여부 (true: 중복, false: 중복 아님)"),
                     ),
                 ),
             )
@@ -219,13 +220,15 @@ class AuthServiceImplTest {
                     ),
 
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data.id").description("유저 아이디"),
-                        fieldWithPath("data.nickname").description("유저 이름"),
-                        fieldWithPath("data.email").description("유저 이메일"),
-                        fieldWithPath("data.role").description("유저 신분"),
-                        fieldWithPath("data.accessToken").description("안쓰는 필드"),
-                        fieldWithPath("data.refreshToken").description("안쓰는 필드"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.STRING).description("유저 아이디"),
+                        fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("유저 닉네임"),
+                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("유저 이메일"),
+                        fieldWithPath("data.role").type(JsonFieldType.STRING).description("유저 역할"),
+                        fieldWithPath("data.accessToken").type(JsonFieldType.STRING).optional()
+                            .description("안쓰는 필드"),
+                        fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).optional()
+                            .description("안쓰는 필드"),
                     ),
                 ),
             )
