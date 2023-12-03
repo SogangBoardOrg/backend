@@ -1,44 +1,47 @@
 package com.kotlin.boardproject.domain.post.service
 
-import com.kotlin.boardproject.domain.comment.dto.CommentsByPostIdResponseDto
+import com.kotlin.boardproject.domain.comment.dto.read.CommentsByPostIdResponseDto
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
+import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.post.domain.BlackPost
 import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
-import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.BlackPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelLikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.LikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.MyScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.MyWrittenPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.ScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.DeleteNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.OneNormalPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.delete.DeletePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.CancelLikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.LikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.MyWrittenPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.OnePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.CancelScrapPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.MyScrapPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.ScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
 import com.kotlin.boardproject.domain.post.repository.LikePostRepository
-import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
+import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PostServiceImpl(
-    private val normalPostRepository: NormalPostRepository,
     private val userRepository: UserRepository,
+    private val courseRepository: CourseRepository,
     private val basePostRepository: BasePostRepository,
     private val blackPostRepository: BlackPostRepository,
     private val likePostRepository: LikePostRepository,
@@ -47,33 +50,33 @@ class PostServiceImpl(
 ) : PostService {
 
     @Transactional(readOnly = true)
-    override fun findNormalPostByQuery(
+    override fun findPostByQuery(
         userEmail: String?,
         pageable: Pageable,
-        findNormalPostByQueryRequestDto: FindNormalPostByQueryRequestDto,
-    ): NormalPostByQueryResponseDto {
-        val data = normalPostRepository.findNormalPostByQueryV2(
-            findNormalPostByQueryRequestDto = findNormalPostByQueryRequestDto,
+        postByQueryRequestDto: PostByQueryRequestDto,
+    ): PostByQueryResponseDto {
+        val data = basePostRepository.findPostByQuery(
+            postByQueryRequestDto = postByQueryRequestDto,
             userEmail = userEmail,
             pageable = pageable,
         )
 
-        return NormalPostByQueryResponseDto.createDtoFromPageable(data)
+        return PostByQueryResponseDto.createDtoFromPageable(data)
     }
 
     @Transactional(readOnly = true)
-    override fun findOneNormalPost(
+    override fun findOnePost(
         userEmail: String?,
         postId: Long,
-    ): OneNormalPostResponseDto {
+    ): OnePostResponseDto {
         val user = userEmail?.let {
             userRepository.findByEmail(it)
         }
-        val post = normalPostRepository.findByIdAndStatusFetchPhotoListAndUser(postId, PostStatus.NORMAL)
+        val post = basePostRepository.findByIdAndStatusFetchPhotoListAndUser(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
-        normalPostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
+        basePostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
-        normalPostRepository.findByIdAndStatusFetchScrapList(postId, PostStatus.NORMAL)
+        basePostRepository.findByIdAndStatusFetchScrapList(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
         // post에서는
         // likeList를 가져오고 그 안에서 user를 다시한번 가져온다.
@@ -85,7 +88,7 @@ class PostServiceImpl(
         // 댓글애 좋아요 여러개 넣어서 테스트 해보자
         val comments = commentRepository.findByPostFetchLikeListOrderById(post)
 
-        return OneNormalPostResponseDto.fromNormalPost(
+        return OnePostResponseDto.fromPost(
             post = post,
             searchUser = user,
             commentList = comments,
@@ -101,7 +104,7 @@ class PostServiceImpl(
             userRepository.findByEmail(it)
         }
 
-        val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
+        val post = basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
 
         val comments = commentRepository.findByPostFetchLikeListOrderById(post)
@@ -140,54 +143,93 @@ class PostServiceImpl(
     }
 
     @Transactional
-    override fun createNormalPost(
+    override fun createPost(
         userEmail: String,
-        createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): CreateNormalPostResponseDto {
+        createPostRequestDto: CreatePostRequestDto,
+    ): CreatePostResponseDto {
+        // 리뷰 타입이면 강의 아이디와 리뷰 점수가 필수
+        require(validateReview(createPostRequestDto)) {
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "리뷰면 강의 아이디와 리뷰 점수가 필수")
+        }
+
+        if (createPostRequestDto.postType == PostType.REVIEW) {
+            if (createPostRequestDto.courseId == null) {
+                throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "강의 아이디가 필요합니다.")
+            }
+            if (createPostRequestDto.reviewScore == null) {
+                throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "리뷰 점수가 필요합니다.")
+            }
+        }
+
         // 유저 확인
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
+        // 해당하는 강의 확인
+        val course = createPostRequestDto.courseId?.let {
+            courseRepository.findByIdOrNull(it)
+                ?: throw EntityNotFoundException("${it}번 강의는 존재하지 않습니다.")
+        }
+
         // 포스트 생성 지금은 그냥 진행 -> 태그 null 값이면 다른 post로 취급?
-        val post = createNormalPostRequestDto.toPost(user)
+        val post = BasePost(
+            title = createPostRequestDto.title,
+            content = createPostRequestDto.content,
+            writer = user,
+            isAnon = createPostRequestDto.isAnon,
+            commentOn = createPostRequestDto.commentOn,
+            photoList = createPostRequestDto.photoList,
+            postType = createPostRequestDto.postType,
+            course = course,
+            reviewScore = createPostRequestDto.reviewScore,
+        )
 
         // post.addPost(user)
-        return CreateNormalPostResponseDto(normalPostRepository.save(post).id!!)
+        return CreatePostResponseDto(basePostRepository.save(post).id!!)
+    }
+
+    private fun validateReview(createPostRequestDto: CreatePostRequestDto): Boolean {
+        return when {
+            createPostRequestDto.postType != PostType.REVIEW -> true
+            createPostRequestDto.courseId == null -> false
+            createPostRequestDto.reviewScore == null -> false
+            else -> true
+        }
     }
 
     @Transactional
-    override fun editNormalPost(
+    override fun editPost(
         userEmail: String,
         postId: Long,
-        editNormalPostRequestDto: EditNormalPostRequestDto,
-    ): EditNormalPostResponseDto {
+        editPostRequestDto: EditPostRequestDto,
+    ): EditPostResponseDto {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 는 없는 유저 이메일 입니다.")
-        val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
+        val post = basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
-        post.notQuestion()
+        post.notEdit()
         post.checkWriter(user)
-        post.editPost(editNormalPostRequestDto)
+        post.editPost(editPostRequestDto)
 
-        return EditNormalPostResponseDto(post.id!!)
+        return EditPostResponseDto(post.id!!)
     }
 
     @Transactional
-    override fun deleteNormalPost(
+    override fun deletePost(
         userEmail: String,
         postId: Long,
-    ): DeleteNormalPostResponseDto {
+    ): DeletePostResponseDto {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
-        val post = normalPostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
+        val post = basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("존재하지 않는 글 입니다.")
 
-        post.notQuestion()
+        post.notEdit()
         post.checkWriter(user)
         post.deletePost(user)
 
-        return DeleteNormalPostResponseDto(post.id!!)
+        return DeletePostResponseDto(post.id!!)
     }
 
     @Transactional

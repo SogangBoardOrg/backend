@@ -2,8 +2,8 @@ package com.kotlin.boardproject
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
-import com.kotlin.boardproject.domain.post.domain.NormalPost
-import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
+import com.kotlin.boardproject.domain.post.domain.BasePost
+import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.schedule.domain.Course
 import com.kotlin.boardproject.domain.schedule.domain.DayOfWeekTimePair
 import com.kotlin.boardproject.domain.schedule.domain.Schedule
@@ -14,7 +14,7 @@ import com.kotlin.boardproject.domain.schedule.repository.ScheduleRepository
 import com.kotlin.boardproject.domain.schedule.repository.TimeTableRepository
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
-import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.global.enums.Seasons
@@ -30,7 +30,7 @@ import javax.annotation.PostConstruct
 class MyDataInit(
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
-    private val normalPostRepository: NormalPostRepository,
+    private val basePostRepository: BasePostRepository,
     private val scheduleRepository: ScheduleRepository,
     private val timeTableRepository: TimeTableRepository,
     private val courseRepository: CourseRepository,
@@ -228,7 +228,7 @@ class MyDataInit(
         return listOf(timetable_1, timetable_2, timeTable_3)
     }
 
-    private fun commentCreate(post: NormalPost, user_a: User, user_b: User) {
+    private fun commentCreate(post: BasePost, user_a: User, user_b: User) {
         // 1. comment 생성하기
         // 2. comment를 붙이기
 
@@ -304,27 +304,27 @@ class MyDataInit(
         // comment6.joinAncestor(comment4)
         commentRepository.saveAndFlush(comment6)
 
-        normalPostRepository.save(post)
+        basePostRepository.save(post)
     }
 
-    private fun postCreate(user: User, start: Int): List<NormalPost> {
-        val post_1 = NormalPost(
+    private fun postCreate(user: User, start: Int): List<BasePost> {
+        val post_1 = BasePost(
             title = "post_$start",
             content = "post_$start",
             writer = user,
             isAnon = true,
-            normalType = NormalType.FREE,
             commentOn = true,
+            postType = PostType.FREE,
         )
-        val post_2 = NormalPost(
+        val post_2 = BasePost(
             title = "post_${start + 1}",
             content = "post_${start + 1}",
             writer = user,
             isAnon = false,
-            normalType = NormalType.FREE,
             commentOn = true,
+            postType = PostType.FREE,
         )
-        normalPostRepository.saveAllAndFlush(listOf(post_1, post_2))
+        basePostRepository.saveAllAndFlush(listOf(post_1, post_2))
         return listOf(post_1, post_2)
     }
 

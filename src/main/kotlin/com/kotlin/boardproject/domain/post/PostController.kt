@@ -1,24 +1,24 @@
 package com.kotlin.boardproject.domain.post
 
-import com.kotlin.boardproject.domain.comment.dto.CommentsByPostIdResponseDto
-import com.kotlin.boardproject.domain.post.dto.BlackPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.BlackPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelLikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.CancelScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.LikePostResponseDto
-import com.kotlin.boardproject.domain.post.dto.ScrapPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.CreateNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.DeleteNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.EditNormalPostResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.FindNormalPostByQueryRequestDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.NormalPostByQueryResponseDto
-import com.kotlin.boardproject.domain.post.dto.normalpost.OneNormalPostResponseDto
+import com.kotlin.boardproject.domain.comment.dto.read.CommentsByPostIdResponseDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.black.BlackPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
+import com.kotlin.boardproject.domain.post.dto.create.CreatePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.delete.DeletePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.CancelLikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.like.LikePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.OnePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.CancelScrapPostResponseDto
+import com.kotlin.boardproject.domain.post.dto.scrap.ScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.service.PostService
 import com.kotlin.boardproject.global.annotation.LoginUser
 import com.kotlin.boardproject.global.dto.ApiResponse
-import com.kotlin.boardproject.global.enums.NormalType
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.util.log
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
@@ -44,44 +44,51 @@ class PostController(
 ) {
     // TODO: newbie이면 글 쓰기가 안됨 -> security config
     @PostMapping("")
-    fun createNormalPost(
+    fun createPost(
         @LoginUser loginUser: User,
         @RequestBody @Valid
-        createNormalPostRequestDto: CreateNormalPostRequestDto,
-    ): ApiResponse<CreateNormalPostResponseDto> {
+        createPostRequestDto: CreatePostRequestDto,
+    ): ApiResponse<CreatePostResponseDto> {
         // TODO: list에 빈 문자열 들어오면 validation이 안된다.
-        val responseDto = postService.createNormalPost(loginUser.username, createNormalPostRequestDto)
+        val responseDto = postService.createPost(loginUser.username, createPostRequestDto)
         return ApiResponse.success(responseDto)
     }
 
     @GetMapping("/query")
-    fun findNormalPostByQuery(
+    fun findPostByQuery(
         @RequestParam("title", required = false) title: String?,
         @RequestParam("content", required = false) content: String?,
         @RequestParam("writer-name", required = false) writerName: String?,
-        @RequestParam("normal-type", required = true) normalType: NormalType,
+        @RequestParam("course-id", required = false) courseId: Long?,
+        @RequestParam("post-type", required = true) postType: PostType,
         pageable: Pageable,
         principal: Principal?,
-    ): ApiResponse<NormalPostByQueryResponseDto> {
+    ): ApiResponse<PostByQueryResponseDto> {
         log.info("username: ${principal?.name}")
 
-        val data = postService.findNormalPostByQuery(
+        val data = postService.findPostByQuery(
             principal?.name,
             pageable,
-            FindNormalPostByQueryRequestDto(title, content, writerName, normalType),
+            PostByQueryRequestDto(
+                title,
+                content,
+                writerName,
+                courseId,
+                postType,
+            ),
         )
         return ApiResponse.success(data)
     }
 
     @GetMapping("/{postId}")
-    fun findOneNormalPost(
+    fun findOnePost(
         @PathVariable @Positive
         postId: Long,
         principal: Principal?,
-    ): ApiResponse<OneNormalPostResponseDto> {
+    ): ApiResponse<OnePostResponseDto> {
         log.info("username: ${principal?.name}")
 
-        val data = postService.findOneNormalPost(principal?.name, postId) // post 객체 반환
+        val data = postService.findOnePost(principal?.name, postId) // post 객체 반환
         return ApiResponse.success(data)
     }
 
@@ -98,24 +105,24 @@ class PostController(
     }
 
     @PutMapping("/{postId}")
-    fun editNormalPost(
+    fun editPost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         postId: Long,
         @RequestBody @Valid
-        editNormalPostRequestDto: EditNormalPostRequestDto,
-    ): ApiResponse<EditNormalPostResponseDto> {
-        val data = postService.editNormalPost(loginUser.username, postId, editNormalPostRequestDto) // post 객체 반환
+        editPostRequestDto: EditPostRequestDto,
+    ): ApiResponse<EditPostResponseDto> {
+        val data = postService.editPost(loginUser.username, postId, editPostRequestDto) // post 객체 반환
         return ApiResponse.success(data)
     }
 
     @DeleteMapping("/{postId}")
-    fun deleteNormalPost(
+    fun deletePost(
         @LoginUser loginUser: User,
         @PathVariable @Positive
         postId: Long,
-    ): ApiResponse<DeleteNormalPostResponseDto> {
-        val data = postService.deleteNormalPost(loginUser.username, postId) // post 객체 반환
+    ): ApiResponse<DeletePostResponseDto> {
+        val data = postService.deletePost(loginUser.username, postId) // post 객체 반환
         return ApiResponse.success(data)
     }
 

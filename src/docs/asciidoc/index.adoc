@@ -129,23 +129,23 @@ End-Point : /api/v1/post
 ----
 
 .Sample Request
-include::{snippets}/normal-post-create/http-request.adoc[]
+include::{snippets}/free-post-create/http-request.adoc[]
 
 .Sample Response
-include::{snippets}/normal-post-create/http-response.adoc[]
+include::{snippets}/free-post-create/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 
-include::{snippets}/normal-post-create/request-headers.adoc[]
+include::{snippets}/free-post-create/request-headers.adoc[]
 
 .Request Body
-include::{snippets}/normal-post-create/request-body.adoc[]
-include::{snippets}/normal-post-create/request-fields.adoc[]
+include::{snippets}/free-post-create/request-body.adoc[]
+include::{snippets}/free-post-create/request-fields.adoc[]
 
 .Response Body
-include::{snippets}/normal-post-create/response-body.adoc[]
-include::{snippets}/normal-post-create/response-fields.adoc[]
+include::{snippets}/free-post-create/response-body.adoc[]
+include::{snippets}/free-post-create/response-fields.adoc[]
 
 ==== 글 단건 조회
 
@@ -161,27 +161,27 @@ End-Point : /api/v1/post/{postId : Long}
 .Sample Request
 로그인
 
-include::{snippets}/view-single-normal-post-login/http-request.adoc[]
+include::{snippets}/view-single-free-post-login/http-request.adoc[]
 
 비로그인
 
-include::{snippets}/view-single-normal-post-no-login/http-request.adoc[]
+include::{snippets}/view-single-free-post-no-login/http-request.adoc[]
 
 .Sample Response
 로그인
 
-include::{snippets}/view-single-normal-post-login/http-response.adoc[]
+include::{snippets}/view-single-free-post-login/http-response.adoc[]
 
 비로그인
 
-include::{snippets}/view-single-normal-post-no-login/http-response.adoc[]
+include::{snippets}/view-single-free-post-no-login/http-response.adoc[]
 
 .Request Header
 로그인
 
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 
-include::{snippets}/view-single-normal-post-login/request-headers.adoc[]
+include::{snippets}/view-single-free-post-login/request-headers.adoc[]
 
 비로그인
 
@@ -190,8 +190,8 @@ include::{snippets}/view-single-normal-post-login/request-headers.adoc[]
 .Response Body
 로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
 
-include::{snippets}/view-single-normal-post-login/response-body.adoc[]
-include::{snippets}/view-single-normal-post-login/response-fields.adoc[]
+include::{snippets}/view-single-free-post-login/response-body.adoc[]
+include::{snippets}/view-single-free-post-login/response-fields.adoc[]
 
 ==== 글 쿼리 조회
 
@@ -206,25 +206,25 @@ End-Point : /api/v1/post/query
 
 .Sample Request
 로그인
-// include::{snippets}/view-bulk-normal-post-no-login/http-request.adoc[]
+// include::{snippets}/view-bulk-free-post-no-login/http-request.adoc[]
 
 비로그인
 
-include::{snippets}/view-bulk-normal-post-no-login/http-request.adoc[]
+include::{snippets}/view-bulk-free-post-no-login/http-request.adoc[]
 
 .Sample Response
 로그인
-// include::{snippets}/view-bulk-normal-post-no-login/http-response.adoc[]
+// include::{snippets}/view-bulk-free-post-no-login/http-response.adoc[]
 
 비로그인
 
-include::{snippets}/view-bulk-normal-post-no-login/http-response.adoc[]
+include::{snippets}/view-bulk-free-post-no-login/http-response.adoc[]
 
 .Request Header
 로그인
 
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
-// include::{snippets}/view-bulk-normal-post-no-login/request-headers.adoc[]
+// include::{snippets}/view-bulk-free-post-no-login/request-headers.adoc[]
 
 비로그인
 
@@ -233,8 +233,8 @@ request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, acces
 .Response Body
 로그인과 비로그인의 경우 response body 필드의 차이는 존재하지 않습니다.
 
-include::{snippets}/view-bulk-normal-post-no-login/response-body.adoc[]
-include::{snippets}/view-bulk-normal-post-no-login/response-fields.adoc[]
+include::{snippets}/view-bulk-free-post-no-login/response-body.adoc[]
+include::{snippets}/view-bulk-free-post-no-login/response-fields.adoc[]
 
 ==== 글 수정
 
@@ -248,23 +248,23 @@ End-Point : /api/v1/post/{postId: Long}
 ----
 
 .Sample Request
-include::{snippets}/normal-post-edit/http-request.adoc[]
+include::{snippets}/free-post-edit/http-request.adoc[]
 
 .Sample Response
-include::{snippets}/normal-post-edit/http-response.adoc[]
+include::{snippets}/free-post-edit/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 
-include::{snippets}/normal-post-edit/request-headers.adoc[]
+include::{snippets}/free-post-edit/request-headers.adoc[]
 
 .Request Body
-include::{snippets}/normal-post-edit/request-body.adoc[]
-include::{snippets}/normal-post-edit/request-fields.adoc[]
+include::{snippets}/free-post-edit/request-body.adoc[]
+include::{snippets}/free-post-edit/request-fields.adoc[]
 
 .Response Body
-include::{snippets}/normal-post-edit/response-body.adoc[]
-include::{snippets}/normal-post-edit/response-fields.adoc[]
+include::{snippets}/free-post-edit/response-body.adoc[]
+include::{snippets}/free-post-edit/response-fields.adoc[]
 
 ==== 글 삭제
 
@@ -278,19 +278,19 @@ End-Point : /api/v1/post/{postId: Long}
 ----
 
 .Sample Request
-include::{snippets}/normal-post-delete/http-request.adoc[]
+include::{snippets}/free-post-delete/http-request.adoc[]
 
 .Sample Response
-include::{snippets}/normal-post-delete/http-response.adoc[]
+include::{snippets}/free-post-delete/http-response.adoc[]
 
 .Request Header
 request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
 
-include::{snippets}/normal-post-delete/request-headers.adoc[]
+include::{snippets}/free-post-delete/request-headers.adoc[]
 
 .Response Body
-include::{snippets}/normal-post-delete/response-body.adoc[]
-include::{snippets}/normal-post-delete/response-fields.adoc[]
+include::{snippets}/free-post-delete/response-body.adoc[]
+include::{snippets}/free-post-delete/response-fields.adoc[]
 
 ==== 글 신고
 

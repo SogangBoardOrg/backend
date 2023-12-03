@@ -1,13 +1,16 @@
 package com.kotlin.boardproject.domain.post.domain
 
 import com.kotlin.boardproject.domain.comment.domain.Comment
+import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
+import com.kotlin.boardproject.domain.schedule.domain.Course
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.domain.BaseEntity
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.enums.PostType
+import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.UnAuthorizedException
 import javax.persistence.Column
-import javax.persistence.DiscriminatorColumn
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -30,7 +33,6 @@ import javax.persistence.OneToMany
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "postType")
 class BasePost(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +50,14 @@ class BasePost(
     var isAnon: Boolean,
 
     var commentOn: Boolean,
+
+    val reviewScore: Int? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    val course: Course? = null,
+
+    @Enumerated(EnumType.STRING) var postType: PostType,
 
     @Enumerated(EnumType.STRING) var status: PostStatus = PostStatus.NORMAL,
 
@@ -90,5 +100,21 @@ class BasePost(
     fun deletePost(user: User) {
         this.status = PostStatus.DELETED
         // user.postList.remove(this)
+    }
+
+    fun editPost(editPostRequestDto: EditPostRequestDto) {
+        // TODO:질문 글이면 수정 불가능하게 만들기
+
+        this.title = editPostRequestDto.title
+        this.isAnon = editPostRequestDto.isAnon
+        this.commentOn = editPostRequestDto.commentOn
+        this.content = editPostRequestDto.content
+        this.photoList = editPostRequestDto.photoList
+    }
+
+    fun notEdit() {
+        require(this.postType != PostType.QUESTION) {
+            throw ConditionConflictException(ErrorCode.FORBIDDEN, "질문 글은 삭제할 수 없습니다.")
+        }
     }
 }

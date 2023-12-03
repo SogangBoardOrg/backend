@@ -197,6 +197,28 @@ class TimeTableServiceImplTest {
             ),
         )
 
+        val schedule = scheduleRepository.saveAndFlush(
+            Schedule(
+                title = "test",
+                memo = "test",
+                alphabetGrade = null,
+                credit = 3.0f,
+                isMajor = false,
+                majorDepartment = "test",
+                professor = "test",
+                location = "test",
+                course = null,
+                dayOfWeekTimePairs = listOf(
+                    DayOfWeekTimePair(
+                        dayOfWeek = DayOfWeek.MONDAY,
+                        startTime = LocalTime.of(1, 0),
+                        endTime = LocalTime.of(3, 0),
+                    ),
+                ).toMutableList(),
+                timeTable = timeTable,
+            ),
+        )
+
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.get(finalUrl, timeTable.id!!).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
@@ -215,14 +237,27 @@ class TimeTableServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("시간표 번호"),
-                        fieldWithPath("data.title").description("시간표 제목"),
-                        fieldWithPath("data.isPublic").description("공개 여부"),
-                        fieldWithPath("data.year").description("연도"),
-                        fieldWithPath("data.season").description("계절"),
-                        fieldWithPath("data.schedules").description("시간표에 등록된 일정"),
-                        fieldWithPath("data.isMain").description("메인 시간표 여부"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("시간표 ID"),
+                        fieldWithPath("data.title").type(JsonFieldType.STRING).description("시간표 제목"),
+                        fieldWithPath("data.isMain").type(JsonFieldType.BOOLEAN).description("메인 시간표 여부"),
+                        fieldWithPath("data.isPublic").type(JsonFieldType.BOOLEAN).description("공개 여부"),
+                        fieldWithPath("data.year").type(JsonFieldType.NUMBER).description("연도"),
+                        fieldWithPath("data.season").type(JsonFieldType.STRING).description("계절"),
+                        fieldWithPath("data.schedules").type(JsonFieldType.ARRAY).description("시간표에 등록된 일정"),
+                        // ScheduleResponseDto 내부 필드
+                        fieldWithPath("data.schedules[].id").type(JsonFieldType.NUMBER).description("일정 ID"),
+                        fieldWithPath("data.schedules[].title").type(JsonFieldType.STRING).description("일정 제목"),
+                        fieldWithPath("data.schedules[].memo").type(JsonFieldType.STRING).description("메모"),
+                        fieldWithPath("data.schedules[].dayOfWeekTimePairs").type(JsonFieldType.ARRAY)
+                            .description("요일 및 시간 쌍"),
+                        // DayOfWeekTimePairDto 내부 필드
+                        fieldWithPath("data.schedules[].dayOfWeekTimePairs[].dayOfWeek").type(JsonFieldType.STRING)
+                            .description("요일"),
+                        fieldWithPath("data.schedules[].dayOfWeekTimePairs[].startTime").type(JsonFieldType.STRING)
+                            .description("시작 시간"),
+                        fieldWithPath("data.schedules[].dayOfWeekTimePairs[].endTime").type(JsonFieldType.STRING)
+                            .description("종료 시간"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -270,8 +305,8 @@ class TimeTableServiceImplTest {
                         ),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("삭제된 시간표 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("삭제된 시간표 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -358,8 +393,8 @@ class TimeTableServiceImplTest {
                             .type(JsonFieldType.STRING),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("추가된 일정 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("추가된 일정 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -436,11 +471,11 @@ class TimeTableServiceImplTest {
                         ),
                     ),
                     requestFields(
-                        fieldWithPath("scheduleId").description("일정의 ID").type(JsonFieldType.NUMBER),
+                        fieldWithPath("scheduleId").type(JsonFieldType.NUMBER).description("일정의 ID"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("삭제된 일정 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("삭제된 일정 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )

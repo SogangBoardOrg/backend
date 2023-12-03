@@ -1,15 +1,15 @@
 package com.kotlin.boardproject.domain.comment
 
-import com.kotlin.boardproject.domain.comment.dto.BlackCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.BlackCommentResponseDto
-import com.kotlin.boardproject.domain.comment.dto.CancelLikeCommentResponseDto
-import com.kotlin.boardproject.domain.comment.dto.CreateCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.CreateCommentResponseDto
-import com.kotlin.boardproject.domain.comment.dto.DeleteCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.DeleteCommentResponseDto
-import com.kotlin.boardproject.domain.comment.dto.LikeCommentResponseDto
-import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.UpdateCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.black.BlackCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.black.BlackCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.delete.DeleteCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.delete.DeleteCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.like.CancelLikeCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.like.LikeCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentResponseDto
 import com.kotlin.boardproject.domain.comment.service.CommentService
 import com.kotlin.boardproject.domain.notification.service.NotificationService
 import com.kotlin.boardproject.domain.notification.service.SseService
@@ -57,8 +57,8 @@ class CommentController(
         // parentCommentId가 null이 아니면 해당 comment의 주인에게 notification을 보낸다.
         // 자신이 작성한 글이나 댓글이면 알림을 보내지 아니한다.
         val notification = notificationService.createNotification(notificationCreateDto)
-        // notification sse Emitter
-        sseService.sendEvent(loginUser.username, notification)
+        // TODO : sseEmiiter 사용하면 다시 켜기
+        // sseService.sendEvent(loginUser.username, notification)
 
         return ApiResponse.success(data)
     }

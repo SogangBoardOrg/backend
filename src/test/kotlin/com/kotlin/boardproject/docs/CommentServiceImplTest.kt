@@ -3,22 +3,21 @@ package com.kotlin.boardproject.docs
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.domain.LikeComment
-import com.kotlin.boardproject.domain.comment.dto.BlackCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.CreateCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.DeleteCommentRequestDto
-import com.kotlin.boardproject.domain.comment.dto.UpdateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.black.BlackCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.delete.DeleteCommentRequestDto
+import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.repository.BlackCommentRepository
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.comment.repository.LikeCommentRepository
 import com.kotlin.boardproject.domain.post.domain.BasePost
-import com.kotlin.boardproject.domain.post.domain.NormalPost
-import com.kotlin.boardproject.domain.post.repository.NormalPostRepository
+import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.BlackReason
-import com.kotlin.boardproject.global.enums.NormalType
 import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
 import com.kotlin.boardproject.global.util.AuthToken
@@ -69,9 +68,6 @@ class CommentServiceImplTest {
     private lateinit var userRepository: UserRepository
 
     @Autowired
-    private lateinit var normalPostRepository: NormalPostRepository
-
-    @Autowired
     private lateinit var commentRepository: CommentRepository
 
     @Autowired
@@ -82,6 +78,9 @@ class CommentServiceImplTest {
 
     @Autowired
     private lateinit var scrapPostRepository: ScrapPostRepository
+
+    @Autowired
+    private lateinit var basePostRepository: BasePostRepository
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -135,14 +134,14 @@ class CommentServiceImplTest {
             role = Role.ROLE_VERIFIED_USER.code,
         )
 
-        post = normalPostRepository.saveAndFlush(
-            NormalPost(
+        post = basePostRepository.saveAndFlush(
+            BasePost(
                 title = "title",
                 content = "content",
                 isAnon = true,
                 commentOn = true,
                 writer = postWriter,
-                normalType = NormalType.FREE,
+                postType = PostType.FREE,
                 photoList = emptyList(),
             ),
         )
@@ -188,15 +187,15 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     requestFields(
-                        fieldWithPath("content").description("글 내용"),
-                        fieldWithPath("isAnon").description("익명 여부"),
-                        fieldWithPath("postId").description("글 번호"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("postId").type(JsonFieldType.NUMBER).description("게시글 ID"),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data.postId").description("글 번호"),
-                        fieldWithPath("data.content").description("글 내용"),
-                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 ID"),
+                        fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("댓글 내용"),
                     ),
                 ),
             )
@@ -258,15 +257,15 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     requestFields(
-                        fieldWithPath("content").description("글 내용"),
-                        fieldWithPath("isAnon").description("익명 여부"),
-                        fieldWithPath("postId").description("글 번호"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("postId").type(JsonFieldType.NUMBER).description("게시글 ID"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("댓글 번호"),
-                        fieldWithPath("data.postId").description("글 번호"),
-                        fieldWithPath("data.content").description("글 내용"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 ID"),
+                        fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("댓글 내용"),
                     ),
                 ),
             )
@@ -342,15 +341,15 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 쓰는 유저를 위해 필요함"),
                     ),
                     requestFields(
-                        fieldWithPath("content").description("글 내용"),
-                        fieldWithPath("isAnon").description("익명 여부"),
-                        fieldWithPath("postId").description("글 번호"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("postId").type(JsonFieldType.NUMBER).description("게시글 ID"),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data.postId").description("글 번호"),
-                        fieldWithPath("data.content").description("글 내용"),
-                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 ID"),
+                        fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("게시글 ID"),
+                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("댓글 내용"),
                     ),
                 ),
             )
@@ -408,11 +407,11 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
                     requestFields(
-                        fieldWithPath("postId").description("지우려는 글 번호"),
+                        fieldWithPath("postId").type(JsonFieldType.NUMBER).description("지우려는 글 번호"),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data.id").description("댓글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 번호"),
                     ),
                 ),
             )
@@ -473,14 +472,14 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 삭제하는 유저를 식별하기 위해 필요함"),
                     ),
                     requestFields(
-                        fieldWithPath("content").description("수정할 댓글 내용"),
-                        fieldWithPath("isAnon").description("익명 여부"),
-                        fieldWithPath("postId").description("수정하는 글의 번호"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 댓글 내용"),
+                        fieldWithPath("isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
+                        fieldWithPath("postId").type(JsonFieldType.NUMBER).description("수정하는 글의 번호"),
                     ),
                     responseFields(
-                        fieldWithPath("status").description("성공 여부"),
-                        fieldWithPath("data.id").description("댓글 번호"),
-                        fieldWithPath("data.content").description("수정된 댓글 내용"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("수정된 댓글 내용"),
                     ),
                 ),
             )
@@ -527,8 +526,8 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 추천을 하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("댓글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -584,8 +583,8 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 추천을 취소하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("게시글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
@@ -636,11 +635,11 @@ class CommentServiceImplTest {
                             .description("인증을 위한 Access 토큰, 댓글을 신고하는 유저를 식별하기 위해서 반드시 필요함"),
                     ),
                     requestFields(
-                        fieldWithPath("blackReason").description("신고 사유"),
+                        fieldWithPath("blackReason").type(JsonFieldType.STRING).description("신고 사유"),
                     ),
                     responseFields(
-                        fieldWithPath("data.id").description("댓글 번호"),
-                        fieldWithPath("status").description("성공 여부"),
+                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("성공 여부"),
                     ),
                 ),
             )
