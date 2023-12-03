@@ -172,7 +172,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
-                    "normal-post-create",
+                    "free-post-create",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
@@ -250,7 +250,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
-                    "normal-post-edit",
+                    "free-post-edit",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
@@ -308,7 +308,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
-                    "normal-post-delete",
+                    "free-post-delete",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
@@ -694,7 +694,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("success"))).andDo(
                 document(
-                    "view-single-normal-post-login",
+                    "view-single-free-post-login",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
@@ -800,7 +800,7 @@ class PostServiceImplTest {
             .andExpect(jsonPath("$.data.isWriter", false).exists())
             .andDo(
                 document(
-                    "view-single-normal-post-no-login",
+                    "view-single-free-post-no-login",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
@@ -898,7 +898,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 document(
-                    "view-comments-normal-post",
+                    "view-comments-free-post",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     responseFields(
@@ -990,7 +990,7 @@ class PostServiceImplTest {
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 document(
-                    "view-bulk-normal-post-no-login",
+                    "view-bulk-free-post-no-login",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestParameters(
