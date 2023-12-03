@@ -3,9 +3,9 @@ package com.kotlin.boardproject.domain.post.repository
 import com.kotlin.boardproject.domain.post.domain.QBasePost.basePost
 import com.kotlin.boardproject.domain.post.domain.QLikePost
 import com.kotlin.boardproject.domain.post.domain.QScrapPost
-import com.kotlin.boardproject.domain.post.dto.QPostByQueryElementDto
 import com.kotlin.boardproject.domain.post.dto.read.PostByQueryElementDto
 import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
+import com.kotlin.boardproject.domain.post.dto.read.QPostByQueryElementDto
 import com.kotlin.boardproject.domain.user.domain.QUser
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.global.enums.PostStatus

@@ -940,7 +940,7 @@ class PostServiceImplTest {
         val title = ""
         val content = ""
         val writerName = "test"
-        val postType = "NORMAL"
+        val postType = PostType.FREE
         val page = 0
         val size = 7
         val sort = ""
