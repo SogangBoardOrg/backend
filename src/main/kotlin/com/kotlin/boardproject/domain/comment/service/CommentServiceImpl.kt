@@ -5,11 +5,11 @@ import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.domain.LikeComment
 import com.kotlin.boardproject.domain.comment.dto.black.BlackCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.black.BlackCommentResponseDto
-import com.kotlin.boardproject.domain.comment.dto.like.CancelLikeCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.create.CreateCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.delete.DeleteCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.delete.DeleteCommentResponseDto
+import com.kotlin.boardproject.domain.comment.dto.like.CancelLikeCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.like.LikeCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.read.MyCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentRequestDto
