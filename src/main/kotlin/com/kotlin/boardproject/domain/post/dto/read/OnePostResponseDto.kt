@@ -37,7 +37,7 @@ data class OnePostResponseDto(
                 commentOn = post.commentOn,
                 title = post.title,
                 isAnon = post.isAnon,
-                content = post.title,
+                content = post.content,
                 isLiked = isLiked(post.likeList.map { it.user }, searchUser),
                 isWriter = isWriter(post, searchUser),
                 isScrapped = isScrapped(post, searchUser),
