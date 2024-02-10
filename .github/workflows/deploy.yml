@@ -39,7 +39,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PEM_KEY }}
           source: "build/libs/*.jar"
-          target: "/home/ubuntu/backend"
+          target: "/home/ubuntu"
           strip_components: 2
 
       - name: stop nohup and restart nohup
