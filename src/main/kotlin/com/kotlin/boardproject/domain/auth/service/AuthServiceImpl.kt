@@ -5,6 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.kotlin.boardproject.domain.auth.dto.TokenDto
+import com.kotlin.boardproject.domain.auth.dto.UserInfoDtoWithProfile
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.dto.UserInfoDto
 import com.kotlin.boardproject.domain.user.dto.UserLoginMobileRequestDto
@@ -116,11 +117,11 @@ class AuthServiceImpl(
         return TokenDto(newAccessToken, null)
     }
 
-    override fun getUserInfo(email: String): UserInfoDto {
+    override fun getUserInfo(email: String): UserInfoDtoWithProfile {
         val findUser = userRepository.findByEmail(email)
             ?: throw EntityNotFoundException("$email 을 가진 유저는 존재하지 않습니다.")
 
-        return UserInfoDto(findUser)
+        return UserInfoDtoWithProfile(findUser)
     }
 
     private fun createTokens(findUser: User, email: String): Pair<String, String> {

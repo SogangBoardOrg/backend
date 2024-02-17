@@ -1,5 +1,6 @@
 package com.kotlin.boardproject.domain.my
 
+import com.kotlin.boardproject.domain.auth.dto.UserInfoDtoWithProfile
 import com.kotlin.boardproject.domain.auth.service.AuthService
 import com.kotlin.boardproject.domain.comment.dto.read.MyCommentResponseDto
 import com.kotlin.boardproject.domain.comment.service.CommentService
@@ -8,7 +9,6 @@ import com.kotlin.boardproject.domain.post.dto.scrap.MyScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.service.PostService
 import com.kotlin.boardproject.domain.schedule.dto.MyTimeTableListResponseDto
 import com.kotlin.boardproject.domain.schedule.service.TimeTableService
-import com.kotlin.boardproject.domain.user.dto.UserInfoDto
 import com.kotlin.boardproject.global.annotation.LoginUser
 import com.kotlin.boardproject.global.dto.ApiResponse
 import org.springframework.data.domain.Pageable
@@ -60,7 +60,7 @@ class MyController(
     @GetMapping("/info")
     fun myInfo(
         @LoginUser loginUser: User,
-    ): ApiResponse<UserInfoDto> {
+    ): ApiResponse<UserInfoDtoWithProfile> {
         val data = authService.getUserInfo(loginUser.username)
 
         return ApiResponse.success(data)
