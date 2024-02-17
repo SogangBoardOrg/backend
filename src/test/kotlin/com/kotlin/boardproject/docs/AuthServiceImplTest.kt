@@ -225,10 +225,8 @@ class AuthServiceImplTest {
                         fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("유저 닉네임"),
                         fieldWithPath("data.email").type(JsonFieldType.STRING).description("유저 이메일"),
                         fieldWithPath("data.role").type(JsonFieldType.STRING).description("유저 역할"),
-                        fieldWithPath("data.accessToken").type(JsonFieldType.STRING).optional()
-                            .description("안쓰는 필드"),
-                        fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).optional()
-                            .description("안쓰는 필드"),
+                        fieldWithPath("data.profileImageUrl").type(JsonFieldType.STRING).description("유저 프로필 이미지 url")
+                            .optional(),
                     ),
                 ),
             )
