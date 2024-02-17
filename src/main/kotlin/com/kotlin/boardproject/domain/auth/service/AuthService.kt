@@ -1,6 +1,7 @@
 package com.kotlin.boardproject.domain.auth.service
 
 import com.kotlin.boardproject.domain.auth.dto.TokenDto
+import com.kotlin.boardproject.domain.auth.dto.UserInfoDtoWithProfile
 import com.kotlin.boardproject.domain.user.dto.UserInfoDto
 import com.kotlin.boardproject.domain.user.dto.UserLoginMobileRequestDto
 import com.kotlin.boardproject.domain.user.dto.UserLoginRequestDto
@@ -16,7 +17,7 @@ interface AuthService {
 
     fun refreshUserToken(request: HttpServletRequest): TokenDto
 
-    fun getUserInfo(email: String): UserInfoDto
+    fun getUserInfo(email: String): UserInfoDtoWithProfile
 
     fun checkDuplicateEmail(email: String): Boolean
 
