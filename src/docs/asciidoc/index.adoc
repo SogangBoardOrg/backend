@@ -1012,3 +1012,64 @@ include::{snippets}/view-my-comment/request-headers.adoc[]
 include::{snippets}/view-my-comment/response-body.adoc[]
 include::{snippets}/view-my-comment/response-fields.adoc[]
 
+=== USER API ( /api/v1/user )
+
+==== 유저 프로필 이미지 변경
+
+.description
+[source]
+----
+유저 프로필 이미지 변경을 위한 API입니다.
+
+HTTP Method : PUT
+End-Point : /api/v1/user/profile-image
+----
+
+.Sample Request
+include::{snippets}/change-profile-image/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/change-profile-image/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/change-profile-image/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/change-profile-image/request-body.adoc[]
+include::{snippets}/change-profile-image/request-fields.adoc[]
+
+.Response Body
+include::{snippets}/change-profile-image/response-body.adoc[]
+include::{snippets}/change-profile-image/response-fields.adoc[]
+
+==== 유저 닉네임 변경
+
+.description
+[source]
+----
+유저 닉네임 변경을 위한 API입니다.
+
+HTTP Method : PUT
+End-Point : /api/v1/user/nickname
+----
+
+.Sample Request
+include::{snippets}/change-nickname/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/change-nickname/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/change-nickname/request-headers.adoc[]
+
+.Request Body
+include::{snippets}/change-nickname/request-body.adoc[]
+include::{snippets}/change-nickname/request-fields.adoc[]
+
+.Response Body
+include::{snippets}/change-nickname/response-body.adoc[]
+include::{snippets}/change-nickname/response-fields.adoc[]
