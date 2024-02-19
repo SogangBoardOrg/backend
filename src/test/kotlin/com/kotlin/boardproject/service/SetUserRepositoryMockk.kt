@@ -24,4 +24,9 @@ fun setUserRepository(
     every { userRepository.findByEmailFetchScrapList(userTwo.email) } returns userTwo
     every { userRepository.findByEmailFetchScrapList(userThree.email) } returns userThree
     every { userRepository.findByEmailFetchScrapList(nonExistUserEmail) } returns null
+
+    every { userRepository.existsByNickname(userOne.nickname) } returns true
+    every { userRepository.existsByNickname(userTwo.nickname) } returns true
+    every { userRepository.existsByNickname(userThree.nickname) } returns true
+    every { userRepository.existsByNickname(newtNickname) } returns false
 }

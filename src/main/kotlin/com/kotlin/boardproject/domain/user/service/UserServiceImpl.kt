@@ -16,9 +16,7 @@ class UserServiceImpl(
     override fun changeProfileImage(userEmail: String, profileImageUrl: String) {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("해당하는 유저가 없습니다.")
-
         user.profileImageUrl = profileImageUrl
-        userRepository.save(user)
     }
 
     @Transactional
@@ -33,6 +31,5 @@ class UserServiceImpl(
         }
 
         user.nickname = nickname
-        userRepository.save(user)
     }
 }
