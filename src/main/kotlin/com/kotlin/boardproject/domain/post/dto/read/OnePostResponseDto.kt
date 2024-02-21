@@ -13,6 +13,7 @@ data class OnePostResponseDto(
     val title: String,
     val content: String,
     val writerName: String,
+    val writerProfileImageUrl: String?,
     val isAnon: Boolean,
     val isLiked: Boolean?,
     val isScrapped: Boolean?,
@@ -42,6 +43,7 @@ data class OnePostResponseDto(
                 isWriter = isWriter(post, searchUser),
                 isScrapped = isScrapped(post, searchUser),
                 writerName = postWriterNameGenerator(post),
+                writerProfileImageUrl = postWriterProfileImageGenerator(post),
                 commentCnt = if (!post.commentOn) 0 else commentList.size,
                 createdAt = post.createdAt!!,
                 updatedAt = post.updatedAt!!,
@@ -63,5 +65,8 @@ data class OnePostResponseDto(
 
         private fun postWriterNameGenerator(post: BasePost): String =
             if (post.isAnon) "ANON" else post.writer.nickname
+
+        private fun postWriterProfileImageGenerator(post: BasePost): String? =
+            if (post.isAnon) null else post.writer.profileImageUrl
     }
 }

@@ -14,6 +14,7 @@ data class CommentDto(
     val likeCnt: Int,
     val content: String,
     val writerName: String,
+    val writerProfileImageUrl: String?,
     val isAnon: Boolean,
     val isLiked: Boolean,
     val isWriter: Boolean, // 로그인 한 사람이 댓글 작성자
@@ -37,6 +38,7 @@ data class CommentDto(
                 isWriter = isWriter(comment, searchUser),
                 isPostWriter = isPostWriter(comment, post),
                 writerName = commentWriterNameGenerator(comment, post, writerMap),
+                writerProfileImageUrl = commentWriterProfileImageUrl(comment, post),
                 createdAt = comment.createdAt!!,
                 updatedAt = comment.updatedAt!!,
                 ancestorId = comment.ancestor?.id,
@@ -46,17 +48,22 @@ data class CommentDto(
             )
         }
 
+        private fun commentWriterProfileImageUrl(comment: Comment, post: BasePost): String? =
+            when {
+                comment.writer == post.writer && !post.isAnon -> post.writer.profileImageUrl
+                comment.isAnon -> null
+                else -> comment.writer.profileImageUrl
+            }
+
         private fun commentWriterNameGenerator(
             comment: Comment,
             post: BasePost,
             writerMap: Map<User, Int>,
         ): String =
-            if (comment.writer == post.writer) {
-                "글쓴이"
-            } else if (comment.isAnon) {
-                "익명 ${writerMap[comment.writer]}"
-            } else {
-                comment.writer.nickname
+            when {
+                comment.writer == post.writer -> "글쓴이"
+                comment.isAnon -> "익명 ${writerMap[comment.writer]}"
+                else -> comment.writer.nickname
             }
 
         private fun isPostWriter(comment: Comment, post: BasePost): Boolean =
