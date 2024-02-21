@@ -84,6 +84,10 @@ class BasePostRepositoryCustomImpl(
                         .`when`(basePost.isAnon.eq(false))
                         .then(basePost.writer.nickname)
                         .otherwise("ANON"),
+                    CaseBuilder()
+                        .`when`(basePost.isAnon.eq(false))
+                        .then(basePost.writer.profileImageUrl)
+                        .otherwise(Expressions.nullExpression()),
                     basePost.isAnon,
                     CaseBuilder()
                         .`when`(basePost.id.`in`(likedIds))

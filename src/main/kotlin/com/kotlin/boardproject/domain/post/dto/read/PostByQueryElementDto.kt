@@ -10,6 +10,7 @@ data class PostByQueryElementDto @QueryProjection constructor(
     val title: String,
     val content: String,
     val writerName: String,
+    val writerProfileImageUrl: String?,
     val isAnon: Boolean,
     val isLiked: Boolean,
     val isScrapped: Boolean,
