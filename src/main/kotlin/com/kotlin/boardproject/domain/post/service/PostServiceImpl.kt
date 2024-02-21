@@ -57,6 +57,7 @@ class PostServiceImpl(
     ): PostByQueryResponseDto {
         val data = basePostRepository.findPostByQuery(
             postByQueryRequestDto = postByQueryRequestDto,
+            postStatus = PostStatus.NORMAL,
             userEmail = userEmail,
             pageable = pageable,
         )

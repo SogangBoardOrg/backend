@@ -22,6 +22,7 @@ class BasePostRepositoryCustomImpl(
 ) : BasePostRepositoryCustom {
     override fun findPostByQuery(
         postByQueryRequestDto: PostByQueryRequestDto,
+        postStatus: PostStatus?,
         userEmail: String?,
         pageable: Pageable,
     ): Page<PostByQueryElementDto> {
@@ -40,7 +41,7 @@ class BasePostRepositoryCustomImpl(
                 contentEq(postByQueryRequestDto.content),
                 postTypeEq(postByQueryRequestDto.postType),
                 courseIdEq(postByQueryRequestDto.courseId),
-                postStatus(PostStatus.NORMAL),
+                postStatus(postStatus),
             )
             .leftJoin(basePost.writer)
             .leftJoin(basePost.course)
@@ -63,7 +64,7 @@ class BasePostRepositoryCustomImpl(
                 contentEq(postByQueryRequestDto.content),
                 postTypeEq(postByQueryRequestDto.postType),
                 courseIdEq(postByQueryRequestDto.courseId),
-                postStatus(PostStatus.NORMAL),
+                postStatus(postStatus),
             )
             .leftJoin(basePost.writer)
             .leftJoin(basePost.course)
@@ -180,8 +181,12 @@ class BasePostRepositoryCustomImpl(
             basePost.writer.eq(searchUser)
         }
 
-    private fun postStatus(status: PostStatus) =
-        basePost.status.eq(status)
+    private fun postStatus(status: PostStatus?) =
+        if (status == null) {
+            null
+        } else {
+            basePost.status.eq(status)
+        }
 
     private fun postTypeEq(postType: PostType?) =
         if (postType == null) {
