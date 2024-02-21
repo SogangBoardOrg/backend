@@ -706,6 +706,9 @@ class PostServiceImplTest {
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
                         fieldWithPath("data.writerName").type(JsonFieldType.STRING).description("게시글 작성자 이름"),
+                        fieldWithPath("data.writerProfileImageUrl").type(JsonFieldType.STRING).optional().description(
+                            "게시글 작성자 프로필 이미지 url",
+                        ),
                         fieldWithPath("data.isAnon").type(JsonFieldType.BOOLEAN).description("게시글 작성자 익명 여부"),
                         fieldWithPath("data.isLiked").type(JsonFieldType.BOOLEAN).optional().description("게시글 좋아요 여부"),
                         fieldWithPath("data.isScrapped").type(JsonFieldType.BOOLEAN).optional()
@@ -726,6 +729,8 @@ class PostServiceImplTest {
                             .description("댓글 작성자 익명 여부"),
                         fieldWithPath("data.commentList[].writerName").type(JsonFieldType.STRING)
                             .description("댓글 작성인 이름"),
+                        fieldWithPath("data.commentList[].writerProfileImageUrl").type(JsonFieldType.STRING).optional()
+                            .description("댓글 작성인 프로필 이미지 url"),
                         fieldWithPath("data.commentList[].isWriter").type(JsonFieldType.BOOLEAN)
                             .description("댓글이 로그인 한 사용자에 의해 작성됨"),
                         fieldWithPath("data.commentList[].isPostWriter").type(JsonFieldType.BOOLEAN)
@@ -810,6 +815,9 @@ class PostServiceImplTest {
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
                         fieldWithPath("data.writerName").type(JsonFieldType.STRING).description("게시글 작성자 이름"),
+                        fieldWithPath("data.writerProfileImageUrl").type(JsonFieldType.STRING).optional().description(
+                            "게시글 작성자 프로필 이미지 url",
+                        ),
                         fieldWithPath("data.isAnon").type(JsonFieldType.BOOLEAN).description("게시글 작성자 익명 여부"),
                         fieldWithPath("data.isLiked").type(JsonFieldType.BOOLEAN).optional()
                             .description("게시글 좋아요 여부"),
@@ -833,6 +841,8 @@ class PostServiceImplTest {
                             .description("댓글 작성자 익명 여부"),
                         fieldWithPath("data.commentList[].writerName").type(JsonFieldType.STRING)
                             .description("댓글 작성인 이름"),
+                        fieldWithPath("data.commentList[].writerProfileImageUrl").type(JsonFieldType.STRING).optional()
+                            .description("댓글 작성인 프로필 이미지 url"),
                         fieldWithPath("data.commentList[].isWriter").type(JsonFieldType.BOOLEAN)
                             .description("댓글이 로그인 한 사용자에 의해 작성됨"),
                         fieldWithPath("data.commentList[].isPostWriter").type(JsonFieldType.BOOLEAN)
@@ -918,6 +928,8 @@ class PostServiceImplTest {
                             .description("댓글 작성자 익명 여부"),
                         fieldWithPath("data.commentList.[].writerName").type(JsonFieldType.STRING)
                             .description("댓글 작성인 이름"),
+                        fieldWithPath("data.commentList.[].writerProfileImageUrl").type(JsonFieldType.STRING).optional()
+                            .description("댓글 작성자 프로필 이미지 url"),
                         fieldWithPath("data.commentList.[].isWriter").type(JsonFieldType.BOOLEAN)
                             .description("댓글이 로그인 한 작성자가 작성했는지의 여부"),
                         fieldWithPath("data.commentList.[].isPostWriter").type(JsonFieldType.BOOLEAN)
@@ -1019,6 +1031,8 @@ class PostServiceImplTest {
                         fieldWithPath("data.contents.[].title").type(JsonFieldType.STRING).description("글 제목"),
                         fieldWithPath("data.contents.[].content").type(JsonFieldType.STRING).description("글 제목"),
                         fieldWithPath("data.contents.[].writerName").type(JsonFieldType.STRING).description("글쓴이"),
+                        fieldWithPath("data.contents.[].writerProfileImageUrl").type(JsonFieldType.STRING).optional()
+                            .description("글쓴이 프로필 이미지 url"),
                         fieldWithPath("data.contents.[].isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
                         fieldWithPath("data.contents.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
                         fieldWithPath("data.contents.[].isScrapped").type(JsonFieldType.BOOLEAN).description("스크랩 여부"),

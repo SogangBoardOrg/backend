@@ -9,5 +9,5 @@ data class PostByQueryRequestDto(
     val content: String?,
     val writerName: String?,
     val courseId: Long?,
-    val postType: PostType,
+    val postType: PostType?,
 )

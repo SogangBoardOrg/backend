@@ -60,7 +60,7 @@ class PostController(
         @RequestParam("content", required = false) content: String?,
         @RequestParam("writer-name", required = false) writerName: String?,
         @RequestParam("course-id", required = false) courseId: Long?,
-        @RequestParam("post-type", required = true) postType: PostType,
+        @RequestParam("post-type", required = false) postType: PostType?,
         pageable: Pageable,
         principal: Principal?,
     ): ApiResponse<PostByQueryResponseDto> {
