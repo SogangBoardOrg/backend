@@ -705,6 +705,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                        fieldWithPath("data.commentOn").type(JsonFieldType.BOOLEAN).description("게시글 댓글 작성 가능 여부"),
                         fieldWithPath("data.writerName").type(JsonFieldType.STRING).description("게시글 작성자 이름"),
                         fieldWithPath("data.writerProfileImageUrl").type(JsonFieldType.STRING).optional().description(
                             "게시글 작성자 프로필 이미지 url",
@@ -715,7 +716,7 @@ class PostServiceImplTest {
                             .description("게시글 스크랩 여부"),
                         fieldWithPath("data.isWriter").type(JsonFieldType.BOOLEAN).optional().description("게시글 작성자 여부"),
                         fieldWithPath("data.commentCnt").type(JsonFieldType.NUMBER).description("댓글 숫자"),
-                        fieldWithPath("data.commentOn").type(JsonFieldType.BOOLEAN).description("게시글 댓글 작성 가능 여부"),
+                        fieldWithPath("data.likeCnt").type(JsonFieldType.NUMBER).description("좋아요 숫자"),
                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("게시글 작성 시간"),
                         fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").type(JsonFieldType.ARRAY).description("댓글 내용"),
@@ -814,6 +815,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("게시글 ID"),
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("게시글 제목"),
                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                        fieldWithPath("data.commentOn").type(JsonFieldType.BOOLEAN).description("게시글 댓글 작성 가능 여부"),
                         fieldWithPath("data.writerName").type(JsonFieldType.STRING).description("게시글 작성자 이름"),
                         fieldWithPath("data.writerProfileImageUrl").type(JsonFieldType.STRING).optional().description(
                             "게시글 작성자 프로필 이미지 url",
@@ -826,7 +828,7 @@ class PostServiceImplTest {
                         fieldWithPath("data.isWriter").type(JsonFieldType.BOOLEAN).optional()
                             .description("게시글 작성자 여부"),
                         fieldWithPath("data.commentCnt").type(JsonFieldType.NUMBER).description("댓글 숫자"),
-                        fieldWithPath("data.commentOn").type(JsonFieldType.BOOLEAN).description("게시글 댓글 작성 가능 여부"),
+                        fieldWithPath("data.likeCnt").type(JsonFieldType.NUMBER).description("좋아요 숫자"),
                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("게시글 작성 시간"),
                         fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("게시글 최종 수정 시간"),
                         fieldWithPath("data.commentList").type(JsonFieldType.ARRAY).description("댓글 내용"),
