@@ -104,7 +104,7 @@ class MyDataInit(
             majorDepartment = "majorDepartment_1",
             professor = "professor_1",
             locaton = "location_1",
-            courseCode = "courseCode_1",
+            courseCode = "courseCode_2",
             yearAndSeason = YearAndSeason(
                 year = 2021,
                 season = Seasons.SPRING,
@@ -129,7 +129,7 @@ class MyDataInit(
             majorDepartment = "majorDepartment_1",
             professor = "professor_1",
             locaton = "location_1",
-            courseCode = "courseCode_1",
+            courseCode = "courseCode_3",
             yearAndSeason = YearAndSeason(
                 year = 2023,
                 season = Seasons.SPRING,

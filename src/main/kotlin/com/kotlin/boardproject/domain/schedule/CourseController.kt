@@ -28,6 +28,7 @@ class CourseController(
         @RequestParam("year", required = false) @Positive year: Int?,
         @RequestParam("season", required = false) season: Seasons?,
         @RequestParam("professor", required = false) professor: String?,
+        @RequestParam("course-code", required = false) courseCode: String?,
         pageable: Pageable,
     ): ApiResponse<CourseListByQueryDto> {
         val data = courseService.getCourseListByQuery(
@@ -36,6 +37,7 @@ class CourseController(
             professor = professor,
             year = year,
             season = season,
+            courseCode = courseCode,
             pageable = pageable,
         )
         return ApiResponse.success(data)

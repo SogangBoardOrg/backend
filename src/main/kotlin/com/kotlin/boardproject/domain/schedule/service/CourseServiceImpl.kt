@@ -18,6 +18,7 @@ class CourseServiceImpl(
         professor: String?,
         year: Int?,
         season: Seasons?,
+        courseCode: String?,
         pageable: Pageable,
     ): CourseListByQueryDto {
         val courses = courseRepository.findByQuery(
@@ -26,6 +27,7 @@ class CourseServiceImpl(
             professor,
             year,
             season,
+            courseCode,
             pageable,
         )
 
