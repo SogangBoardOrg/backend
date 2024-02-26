@@ -12,6 +12,7 @@ interface CourseRepositoryCustom {
         professor: String?,
         year: Int?,
         seasons: Seasons?,
+        courseCode: String?,
         pageable: Pageable,
     ): Page<Course>
 }

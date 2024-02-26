@@ -17,6 +17,7 @@ class CourseRepositoryCustomImpl(
         professor: String?,
         year: Int?,
         seasons: Seasons?,
+        courseCode: String?,
         pageable: Pageable,
     ): Page<Course> {
         val dataIds = queryFactory
@@ -28,6 +29,7 @@ class CourseRepositoryCustomImpl(
                 majorEq(major),
                 professorEq(professor),
                 yearEq(year),
+                courseCodeEq(courseCode),
                 seasonsEq(seasons),
             )
             .offset(pageable.offset)
@@ -44,6 +46,7 @@ class CourseRepositoryCustomImpl(
                 majorEq(major),
                 professorEq(professor),
                 yearEq(year),
+                courseCodeEq(courseCode),
                 seasonsEq(seasons),
             )
             .fetch()
@@ -61,6 +64,13 @@ class CourseRepositoryCustomImpl(
 
         return PageImpl(data.toList(), pageable, totalCnt)
     }
+
+    private fun courseCodeEq(courseCode: String?) =
+        if (courseCode.isNullOrEmpty()) {
+            null
+        } else {
+            course.courseCode.eq(courseCode)
+        }
 
     private fun titleContains(title: String?) =
         if (title.isNullOrEmpty()) {

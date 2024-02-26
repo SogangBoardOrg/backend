@@ -6,6 +6,7 @@ import com.kotlin.boardproject.global.enums.Seasons
 data class CourseResponseDto(
     val id: Long,
     val title: String,
+    val courseCode: String,
     val dayOfWeekTimePairs: List<DayOfWeekTimePairDto>,
     val credit: Float,
     val majorDepartment: String,
@@ -21,6 +22,7 @@ data class CourseResponseDto(
             return CourseResponseDto(
                 id = course.id!!,
                 title = course.title,
+                courseCode = course.courseCode,
                 dayOfWeekTimePairs = course.dayOfWeekTimePairs.map { dayOfWeekTimePair ->
                     DayOfWeekTimePairDto(
                         dayOfWeek = dayOfWeekTimePair.dayOfWeek,
