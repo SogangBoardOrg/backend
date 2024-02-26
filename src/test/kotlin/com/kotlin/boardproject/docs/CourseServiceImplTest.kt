@@ -209,6 +209,7 @@ class CourseServiceImplTest {
                     preprocessResponse(prettyPrint()),
                     requestParameters(
                         parameterWithName("title").description("강의 제목").optional(),
+                        parameterWithName("course-code").description("강의 코드").optional(),
                         parameterWithName("major").description("강의 학과").optional(),
                         parameterWithName("year").description("강의 연도").optional(),
                         parameterWithName("season").description("강의 계절").optional(),
@@ -223,6 +224,7 @@ class CourseServiceImplTest {
                         fieldWithPath("data.contents[]").type(JsonFieldType.ARRAY).description("강의 목록을 나타내는 배열"),
                         fieldWithPath("data.contents[].id").type(JsonFieldType.NUMBER).description("강의의 고유 식별자"),
                         fieldWithPath("data.contents[].title").type(JsonFieldType.STRING).description("강의의 제목"),
+                        fieldWithPath("data.contents[].courseCode").type(JsonFieldType.STRING).description("강의의 코드"),
                         fieldWithPath("data.contents[].dayOfWeekTimePairs").type(JsonFieldType.ARRAY)
                             .description("강의가 있는 요일과 시간의 쌍 목록"),
                         fieldWithPath("data.contents[].dayOfWeekTimePairs[].dayOfWeek").type(JsonFieldType.STRING)
@@ -281,6 +283,7 @@ class CourseServiceImplTest {
                             .description("응답 상태를 나타내며, 성공, 실패, 오류 등의 값을 가질 수 있습니다."),
                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("강의의 고유 식별자"),
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("강의의 제목"),
+                        fieldWithPath("data.courseCode").type(JsonFieldType.STRING).description("강의의 코드"),
                         fieldWithPath("data.dayOfWeekTimePairs").type(JsonFieldType.ARRAY)
                             .description("강의가 있는 요일과 시간의 쌍 목록"),
                         fieldWithPath("data.dayOfWeekTimePairs[].dayOfWeek").type(JsonFieldType.STRING)
