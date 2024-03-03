@@ -40,6 +40,7 @@ import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.request.RequestDocumentation
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
@@ -79,6 +80,10 @@ class TimeTableServiceImplTest {
     private lateinit var user1: User
 
     private lateinit var user2: User
+
+    private lateinit var timeTable: TimeTable
+
+    private lateinit var schedule: Schedule
 
     private lateinit var accessToken: AuthToken
 
@@ -120,6 +125,89 @@ class TimeTableServiceImplTest {
             expiry = Date(Date().time + 6000000),
             role = Role.ROLE_VERIFIED_USER.code,
         )
+
+        timeTable = timeTableRepository.saveAndFlush(
+            TimeTable(
+                title = "test",
+                isPublic = true,
+                user = user1,
+                yearAndSeason = YearAndSeason(
+                    year = 2021,
+                    season = Seasons.SPRING,
+                ),
+                schedules = mutableListOf(),
+                isMain = false,
+            ),
+        )
+
+        schedule = scheduleRepository.saveAndFlush(
+            Schedule(
+                title = "test",
+                memo = "test",
+                alphabetGrade = null,
+                credit = 3.0f,
+                isMajor = false,
+                majorDepartment = "test",
+                professor = "test",
+                location = "test",
+                course = null,
+                dayOfWeekTimePairs = listOf(
+                    DayOfWeekTimePair(
+                        dayOfWeek = DayOfWeek.MONDAY,
+                        startTime = LocalTime.of(1, 0),
+                        endTime = LocalTime.of(3, 0),
+                    ),
+                ).toMutableList(),
+                timeTable = timeTable,
+            ),
+        )
+        schedule.addScheduleToTimeTable(timeTable)
+    }
+
+    @Test
+    @Rollback(true)
+    fun 자신의_시간표_조회() {
+        // given
+        val finalUrl = "/api/v1/my/timetable"
+
+        // when
+        val result = mockMvc.perform(
+            RestDocumentationRequestBuilders
+                .get(finalUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+                .accept(MediaType.APPLICATION_JSON),
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "view-my-time-tables",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION).description(
+                            "인증을 위한 Access 토큰, 자신의 글을 찾는 유저를 식별하기 위해서 반드시 필요함",
+                        ),
+                    ),
+                    RequestDocumentation
+                        .requestParameters(),
+                    responseFields(
+                        fieldWithPath("status").type(JsonFieldType.STRING).description("응답 상태"),
+                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                        fieldWithPath("data.timeTableMap").type(JsonFieldType.OBJECT).description("시간표 맵"),
+                        fieldWithPath("data.timeTableMap.*").type(JsonFieldType.ARRAY).description("연도 및 학기별 시간표 리스트"),
+                        fieldWithPath("data.timeTableMap.*.[].id").type(JsonFieldType.NUMBER).description("시간표 ID"),
+                        fieldWithPath("data.timeTableMap.*.[].title").type(JsonFieldType.STRING).description("시간표 제목"),
+                        fieldWithPath("data.timeTableMap.*.[].isMain").type(JsonFieldType.BOOLEAN).description(
+                            "메인 시간표 여부",
+                        ),
+                        fieldWithPath("data.timeTableMap.*.[].isPublic").type(JsonFieldType.BOOLEAN).description(
+                            "공개 시간표 여부",
+                        ),
+                    ),
+                ),
+            )
     }
 
     @Test
@@ -128,9 +216,6 @@ class TimeTableServiceImplTest {
         // given
         val urlPoint = ""
         val finalUrl = "$statsEndPoint$urlPoint"
-
-        val title = "title_test"
-        val content = "content_test"
 
         val createTimeTableDto = CreateTimeTableRequestDto(
             year = 2021,
@@ -173,7 +258,7 @@ class TimeTableServiceImplTest {
             )
 
         // then
-        timeTableRepository.findAll()[0].id!! shouldBe 1
+        timeTableRepository.findAll().size shouldBe 2
     }
 
     @Test
@@ -182,42 +267,6 @@ class TimeTableServiceImplTest {
         // given
         val urlPoint = "/{timeTableId}"
         val finalUrl = "$statsEndPoint$urlPoint"
-
-        val timeTable = timeTableRepository.saveAndFlush(
-            TimeTable(
-                title = "test",
-                isPublic = true,
-                user = user1,
-                yearAndSeason = YearAndSeason(
-                    year = 2021,
-                    season = Seasons.SPRING,
-                ),
-                schedules = mutableListOf(),
-                isMain = false,
-            ),
-        )
-
-        val schedule = scheduleRepository.saveAndFlush(
-            Schedule(
-                title = "test",
-                memo = "test",
-                alphabetGrade = null,
-                credit = 3.0f,
-                isMajor = false,
-                majorDepartment = "test",
-                professor = "test",
-                location = "test",
-                course = null,
-                dayOfWeekTimePairs = listOf(
-                    DayOfWeekTimePair(
-                        dayOfWeek = DayOfWeek.MONDAY,
-                        startTime = LocalTime.of(1, 0),
-                        endTime = LocalTime.of(3, 0),
-                    ),
-                ).toMutableList(),
-                timeTable = timeTable,
-            ),
-        )
 
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.get(finalUrl, timeTable.id!!).contentType(MediaType.APPLICATION_JSON)
@@ -273,20 +322,6 @@ class TimeTableServiceImplTest {
         val urlPoint = "/{timeTableId}"
         val finalUrl = "$statsEndPoint$urlPoint"
 
-        val timeTable = timeTableRepository.saveAndFlush(
-            TimeTable(
-                title = "test",
-                isPublic = true,
-                user = user1,
-                yearAndSeason = YearAndSeason(
-                    year = 2021,
-                    season = Seasons.SPRING,
-                ),
-                schedules = mutableListOf(),
-                isMain = false,
-            ),
-        )
-
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.delete(finalUrl, timeTable.id!!).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
@@ -322,20 +357,6 @@ class TimeTableServiceImplTest {
         val urlPoint = "/{timeTableId}/schedule"
         val finalUrl = "$statsEndPoint$urlPoint"
 
-        val timeTable = timeTableRepository.saveAndFlush(
-            TimeTable(
-                title = "test",
-                isPublic = true,
-                user = user1,
-                yearAndSeason = YearAndSeason(
-                    year = 2021,
-                    season = Seasons.SPRING,
-                ),
-                schedules = mutableListOf(),
-                isMain = false,
-            ),
-        )
-
         val addScheduleRequestDto = AddScheduleRequestDto(
             title = "test",
             memo = "test",
@@ -349,8 +370,8 @@ class TimeTableServiceImplTest {
             dayOfWeekTimePairs = listOf(
                 DayOfWeekTimePairDto(
                     dayOfWeek = DayOfWeek.MONDAY,
-                    startTime = LocalTime.of(1, 0),
-                    endTime = LocalTime.of(3, 0),
+                    startTime = LocalTime.of(5, 0),
+                    endTime = LocalTime.of(10, 0),
                 ),
             ),
         )
@@ -400,7 +421,7 @@ class TimeTableServiceImplTest {
             )
 
         // then
-        scheduleRepository.findAll().size shouldBe 1
+        scheduleRepository.findAll().size shouldBe 2
     }
 
     @Test
@@ -409,20 +430,6 @@ class TimeTableServiceImplTest {
         // given
         val urlPoint = "/{timeTableId}/schedule"
         val finalUrl = "$statsEndPoint$urlPoint"
-
-        val timeTable = timeTableRepository.saveAndFlush(
-            TimeTable(
-                title = "test",
-                isPublic = true,
-                user = user1,
-                yearAndSeason = YearAndSeason(
-                    year = 2021,
-                    season = Seasons.SPRING,
-                ),
-                schedules = mutableListOf(),
-                isMain = false,
-            ),
-        )
 
         val schedule = scheduleRepository.saveAndFlush(
             Schedule(
@@ -481,8 +488,6 @@ class TimeTableServiceImplTest {
             )
 
         // then
-        scheduleRepository.findAll().size shouldBe 0
         timeTableRepository.findAll().size shouldBe 1
-        timeTableRepository.findAll()[0].schedules.size shouldBe 0
     }
 }

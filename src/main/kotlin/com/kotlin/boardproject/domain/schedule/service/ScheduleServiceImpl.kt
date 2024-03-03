@@ -88,6 +88,7 @@ class ScheduleServiceImpl(
                 majorDepartment = addScheduleRequestDto.majorDepartment,
             ),
         )
+        schedule.addScheduleToTimeTable(timeTable)
 
         return AddScheduleResponseDto(
             id = schedule.id!!,
@@ -134,6 +135,7 @@ class ScheduleServiceImpl(
             throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "시간표에 존재하지 않는 시간입니다.")
         }
 
+        schedule.deleteScheduleFromTimeTable(timeTable)
         scheduleRepository.delete(schedule)
 
         return DeleteScheduleResponseDto(

@@ -1012,6 +1012,33 @@ include::{snippets}/view-my-comment/request-headers.adoc[]
 include::{snippets}/view-my-comment/response-body.adoc[]
 include::{snippets}/view-my-comment/response-fields.adoc[]
 
+==== 자신이 작성한 시간표 조회
+
+.description
+[source]
+----
+자신의 시간표를 조회하기 위한 API입니다.
+
+HTTP Method : GET
+End-Point : /api/v1/my/timetable
+----
+
+.Sample Request
+include::{snippets}/view-my-time-tables/http-request.adoc[]
+
+.Sample Response
+include::{snippets}/view-my-time-tables/http-response.adoc[]
+
+.Request Header
+request를 살펴보면 Authorization 헤더에서 Bearer token 형태로, access token을 전달하는 것을 알 수 있습니다.
+
+include::{snippets}/view-my-time-tables/request-headers.adoc[]
+
+.Response Body
+include::{snippets}/view-my-time-tables/response-body.adoc[]
+include::{snippets}/view-my-time-tables/response-fields.adoc[]
+
+
 === USER API ( /api/v1/user )
 
 ==== 유저 프로필 이미지 변경

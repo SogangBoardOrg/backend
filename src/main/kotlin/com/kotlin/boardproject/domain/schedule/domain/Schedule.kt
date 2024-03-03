@@ -48,4 +48,13 @@ class Schedule(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     val course: Course? = null,
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun addScheduleToTimeTable(timeTable: TimeTable) {
+        timeTable.schedules.add(this)
+    }
+
+    fun deleteScheduleFromTimeTable(timeTable: TimeTable) {
+        timeTable.schedules.remove(this)
+    }
+}
