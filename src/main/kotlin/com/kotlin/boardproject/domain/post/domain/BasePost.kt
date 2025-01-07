@@ -63,24 +63,12 @@ class BasePost(
 
     @OneToMany(mappedBy = "post") val commentList: MutableList<Comment> = mutableListOf(),
 
-    @OneToMany(mappedBy = "post") val likeList: MutableList<LikePost> = mutableListOf(),
-
     @OneToMany(mappedBy = "post") val scrapList: MutableList<ScrapPost> = mutableListOf(),
 
     @ElementCollection var photoList: List<String> = emptyList(),
 ) : BaseEntity() {
     fun addPost(user: User) {
         // user.postList.add(this)
-    }
-
-    fun addLikePost(likePost: LikePost, user: User) {
-        this.likeList.add(likePost)
-        user.likePostList.add(likePost)
-    }
-
-    fun cancelLikePost(likePost: LikePost, user: User) {
-        this.likeList.remove(likePost)
-        user.likePostList.remove(likePost)
     }
 
     fun addScrapPost(scrapPost: ScrapPost, user: User) {

@@ -1,6 +1,5 @@
 package com.kotlin.boardproject.domain.user.domain
 
-import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.global.domain.BaseEntity
 import com.kotlin.boardproject.global.enums.CurrentStatus
@@ -56,9 +55,6 @@ class User(
     var profileImageUrl: String? = null,
 
     // 쓴 글 목록
-
-    @OneToMany(mappedBy = "user")
-    val likePostList: MutableList<LikePost> = mutableListOf(),
 
     @OneToMany(mappedBy = "user")
     val scrapList: MutableList<ScrapPost> = mutableListOf(),

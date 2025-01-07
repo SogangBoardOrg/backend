@@ -23,7 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.DayOfWeek
 import java.time.LocalTime
-import javax.annotation.PostConstruct
 
 @Profile("local")
 @Component
@@ -36,7 +35,7 @@ class MyDataInit(
     private val courseRepository: CourseRepository,
     private val passwordEncoder: BCryptPasswordEncoder,
 ) {
-    @PostConstruct
+    // @PostConstruct
     fun init() {
         val (user_a, user_b) = userCreate()
         val (timetable_1, timetable_2, timetable_3) = timetableCreate(user_a)

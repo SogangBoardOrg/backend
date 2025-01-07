@@ -12,16 +12,6 @@ interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmailOrProviderId(email: String, id: String): User?
 
     @Query(
-        """ SELECT u
-            FROM User AS u
-            LEFT JOIN FETCH u.likePostList as l
-            LEFT JOIN FETCH l.post
-            WHERE u.email = :email
-            """,
-    )
-    fun findByEmailFetchLikeList(email: String): User?
-
-    @Query(
         """ SELECT DISTINCT u
             FROM User AS u
             LEFT JOIN FETCH u.scrapList s

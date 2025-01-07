@@ -67,4 +67,24 @@ class RedisRepository(
     fun removePasswordVerification(code: String) {
         redisTemplate.delete(code)
     }
+
+    fun setPostLike(postId: Long, userEmail: String) {
+        redisTemplate.opsForSet().add("post_like:$postId", userEmail)
+    }
+
+    fun cancelPostLike(postId: Long, userEmail: String) {
+        redisTemplate.opsForSet().remove("post_like:$postId", userEmail)
+    }
+
+    fun userLikesPost(postId: Long, userEmail: String): Boolean {
+        return redisTemplate.opsForSet().isMember("post_like:$postId", userEmail)!!
+    }
+
+    fun getPostLikeCount(postId: Long): Int {
+        return redisTemplate.opsForSet().size("post_like:$postId")!!.toInt()
+    }
+
+    fun getPostLikeMap(posts: List<Long>): Map<Long, Int> {
+        return posts.associateWith { redisTemplate.opsForSet().size("post_like:$it")!!.toInt() }
+    }
 }

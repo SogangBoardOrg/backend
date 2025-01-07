@@ -15,11 +15,6 @@ fun setUserRepository(
     every { userRepository.findByEmail(userThree.email) } returns userThree
     every { userRepository.findByEmail(nonExistUserEmail) } returns null
 
-    every { userRepository.findByEmailFetchLikeList(userOne.email) } returns userOne
-    every { userRepository.findByEmailFetchLikeList(userTwo.email) } returns userTwo
-    every { userRepository.findByEmailFetchLikeList(userThree.email) } returns userThree
-    every { userRepository.findByEmailFetchLikeList(nonExistUserEmail) } returns null
-
     every { userRepository.findByEmailFetchScrapList(userOne.email) } returns userOne
     every { userRepository.findByEmailFetchScrapList(userTwo.email) } returns userTwo
     every { userRepository.findByEmailFetchScrapList(userThree.email) } returns userThree
