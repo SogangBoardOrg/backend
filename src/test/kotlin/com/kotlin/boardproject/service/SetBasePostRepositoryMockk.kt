@@ -17,12 +17,6 @@ fun setBasePostRepository(
         )
     } returns freePostPresent
     every {
-        basePostRepository.findByIdAndStatusFetchLikeList(
-            freePostPresent.id!!,
-            PostStatus.NORMAL,
-        )
-    } returns freePostPresent
-    every {
         basePostRepository.findByIdAndStatusFetchScrapList(
             freePostPresent.id!!,
             PostStatus.NORMAL,
@@ -36,12 +30,6 @@ fun setBasePostRepository(
         )
     } returns null
     every {
-        basePostRepository.findByIdAndStatusFetchLikeList(
-            freePostDeleted.id!!,
-            PostStatus.NORMAL,
-        )
-    } returns null
-    every {
         basePostRepository.findByIdAndStatusFetchScrapList(
             freePostDeleted.id!!,
             PostStatus.NORMAL,
@@ -50,12 +38,6 @@ fun setBasePostRepository(
 
     every {
         basePostRepository.findByIdAndStatus(
-            nonExistPostId,
-            PostStatus.NORMAL,
-        )
-    } returns null
-    every {
-        basePostRepository.findByIdAndStatusFetchLikeList(
             nonExistPostId,
             PostStatus.NORMAL,
         )

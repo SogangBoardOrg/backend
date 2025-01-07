@@ -4,7 +4,6 @@ import com.kotlin.boardproject.domain.comment.dto.read.CommentsByPostIdResponseD
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.BasePost
 import com.kotlin.boardproject.domain.post.domain.BlackPost
-import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.black.BlackPostResponseDto
@@ -17,6 +16,7 @@ import com.kotlin.boardproject.domain.post.dto.like.CancelLikePostResponseDto
 import com.kotlin.boardproject.domain.post.dto.like.LikePostResponseDto
 import com.kotlin.boardproject.domain.post.dto.read.MyWrittenPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.read.OnePostResponseDto
+import com.kotlin.boardproject.domain.post.dto.read.PostByQueryElementDto
 import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.dto.read.PostByQueryResponseDto
 import com.kotlin.boardproject.domain.post.dto.scrap.CancelScrapPostResponseDto
@@ -24,7 +24,6 @@ import com.kotlin.boardproject.domain.post.dto.scrap.MyScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.dto.scrap.ScrapPostResponseDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
-import com.kotlin.boardproject.domain.post.repository.LikePostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.schedule.repository.CourseRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
@@ -33,6 +32,8 @@ import com.kotlin.boardproject.global.enums.PostStatus
 import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
+import com.kotlin.boardproject.global.repository.RedisRepository
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -44,9 +45,9 @@ class PostServiceImpl(
     private val courseRepository: CourseRepository,
     private val basePostRepository: BasePostRepository,
     private val blackPostRepository: BlackPostRepository,
-    private val likePostRepository: LikePostRepository,
     private val scrapPostRepository: ScrapPostRepository,
     private val commentRepository: CommentRepository,
+    private val redisRepository: RedisRepository,
 ) : PostService {
 
     @Transactional(readOnly = true)
@@ -62,7 +63,16 @@ class PostServiceImpl(
             pageable = pageable,
         )
 
+        mapLikeCnt(data)
+
         return PostByQueryResponseDto.createDtoFromPageable(data)
+    }
+
+    private fun mapLikeCnt(data: Page<PostByQueryElementDto>) {
+        val likeCntMap = redisRepository.getPostLikeMap(data.content.map { it.id })
+        data.content.forEach {
+            it.likeCnt = likeCntMap[it.id] ?: 0
+        }
     }
 
     @Transactional(readOnly = true)
@@ -75,12 +85,11 @@ class PostServiceImpl(
         }
         val post = basePostRepository.findByIdAndStatusFetchPhotoListAndUser(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
-        basePostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
+        basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
         basePostRepository.findByIdAndStatusFetchScrapList(postId, PostStatus.NORMAL)
             ?: throw EntityNotFoundException("${postId}번 글은 존재하지 않는 글 입니다.")
         // post에서는
-        // likeList를 가져오고 그 안에서 user를 다시한번 가져온다.
         // scrapList를 가져오고 그 안에서 user를 다시한번 가져온다.
         // photoList는 그냥 가져온다.
         // commentlist는 가져오지 않는다. -> multiple bag fetch exception 발생하므로 comment가 post를 가지고 있는 것으로 해결한다.
@@ -93,6 +102,8 @@ class PostServiceImpl(
             post = post,
             searchUser = user,
             commentList = comments,
+            likeCnt = redisRepository.getPostLikeCount(postId),
+            isLiked = userEmail?.let { redisRepository.userLikesPost(postId, it) } ?: false,
         )
     }
 
@@ -238,23 +249,14 @@ class PostServiceImpl(
         userEmail: String,
         postId: Long,
     ): LikePostResponseDto {
-        val user = userRepository.findByEmailFetchLikeList(userEmail)
+        val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 는 없는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
-        likePostRepository.findByUserAndPost(user, post)?.let {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "이미 추천을 했습니다.")
-        }
-
-        val likePost = LikePost(
-            user = user,
-            post = post,
-        )
-        likePostRepository.save(likePost)
-        post.addLikePost(likePost, user)
+        redisRepository.setPostLike(postId, userEmail)
         return LikePostResponseDto(post.id!!)
     }
 
@@ -263,17 +265,14 @@ class PostServiceImpl(
         userEmail: String,
         postId: Long,
     ): CancelLikePostResponseDto {
-        val user = userRepository.findByEmailFetchLikeList(userEmail)
+        val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 않는 유저 입니다.")
 
         val post =
-            basePostRepository.findByIdAndStatusFetchLikeList(postId, PostStatus.NORMAL)
+            basePostRepository.findByIdAndStatus(postId, PostStatus.NORMAL)
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
-        likePostRepository.findByUserAndPost(user, post)?.let {
-            post.cancelLikePost(it, user)
-            likePostRepository.delete(it)
-        }
+        redisRepository.cancelPostLike(postId, user.email)
 
         return CancelLikePostResponseDto(post.id!!)
     }

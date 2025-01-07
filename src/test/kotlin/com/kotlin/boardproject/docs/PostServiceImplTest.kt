@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.kotlin.boardproject.domain.comment.domain.Comment
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.post.domain.BasePost
-import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.dto.black.BlackPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
 import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
-import com.kotlin.boardproject.domain.post.repository.LikePostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.user.domain.User
 import com.kotlin.boardproject.domain.user.repository.UserRepository
@@ -19,6 +17,7 @@ import com.kotlin.boardproject.global.enums.BlackReason
 import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.enums.ProviderType
 import com.kotlin.boardproject.global.enums.Role
+import com.kotlin.boardproject.global.repository.RedisRepository
 import com.kotlin.boardproject.global.util.AuthToken
 import com.kotlin.boardproject.global.util.AuthTokenProvider
 import io.kotest.matchers.shouldBe
@@ -31,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
@@ -64,6 +64,9 @@ import java.util.UUID
 class PostServiceImplTest {
 
     @Autowired
+    private lateinit var redisRepository: RedisRepository
+
+    @Autowired
     private lateinit var mockMvc: MockMvc
 
     @Autowired
@@ -79,9 +82,6 @@ class PostServiceImplTest {
     private lateinit var blackPostRepository: BlackPostRepository
 
     @Autowired
-    private lateinit var likePostRepository: LikePostRepository
-
-    @Autowired
     private lateinit var scrapPostRepository: ScrapPostRepository
 
     @Autowired
@@ -89,6 +89,9 @@ class PostServiceImplTest {
 
     @Autowired
     private lateinit var tokenProvider: AuthTokenProvider
+
+    @Autowired
+    private lateinit var redisTemplate: StringRedisTemplate
 
     private lateinit var writer: User
 
@@ -134,6 +137,8 @@ class PostServiceImplTest {
             expiry = Date(Date().time + 6000000),
             role = Role.ROLE_VERIFIED_USER.code,
         )
+
+        redisTemplate.connectionFactory?.connection?.flushDb()
     }
 
     @AfterEach
@@ -436,11 +441,9 @@ class PostServiceImplTest {
             )
 
         // then
-        val likes = likePostRepository.findAll()
+        val ifLike = redisRepository.userLikesPost(post.id!!, user2.email)
 
-        likes.size shouldBe 1
-        likes[0].user shouldBe user2
-        likes[0].post shouldBe post
+        ifLike shouldBe true
     }
 
     @Test
@@ -464,13 +467,7 @@ class PostServiceImplTest {
             ),
         )
 
-        likePostRepository.save(
-            LikePost(
-                user = user2,
-                post = post,
-            ),
-        )
-
+        redisRepository.setPostLike(post.id!!, user2.email)
         // when
         val result = mockMvc.perform(
             RestDocumentationRequestBuilders.delete(finalUrl, post.id!!).contentType(MediaType.APPLICATION_JSON)
@@ -496,9 +493,9 @@ class PostServiceImplTest {
             )
 
         // then
-        val likes = likePostRepository.findAll()
+        val ifLike = redisRepository.userLikesPost(post.id!!, user2.email)
 
-        likes.size shouldBe 0
+        ifLike shouldBe false
     }
 
     @Test
@@ -1036,8 +1033,6 @@ class PostServiceImplTest {
                         fieldWithPath("data.contents.[].writerProfileImageUrl").type(JsonFieldType.STRING).optional()
                             .description("글쓴이 프로필 이미지 url"),
                         fieldWithPath("data.contents.[].isAnon").type(JsonFieldType.BOOLEAN).description("익명 여부"),
-                        fieldWithPath("data.contents.[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
-                        fieldWithPath("data.contents.[].isScrapped").type(JsonFieldType.BOOLEAN).description("스크랩 여부"),
                         fieldWithPath("data.contents.[].isWriter").type(JsonFieldType.BOOLEAN).description("글쓴이 여부"),
                         fieldWithPath("data.contents.[].postType").type(JsonFieldType.STRING).description("글 종류"),
                         fieldWithPath("data.contents.[].courseId").type(JsonFieldType.NUMBER).description("강의 번호")

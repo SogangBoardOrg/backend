@@ -15,16 +15,6 @@ interface BasePostRepository : JpaRepository<BasePost, Long>, BasePostRepository
         """
             SELECT DISTINCT p
             FROM BasePost AS p
-            LEFT JOIN FETCH p.likeList
-            WHERE p.id = :id AND p.status = :status
-        """,
-    )
-    fun findByIdAndStatusFetchLikeList(id: Long, status: PostStatus): BasePost?
-
-    @Query(
-        """
-            SELECT DISTINCT p
-            FROM BasePost AS p
             LEFT JOIN FETCH p.commentList
             WHERE p.id = :id AND p.status = :status
         """,

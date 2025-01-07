@@ -1,8 +1,6 @@
 package com.kotlin.boardproject.domain.post.repository
 
 import com.kotlin.boardproject.domain.post.domain.QBasePost.basePost
-import com.kotlin.boardproject.domain.post.domain.QLikePost
-import com.kotlin.boardproject.domain.post.domain.QScrapPost
 import com.kotlin.boardproject.domain.post.dto.read.PostByQueryElementDto
 import com.kotlin.boardproject.domain.post.dto.read.PostByQueryRequestDto
 import com.kotlin.boardproject.domain.post.dto.read.QPostByQueryElementDto
@@ -28,9 +26,6 @@ class BasePostRepositoryCustomImpl(
     ): Page<PostByQueryElementDto> {
         val searchUser = userEmail?.let { findUserByEmail(it) }
 
-        val scrappedIds = searchUser?.let { findScrappedIds(it) } ?: listOf()
-        val likedIds = searchUser?.let { findLikedIds(searchUser) } ?: listOf()
-
         val dataIds = queryFactory
             .select(basePost.id)
             .from(basePost)
@@ -47,7 +42,6 @@ class BasePostRepositoryCustomImpl(
             .leftJoin(basePost.course)
             .leftJoin(basePost.photoList)
             .leftJoin(basePost.commentList)
-            .leftJoin(basePost.likeList)
             .leftJoin(basePost.scrapList)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
@@ -70,7 +64,6 @@ class BasePostRepositoryCustomImpl(
             .leftJoin(basePost.course)
             .leftJoin(basePost.photoList)
             .leftJoin(basePost.commentList)
-            .leftJoin(basePost.likeList)
             .leftJoin(basePost.scrapList)
             .fetch()
             .size.toLong()
@@ -91,14 +84,6 @@ class BasePostRepositoryCustomImpl(
                         .otherwise(Expressions.nullExpression()),
                     basePost.isAnon,
                     CaseBuilder()
-                        .`when`(basePost.id.`in`(likedIds))
-                        .then(true)
-                        .otherwise(false),
-                    CaseBuilder()
-                        .`when`(basePost.id.`in`(scrappedIds))
-                        .then(true)
-                        .otherwise(false),
-                    CaseBuilder()
                         .`when`(searchUserIsWriter(searchUser)).then(true)
                         .otherwise(false),
                     basePost.postType,
@@ -110,7 +95,7 @@ class BasePostRepositoryCustomImpl(
                     basePost.reviewScore,
                     basePost.commentOn,
                     basePost.commentList.size(),
-                    basePost.likeList.size(),
+                    Expressions.constant(0),
                     basePost.scrapList.size(),
                     basePost.photoList.size(),
                     basePost.createdAt,
@@ -122,12 +107,10 @@ class BasePostRepositoryCustomImpl(
             .leftJoin(basePost.course)
             .leftJoin(basePost.photoList)
             .leftJoin(basePost.commentList)
-            .leftJoin(basePost.likeList)
             .leftJoin(basePost.scrapList)
             .where(basePost.id.`in`(dataIds))
             .orderBy(basePost.id.desc())
             .fetch()
-
         return PageImpl(data.toList(), pageable, totalCnt)
     }
 
@@ -136,22 +119,6 @@ class BasePostRepositoryCustomImpl(
             .selectFrom(QUser.user)
             .where(QUser.user.email.eq(userEmail))
             .fetchOne()
-
-    private fun findScrappedIds(user: User) =
-        queryFactory
-            .select(QScrapPost.scrapPost.post.id)
-            .from(QScrapPost.scrapPost)
-            .where(QScrapPost.scrapPost.user.eq(user))
-            .fetch()
-            .toList()
-
-    private fun findLikedIds(user: User) =
-        queryFactory
-            .select(QLikePost.likePost.post.id)
-            .from(QLikePost.likePost)
-            .where(QLikePost.likePost.user.eq(user))
-            .fetch()
-            .toList()
 
     private fun writerNoAnonEq(writerName: String?) =
         if (writerName.isNullOrEmpty()) {

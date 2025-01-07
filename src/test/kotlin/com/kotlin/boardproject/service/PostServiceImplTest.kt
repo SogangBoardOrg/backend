@@ -1,7 +1,6 @@
 package com.kotlin.boardproject.service
 
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
-import com.kotlin.boardproject.domain.post.domain.LikePost
 import com.kotlin.boardproject.domain.post.domain.ScrapPost
 import com.kotlin.boardproject.domain.post.dto.create.CreatePostRequestDto
 import com.kotlin.boardproject.domain.post.dto.create.CreatePostResponseDto
@@ -9,7 +8,6 @@ import com.kotlin.boardproject.domain.post.dto.edit.EditPostRequestDto
 import com.kotlin.boardproject.domain.post.dto.edit.EditPostResponseDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.post.repository.BlackPostRepository
-import com.kotlin.boardproject.domain.post.repository.LikePostRepository
 import com.kotlin.boardproject.domain.post.repository.ScrapPostRepository
 import com.kotlin.boardproject.domain.post.service.PostService
 import com.kotlin.boardproject.domain.post.service.PostServiceImpl
@@ -21,6 +19,7 @@ import com.kotlin.boardproject.global.enums.PostType
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.exception.EntityNotFoundException
 import com.kotlin.boardproject.global.exception.UnAuthorizedException
+import com.kotlin.boardproject.global.repository.RedisRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -43,9 +42,9 @@ class PostServiceImplTest : BehaviorSpec(
         val courseRepository: CourseRepository = mockk()
         val basePostRepository: BasePostRepository = mockk()
         val blackPostRepository: BlackPostRepository = mockk()
-        val likePostRepository: LikePostRepository = mockk()
         val scrapPostRepository: ScrapPostRepository = mockk()
         val commentRepository: CommentRepository = mockk()
+        val redisRepository: RedisRepository = mockk()
 
         lateinit var postService: PostService
 
@@ -54,9 +53,9 @@ class PostServiceImplTest : BehaviorSpec(
             courseRepository,
             basePostRepository,
             blackPostRepository,
-            likePostRepository,
             scrapPostRepository,
             commentRepository,
+            redisRepository,
         )
 
         setUserRepository(
@@ -180,31 +179,19 @@ class PostServiceImplTest : BehaviorSpec(
         }
 
         given("글 추천") {
-            val likePost = LikePost(
-                user = userTwo,
-                post = freePostPresent,
-            )
-
-            every { likePostRepository.findByUserAndPost(userTwo, freePostPresent) } returns null
-            every { likePostRepository.save(any()) } returns likePost
+            every { redisRepository.setPostLike(freePostPresent.id!!, userTwo.email) } returns Unit
+            every { redisRepository.cancelPostLike(freePostPresent.id!!, userTwo.email) } returns Unit
 
             `when`("정상") {
                 postService.likePost(userTwo.email, freePostPresent.id!!)
                 then("통과") {
-                    verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
+                    verify(exactly = 1) { userRepository.findByEmail(userTwo.email) }
                     verify(exactly = 1) {
-                        basePostRepository.findByIdAndStatusFetchLikeList(
+                        basePostRepository.findByIdAndStatus(
                             freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 1) { likePostRepository.findByUserAndPost(userTwo, freePostPresent) }
-                    verify(exactly = 1) { likePostRepository.save(any()) }
-
-                    freePostPresent.likeList.size shouldBe 1
-                    freePostPresent.likeList[0].user shouldBe userTwo
-                    userTwo.likePostList.size shouldBe 1
-                    userTwo.likePostList[0].post shouldBe freePostPresent
                 }
             }
 
@@ -213,19 +200,14 @@ class PostServiceImplTest : BehaviorSpec(
                     postService.likePost(userTwo.email, nonExistPostId)
                 }
                 then("글이 존재하지 않음") {
-                    verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
+                    verify(exactly = 1) { userRepository.findByEmail(userTwo.email) }
                     verify(exactly = 1) {
-                        basePostRepository.findByIdAndStatusFetchLikeList(
+                        basePostRepository.findByIdAndStatus(
                             nonExistPostId,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 0) { likePostRepository.findByUserAndPost(userTwo, any()) }
-                    verify(exactly = 0) { likePostRepository.save(any()) }
-
                     error.log shouldBe ErrorCode.NOT_FOUND_ENTITY.message
-
-                    userTwo.likePostList.size shouldBe 0
                 }
             }
 
@@ -234,19 +216,14 @@ class PostServiceImplTest : BehaviorSpec(
                     postService.likePost(userTwo.email, freePostDeleted.id!!)
                 }
                 then("글이 존재하지 않음") {
-                    verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
+                    verify(exactly = 1) { userRepository.findByEmail(userTwo.email) }
                     verify(exactly = 1) {
-                        basePostRepository.findByIdAndStatusFetchLikeList(
+                        basePostRepository.findByIdAndStatus(
                             freePostDeleted.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 0) { likePostRepository.findByUserAndPost(userTwo, any()) }
-                    verify(exactly = 0) { likePostRepository.save(any()) }
-
                     error.log shouldBe ErrorCode.NOT_FOUND_ENTITY.message
-
-                    userTwo.likePostList.size shouldBe 0
                 }
             }
 
@@ -256,42 +233,19 @@ class PostServiceImplTest : BehaviorSpec(
                 }
                 then("유저가 존재하지 않음") {
 
-                    verify(exactly = 1) { userRepository.findByEmailFetchLikeList(nonExistUserEmail) }
+                    verify(exactly = 1) { userRepository.findByEmail(nonExistUserEmail) }
                     verify(exactly = 0) {
-                        basePostRepository.findByIdAndStatusFetchLikeList(
+                        basePostRepository.findByIdAndStatus(
                             freePostPresent.id!!,
                             PostStatus.NORMAL,
                         )
                     }
-                    verify(exactly = 0) { likePostRepository.findByUserAndPost(userTwo, freePostPresent) }
-                    verify(exactly = 0) { likePostRepository.save(any()) }
-
                     error.log shouldBe "$nonExistUserEmail 는 없는 유저 입니다."
-
-                    freePostPresent.likeList.size shouldBe 0
-                    userTwo.likePostList.size shouldBe 0
                 }
             }
 
             `when`("이미 추천했음") {
-                every { likePostRepository.findByUserAndPost(userTwo, freePostPresent) } returns likePost
-                val error = shouldThrow<ConditionConflictException> {
-                    postService.likePost(userTwo.email, freePostPresent.id!!)
-                }
-
-                then("이미 추천을 한 글") {
-                    verify(exactly = 1) { userRepository.findByEmailFetchLikeList(userTwo.email) }
-                    verify(exactly = 1) {
-                        basePostRepository.findByIdAndStatusFetchLikeList(
-                            freePostPresent.id!!,
-                            PostStatus.NORMAL,
-                        )
-                    }
-                    verify(exactly = 1) { likePostRepository.findByUserAndPost(userTwo, freePostPresent) }
-                    verify(exactly = 0) { likePostRepository.save(any()) }
-
-                    error.log shouldBe "이미 추천을 했습니다."
-                }
+                postService.likePost(userTwo.email, freePostPresent.id!!)
             }
         }
 
