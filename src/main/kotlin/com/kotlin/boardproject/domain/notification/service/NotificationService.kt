@@ -1,8 +1,6 @@
 package com.kotlin.boardproject.domain.notification.service
 
-import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.dto.GetNotificationsResponseDto
-import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,8 +18,4 @@ interface NotificationService {
     fun readAllUnreadNotificationByEmail(
         email: String,
     )
-
-    fun createNotification(
-        notificationCreateDto: NotificationCreateDto,
-    ): Notification?
 }

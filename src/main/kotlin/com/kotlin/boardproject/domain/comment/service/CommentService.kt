@@ -11,7 +11,6 @@ import com.kotlin.boardproject.domain.comment.dto.like.LikeCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.read.MyCommentResponseDto
 import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentRequestDto
 import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentResponseDto
-import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
 import org.springframework.data.domain.Pageable
 
 interface CommentService {
@@ -19,7 +18,7 @@ interface CommentService {
         username: String,
         createCommentRequestDto: CreateCommentRequestDto,
         parentCommentId: Long?,
-    ): Pair<CreateCommentResponseDto, NotificationCreateDto>
+    ): CreateCommentResponseDto
 
     fun deleteComment(
         username: String,

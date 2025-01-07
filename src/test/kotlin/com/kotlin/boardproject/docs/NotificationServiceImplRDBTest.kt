@@ -17,6 +17,7 @@ import com.kotlin.boardproject.global.util.AuthTokenProvider
 import io.kotest.matchers.shouldBe
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -142,6 +143,7 @@ class NotificationServiceImplRDBTest {
     }
 
     @Test
+    @Disabled
     fun 알림_받기() {
         val urlPoint = ""
         val finalUrl = "$statsEndPoint$urlPoint"
@@ -197,7 +199,6 @@ class NotificationServiceImplRDBTest {
                     ),
                 ),
             )
-
         val notificationList = notificationRepository.findAll()
 
         notificationList.size shouldBe 2

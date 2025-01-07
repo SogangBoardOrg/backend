@@ -17,12 +17,13 @@ import com.kotlin.boardproject.domain.comment.dto.update.UpdateCommentResponseDt
 import com.kotlin.boardproject.domain.comment.repository.BlackCommentRepository
 import com.kotlin.boardproject.domain.comment.repository.CommentRepository
 import com.kotlin.boardproject.domain.comment.repository.LikeCommentRepository
-import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
 import com.kotlin.boardproject.domain.post.repository.BasePostRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
 import com.kotlin.boardproject.global.enums.ErrorCode
 import com.kotlin.boardproject.global.enums.NotificationType
 import com.kotlin.boardproject.global.enums.PostStatus
+import com.kotlin.boardproject.global.event.NotificationEvent
+import com.kotlin.boardproject.global.event.SpringEventPublisher
 import com.kotlin.boardproject.global.exception.ConditionConflictException
 import com.kotlin.boardproject.global.util.log
 import org.springframework.data.domain.Pageable
@@ -37,6 +38,7 @@ class CommentServiceImpl(
     private val commentRepository: CommentRepository,
     private val likeCommentRepository: LikeCommentRepository,
     private val blackCommentRepository: BlackCommentRepository,
+    private val springEventPublisher: SpringEventPublisher,
 ) : CommentService {
 
     @Transactional
@@ -44,19 +46,25 @@ class CommentServiceImpl(
         username: String,
         createCommentRequestDto: CreateCommentRequestDto,
         parentCommentId: Long?,
-    ): Pair<CreateCommentResponseDto, NotificationCreateDto> {
+    ): CreateCommentResponseDto {
         log.info("create Comment")
         // user
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
         // post
-        val post = postRepository.findByIdAndStatusFetchCommentList(createCommentRequestDto.postId, PostStatus.NORMAL)
+        val post = postRepository.findByIdAndStatusFetchCommentList(
+            createCommentRequestDto.postId,
+            PostStatus.NORMAL,
+        )
             ?: throw EntityNotFoundException("${createCommentRequestDto.postId} 에 해당하는 글이 존재하지 않습니다.")
 
         // 부모 댓글
         val parentComment = parentCommentId?.let {
-            commentRepository.findByIdAndStatusFetchAncestorAndPost(parentCommentId, PostStatus.NORMAL)
+            commentRepository.findByIdAndStatusFetchAncestorAndPost(
+                parentCommentId,
+                PostStatus.NORMAL,
+            )
                 ?: throw EntityNotFoundException("$parentCommentId 에 해당하는 댓글이 존재하지 않습니다.")
         }
         // 대댓글에서 부모글을 찾는 쿼리가 나가면 test 실패
@@ -89,19 +97,27 @@ class CommentServiceImpl(
         // 2. 대댓글이면 부모 댓글의 writer return
         val returnComment = commentRepository.save(comment)
 
-        return Pair(
-            CreateCommentResponseDto(
-                returnComment.id!!,
-                post.id!!,
-                comment.content,
-            ),
-            NotificationCreateDto(
-                fromUser = user,
-                toUser = parentComment?.writer ?: post.writer,
-                url = "/post/${post.id}",
-                message = comment.content,
-                notificationType = NotificationType.COMMENT,
-            ),
+        // 댓글의 주인이 글의 주인이면 알림을 보내지 않는다.
+        // 댓글의 주인이 글의 주인이 아니면 알림을 보낸다.
+        log.info("parentComment: $parentComment")
+        log.info("post.writer: ${comment.writer}")
+        log.info("user: $user")
+        if ((parentComment == null && post.writer != user) || (parentComment != null && parentComment.writer != user)) {
+            springEventPublisher.publishEvent(
+                NotificationEvent(
+                    fromUser = user,
+                    toUser = parentComment?.writer ?: post.writer,
+                    url = "/post/${post.id}",
+                    message = "${user.nickname}님이 댓글을 남겼습니다.",
+                    notificationType = NotificationType.COMMENT,
+                ),
+            )
+        }
+
+        return CreateCommentResponseDto(
+            returnComment.id!!,
+            post.id!!,
+            comment.content,
         )
     }
 
@@ -113,7 +129,8 @@ class CommentServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 에 해당하는 유저가 존재하지 않습니다.")
 
-        val comments = commentRepository.findByWriterAndStatusFetchPost(user, PostStatus.NORMAL, pageable)
+        val comments =
+            commentRepository.findByWriterAndStatusFetchPost(user, PostStatus.NORMAL, pageable)
 
         return MyCommentResponseDto.createDtoFromPageable(comments)
     }
@@ -229,7 +246,10 @@ class CommentServiceImpl(
                 ?: throw EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY.message)
 
         blackCommentRepository.findByUserAndComment(user, comment)?.let {
-            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "해당 댓글은 이미 신고가 되었습니다.")
+            throw ConditionConflictException(
+                ErrorCode.CONDITION_NOT_FULFILLED,
+                "해당 댓글은 이미 신고가 되었습니다.",
+            )
         }
 
         val blackComment = BlackComment(

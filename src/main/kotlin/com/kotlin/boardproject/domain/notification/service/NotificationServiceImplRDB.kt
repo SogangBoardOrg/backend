@@ -1,8 +1,6 @@
 package com.kotlin.boardproject.domain.notification.service
 
-import com.kotlin.boardproject.domain.notification.domain.Notification
 import com.kotlin.boardproject.domain.notification.dto.GetNotificationsResponseDto
-import com.kotlin.boardproject.domain.notification.dto.NotificationCreateDto
 import com.kotlin.boardproject.domain.notification.dto.NotificationResponseDto
 import com.kotlin.boardproject.domain.notification.repository.NotificationRepository
 import com.kotlin.boardproject.domain.user.repository.UserRepository
@@ -31,19 +29,6 @@ class NotificationServiceImplRDB(
             notificationCount = notifications.size,
             notifications = notifications,
         )
-    }
-
-    @Transactional
-    override fun createNotification(
-        notificationCreateDto: NotificationCreateDto,
-    ): Notification? {
-        if (notificationCreateDto.fromUser.id == notificationCreateDto.toUser.id) {
-            return null
-        }
-
-        val notification = NotificationCreateDto.toNotification(notificationCreateDto)
-
-        return notificationRepository.save(notification)
     }
 
     @Transactional

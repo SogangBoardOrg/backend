@@ -46,7 +46,7 @@ class CommentController(
     ): ApiResponse<CreateCommentResponseDto> {
         log.info(createCommentRequestDto.toString())
 
-        val (data, notificationCreateDto) = commentService.createComment(
+        val data = commentService.createComment(
             loginUser.username,
             createCommentRequestDto,
             parentCommentId,
@@ -55,10 +55,6 @@ class CommentController(
         // 1. 댓글을 파악한다 -> 댓글에 쿼리를 보내서 parentId가 null이면 일반댓글 아니면 대댓글
         // parentCommentId가 null이면 해당 comment의 글의 주인에게 nofitication을 보낸다.
         // parentCommentId가 null이 아니면 해당 comment의 주인에게 notification을 보낸다.
-        // 자신이 작성한 글이나 댓글이면 알림을 보내지 아니한다.
-        val notification = notificationService.createNotification(notificationCreateDto)
-        // TODO : sseEmiiter 사용하면 다시 켜기
-        // sseService.sendEvent(loginUser.username, notification)
 
         return ApiResponse.success(data)
     }
